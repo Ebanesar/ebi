@@ -17,7 +17,6 @@ public class AppConfig {
     DataSourceProperties dataSourceProperties;
 
     @Bean
-    //@ConfigurationProperties(prefix = DataSourceProperties.PREFIX)
     @ConfigurationProperties(prefix = "spring.datasource")
     DataSource realDataSource() {
         DataSource dataSource = DataSourceBuilder
