@@ -1,5 +1,6 @@
 package com.palmtree.content.analysis.image;
 
+import com.palmtree.content.analysis.image.model.ImageSafetyResponse;
 import com.palmtree.content.analysis.image.model.ImageValidityResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,14 @@ public class ImageContentAnalysisResourceController {
         boolean isValid = contentAnalyser.isValidImage(imageURI);
         ImageValidityResponse response = new ImageValidityResponse();
         response.setValid(isValid);
+        return ResponseEntity.ok(response);
+    }
+
+    @RequestMapping(value = "/safeImage", method = RequestMethod.POST)
+    public @ResponseBody ResponseEntity<ImageSafetyResponse> isImageSafe(@RequestParam String imageURI) {
+        boolean isSafe = contentAnalyser.isImageSafe(imageURI);
+        ImageSafetyResponse response = new ImageSafetyResponse();
+        response.setSafe(isSafe);
         return ResponseEntity.ok(response);
     }
 }
