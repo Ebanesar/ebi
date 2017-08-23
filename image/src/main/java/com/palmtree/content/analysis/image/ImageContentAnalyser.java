@@ -118,8 +118,7 @@ public class ImageContentAnalyser {
                 boolean hasError = annotateImageResponse.hasError();
                 System.out.println(annotateImageResponse.getError().getMessage());
 
-            for (WebDetection.WebEntity wb2 : wb.getWebEntitiesList())
-            {
+
             for(EntityAnnotation entityAnnotation:labelAnnotations)   //Face Focus
             {
                 if (entityAnnotation.getDescription().contains("chin")
@@ -155,6 +154,8 @@ public class ImageContentAnalyser {
          {
              case 1:
              {
+                 for (WebDetection.WebEntity wb2 : wb.getWebEntitiesList())
+                 {
               if (entityAnnotation.getDescription().equalsIgnoreCase("sunglasses")
                         || entityAnnotation.getDescription().equalsIgnoreCase("Headgear")
                         || entityAnnotation.getDescription().equalsIgnoreCase("Mask")
@@ -178,10 +179,12 @@ public class ImageContentAnalyser {
                            }
                                     break;
 
-
+                 }
              }
              case 2:
              {
+                 for (WebDetection.WebEntity wb2 : wb.getWebEntitiesList())
+                 {
                 if (entityAnnotation.getDescription().equalsIgnoreCase("sunglasses")
                              || entityAnnotation.getDescription().equalsIgnoreCase("Headgear")
                              || entityAnnotation.getDescription().equalsIgnoreCase("Mask")
@@ -227,7 +230,7 @@ public class ImageContentAnalyser {
         ImageContentAnalyser analyser = new ImageContentAnalyser();
         System.out.println(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
         //System.out.println(analyser.isImageSafe("https://cdn.pornpics.com/pics1/2016-07-15/361749_12big.jpg"));
-       if (analyser.isValidImage("http://www.dhresource.com/albu_1112953851_00-1.0x0/wholesale-new-fashion-korean-brand-gentle.jpg")==false)
+       if (analyser.isValidImage("http://st3.cricketcountry.com/wp-content/uploads/cricket/20160617015246.jpeg")==false)
         {
             System.out.println("Invalid Image");
         }
