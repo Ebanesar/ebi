@@ -105,32 +105,32 @@ public class ImageContentAnalyser {
                 boolean hasError = annotateImageResponse.hasError();
                 System.out.println(annotateImageResponse.getError().getMessage());
 
-                for(EntityAnnotation entityAnnotation:labelAnnotations)   //Face Focus
+                for(EntityAnnotation entityAnnotation:labelAnnotations)
                 {
                     if (entityAnnotation.getDescription().contains("chin")
-                            || entityAnnotation.getDescription().contains("Nose")
-                            || entityAnnotation.getDescription().contains("Forehead")
-                            || entityAnnotation.getDescription().contains("Mouth")
-                            || entityAnnotation.getDescription().contains("Neck")
-                            || entityAnnotation.getDescription().contains("cheek")
-                            || entityAnnotation.getDescription().contains("jaw")
-                            || entityAnnotation.getDescription().contains("ear")
-                            || entityAnnotation.getDescription().contains("smile")
-                            || entityAnnotation.getDescription().contains("Eyebrow")
-                            || entityAnnotation.getDescription().contains("head"))
+                           || entityAnnotation.getDescription().contains("Nose")
+                           || entityAnnotation.getDescription().contains("Forehead")
+                           || entityAnnotation.getDescription().contains("Mouth")
+                           || entityAnnotation.getDescription().contains("Neck")
+                           || entityAnnotation.getDescription().contains("cheek")
+                           || entityAnnotation.getDescription().contains("jaw")
+                           || entityAnnotation.getDescription().contains("ear")
+                           || entityAnnotation.getDescription().contains("smile")
+                           || entityAnnotation.getDescription().contains("Eyebrow")
+                           || entityAnnotation.getDescription().contains("head"))
                        {
-                       face_image(uri);
+                     return isValid =  face_image(uri);
                        }
-                    else  if (entityAnnotation.getDescription().contains("jeans")      //Full image
+                    else if (entityAnnotation.getDescription().contains("jeans")
                             || entityAnnotation.getDescription().contains("Standing")
                             || entityAnnotation.getDescription().contains("Trouser")
                             || entityAnnotation.getDescription().contains("Shoe")
                             || entityAnnotation.getDescription().contains("Gentleman")
-                            || entityAnnotation.getDescription().contains("Suit")
+                            || entityAnnotation.getDescription().contains("suit")
                             || entityAnnotation.getDescription().contains("Formal Wear")
                             || entityAnnotation.getDescription().contains("T Shirt"))
                        {
-                       full_image(uri);
+                     return isValid =  full_image(uri);
                        }
                 }
             }
@@ -264,15 +264,12 @@ public class ImageContentAnalyser {
                 }
                 }
             }
-            System.out.println("Face image is ");
+            System.out.print("Face image is ");
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
-        //Invoke Cloud Vision API and based on the response return if its valid or not.
-
-
         return face_result;
     }
 
@@ -281,16 +278,17 @@ public class ImageContentAnalyser {
     {
         ImageContentAnalyser analyser = new ImageContentAnalyser();
         System.out.println(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
-        if (analyser.isValidImage("https://thumbs.dreamstime.com/z/full-body-picture-young-man-hands-crossed-white-background-37224316.jpg")==false)
+
+        if (analyser.isValidImage("http://c8.alamy.com/comp/J3XTCG/tough-young-undercover-police-agent-with-waist-bag-and-sunglasses-J3XTCG.jpg")==false)
         {
-            System.out.println("Invalid");
+            System.out.print("Invalid");
         }
         else
         {
             System.out.print("Valid");
         }
 
-   /*    if (analyser.isImageSafe("https://image.shutterstock.com/z/stock-photo-bald-man-face-closed-hands-279396935.jpg")==false)
+  /*      if (analyser.isImageSafe("https://image.shutterstock.com/z/stock-photo-bald-man-face-closed-hands-279396935.jpg")==false)
         {
             System.out.println("Unsafe Image");
         }
