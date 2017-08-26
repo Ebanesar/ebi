@@ -79,10 +79,10 @@ public class ImageContentAnalyser {
     }
 
 
-    public boolean isValidImage(String imageURI){
-
+    public boolean isValidImage(String imageURI)
+    {
         boolean isValid = true;
-
+        String uri = imageURI;
         try {
             ImageAnnotatorClient visionClient =  ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
@@ -96,22 +96,14 @@ public class ImageContentAnalyser {
             imageReqsList.add(imageReq);
 
             BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
-            //System.out.println(response.getResponsesCount());
             List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
-
-              for(AnnotateImageResponse annotateImageResponse : annotateImageResponses)
+            for(AnnotateImageResponse annotateImageResponse : annotateImageResponses)
             {
                 List<EntityAnnotation> labelAnnotations =  annotateImageResponse.getLabelAnnotationsList();
                 WebDetection wb = annotateImageResponse.getWebDetection();
                 List<WebDetection.WebEntity> wb1 = wb.getWebEntitiesList();
-                // List<FaceAnnotation> fa = annotateImageResponse.getFaceAnnotationsList();
-                //System.out.println(annotateImageResponse.getLogoAnnotationsCount());
-                //System.out.println(annotateImageResponse.getTextAnnotationsCount());
-                //System.out.println(annotateImageResponse.());
-                //System.out.println(annotateImageResponse.getLogoAnnotationsCount());
                 boolean hasError = annotateImageResponse.hasError();
                 System.out.println(annotateImageResponse.getError().getMessage());
-
 
                 for(EntityAnnotation entityAnnotation:labelAnnotations)   //Face Focus
                 {
@@ -126,11 +118,9 @@ public class ImageContentAnalyser {
                             || entityAnnotation.getDescription().contains("smile")
                             || entityAnnotation.getDescription().contains("Eyebrow")
                             || entityAnnotation.getDescription().contains("head"))
-
-                    {
-                         isValid= true;
-                    }
-
+                       {
+                       face_image(uri);
+                       }
                     else  if (entityAnnotation.getDescription().contains("jeans")      //Full image
                             || entityAnnotation.getDescription().contains("Standing")
                             || entityAnnotation.getDescription().contains("Trouser")
@@ -139,34 +129,27 @@ public class ImageContentAnalyser {
                             || entityAnnotation.getDescription().contains("Suit")
                             || entityAnnotation.getDescription().contains("Formal Wear")
                             || entityAnnotation.getDescription().contains("T Shirt"))
-                    {
-                        isValid=false;
-                    }
-
-
-
-                                    }
-
+                       {
+                       full_image(uri);
+                       }
                 }
-
-            // p.getName()
+            }
         }
          catch (IOException e)
         {
             e.printStackTrace();
         }
-        //Invoke Cloud Vision API and based on the response return if its valid or not.
         return isValid;
     }
 
 
-    public  boolean full_image(String imageURI)
+    public  boolean full_image(String uri)
     {
         boolean full_result =true;
         try {
             ImageAnnotatorClient visionClient =  ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(uri)).build();
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
                     .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
                     .addFeatures(Feature.newBuilder().setType(Type.SAFE_SEARCH_DETECTION).build())
@@ -176,26 +159,18 @@ public class ImageContentAnalyser {
             imageReqsList.add(imageReq);
 
             BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
-            //System.out.println(response.getResponsesCount());
             List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
-
-
             for(AnnotateImageResponse annotateImageResponse : annotateImageResponses)
             {
                 List<EntityAnnotation> labelAnnotations =  annotateImageResponse.getLabelAnnotationsList();
                 WebDetection wb = annotateImageResponse.getWebDetection();
                 List<WebDetection.WebEntity> wb1 = wb.getWebEntitiesList();
-                // List<FaceAnnotation> fa = annotateImageResponse.getFaceAnnotationsList();
-                //System.out.println(annotateImageResponse.getLogoAnnotationsCount());
-                //System.out.println(annotateImageResponse.getTextAnnotationsCount());
-                //System.out.println(annotateImageResponse.());
-                //System.out.println(annotateImageResponse.getLogoAnnotationsCount());
                 boolean hasError = annotateImageResponse.hasError();
                 System.out.println(annotateImageResponse.getError().getMessage());
 
                 for (WebDetection.WebEntity wb2 : wb.getWebEntitiesList())
                 {
-                for(EntityAnnotation entityAnnotation:labelAnnotations)   //Face Focus
+                for(EntityAnnotation entityAnnotation:labelAnnotations)
                 {
                     if (entityAnnotation.getDescription().equalsIgnoreCase("sunglasses")
                             || entityAnnotation.getDescription().equalsIgnoreCase("Headgear")
@@ -220,36 +195,25 @@ public class ImageContentAnalyser {
                           full_result=false;
                     }
                 }
-
-            }   }
-            if (full_result==false)
-            {
-                System.out.println("Full Invalid Image");
+                }
             }
-            else
-            {
-                System.out.println("Full Valid Image");
-            }
-            // p.getName()
+            System.out.print("Full image is ");
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
-        //Invoke Cloud Vision API and based on the response return if its valid or not.
-
-
-
-        return full_result;
+       return full_result;
     }
 
-    public  boolean face_image(String imageURI)
+
+    public  boolean face_image(String uri)
     {
         boolean face_result =true;
         try {
             ImageAnnotatorClient visionClient =  ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(uri)).build();
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
                     .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
                     .addFeatures(Feature.newBuilder().setType(Type.SAFE_SEARCH_DETECTION).build())
@@ -259,64 +223,48 @@ public class ImageContentAnalyser {
             imageReqsList.add(imageReq);
 
             BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
-            //System.out.println(response.getResponsesCount());
             List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
-
-
             for(AnnotateImageResponse annotateImageResponse : annotateImageResponses)
             {
                 List<EntityAnnotation> labelAnnotations =  annotateImageResponse.getLabelAnnotationsList();
                 WebDetection wb = annotateImageResponse.getWebDetection();
                 List<WebDetection.WebEntity> wb1 = wb.getWebEntitiesList();
-                // List<FaceAnnotation> fa = annotateImageResponse.getFaceAnnotationsList();
-                //System.out.println(annotateImageResponse.getLogoAnnotationsCount());
-                //System.out.println(annotateImageResponse.getTextAnnotationsCount());
-                //System.out.println(annotateImageResponse.());
-                //System.out.println(annotateImageResponse.getLogoAnnotationsCount());
                 boolean hasError = annotateImageResponse.hasError();
                 System.out.println(annotateImageResponse.getError().getMessage());
 
                 for (WebDetection.WebEntity wb2: wb.getWebEntitiesList())
                 {
-                    for(EntityAnnotation entityAnnotation:labelAnnotations)   //Face Focus
-                    {
-                        if (entityAnnotation.getDescription().equalsIgnoreCase("sunglasses")
-                                || entityAnnotation.getDescription().equalsIgnoreCase("Headgear")
-                                || entityAnnotation.getDescription().equalsIgnoreCase("Mask")
-                                || entityAnnotation.getDescription().equalsIgnoreCase("Helmet")
-                                || entityAnnotation.getDescription().equalsIgnoreCase("Turban")
-                                || entityAnnotation.getDescription().equalsIgnoreCase("Fedora")
-                                || entityAnnotation.getDescription().equalsIgnoreCase("Mammal")
-                                || entityAnnotation.getDescription().equalsIgnoreCase("Animal")
-                                || entityAnnotation.getDescription().equalsIgnoreCase("Hand")
-                                || entityAnnotation.getDescription().equalsIgnoreCase("Tattoo")
-                                || entityAnnotation.getDescription().equalsIgnoreCase("Actor")
-                                || entityAnnotation.getDescription().equalsIgnoreCase("Actress")
-                                || wb2.getDescription().equalsIgnoreCase("Silhouette")
-                                || wb2.getDescription().equalsIgnoreCase("Tattoo")
-                                || wb2.getDescription().equalsIgnoreCase("Mask")
-                                || wb2.getDescription().equalsIgnoreCase("Headwear")
-                                || wb2.getDescription().equalsIgnoreCase("Headscarf")
-                                || wb2.getDescription().equalsIgnoreCase("sunglasses")
-                                || wb2.getDescription().equalsIgnoreCase("Animal")
-                                || wb2.getDescription().equalsIgnoreCase("Mammal")
-                                || wb2.getDescription().equalsIgnoreCase("Actress")
-                                || wb2.getDescription().equalsIgnoreCase("Actor"))
+                for(EntityAnnotation entityAnnotation:labelAnnotations)
+                {
+                     if (entityAnnotation.getDescription().equalsIgnoreCase("sunglasses")
+                            || entityAnnotation.getDescription().equalsIgnoreCase("Headgear")
+                            || entityAnnotation.getDescription().equalsIgnoreCase("Mask")
+                            || entityAnnotation.getDescription().equalsIgnoreCase("Helmet")
+                            || entityAnnotation.getDescription().equalsIgnoreCase("Turban")
+                            || entityAnnotation.getDescription().equalsIgnoreCase("Fedora")
+                            || entityAnnotation.getDescription().equalsIgnoreCase("Mammal")
+                            || entityAnnotation.getDescription().equalsIgnoreCase("Animal")
+                            || entityAnnotation.getDescription().equalsIgnoreCase("Hand")
+                            || entityAnnotation.getDescription().equalsIgnoreCase("Tattoo")
+                            || entityAnnotation.getDescription().equalsIgnoreCase("Actor")
+                            || entityAnnotation.getDescription().equalsIgnoreCase("Actress")
+                            || wb2.getDescription().equalsIgnoreCase("Silhouette")
+                            || wb2.getDescription().equalsIgnoreCase("Tattoo")
+                            || wb2.getDescription().equalsIgnoreCase("Mask")
+                            || wb2.getDescription().equalsIgnoreCase("Headwear")
+                            || wb2.getDescription().equalsIgnoreCase("Headscarf")
+                            || wb2.getDescription().equalsIgnoreCase("sunglasses")
+                            || wb2.getDescription().equalsIgnoreCase("Animal")
+                            || wb2.getDescription().equalsIgnoreCase("Mammal")
+                            || wb2.getDescription().equalsIgnoreCase("Actress")
+                            || wb2.getDescription().equalsIgnoreCase("Actor"))
                         {
                             face_result=false;
-
                         }
-                        }
-                }  }
-            if (face_result==false)
-            {
-                System.out.println("Face Invalid Image");
+                }
+                }
             }
-            else
-            {
-                System.out.println("Face Valid Image");
-            }
-            // p.getName()
+            System.out.println("Face image is ");
         }
         catch (IOException e)
         {
@@ -329,19 +277,17 @@ public class ImageContentAnalyser {
     }
 
 
-
     public static  void main(String args[])
     {
         ImageContentAnalyser analyser = new ImageContentAnalyser();
         System.out.println(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
-        //System.out.println(analyser.isImageSafe("https://cdn.pornpics.com/pics1/2016-07-15/361749_12big.jpg"));
         if (analyser.isValidImage("https://thumbs.dreamstime.com/z/full-body-picture-young-man-hands-crossed-white-background-37224316.jpg")==false)
         {
-            System.out.println(analyser.full_image("https://thumbs.dreamstime.com/z/full-body-picture-young-man-hands-crossed-white-background-37224316.jpg"));
+            System.out.println("Invalid");
         }
         else
         {
-       System.out.println(analyser.face_image("https://thumbs.dreamstime.com/z/full-body-picture-young-man-hands-crossed-white-background-37224316.jpg"));
+            System.out.print("Valid");
         }
 
    /*    if (analyser.isImageSafe("https://image.shutterstock.com/z/stock-photo-bald-man-face-closed-hands-279396935.jpg")==false)
