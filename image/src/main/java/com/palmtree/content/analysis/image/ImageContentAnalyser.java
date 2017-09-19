@@ -380,9 +380,9 @@ public class ImageContentAnalyser {
                 float right_Top_Y_Pos = value.right_Top_Y_Pos;
                 float left_Top_X_Pos = value.right_Top_X_Pos;
                 float left_Top_Y_Pos = value.left_Top_Y_Pos;
-            /*    System.out.println( value.left_Bottom_X_Pos + "  " + value.left_Bottom_Y_Pos + "  " +
-                          "    " + value.right_Bottom_X_Pos + "   " + value.right_Bottom_Y_Pos + "   " + value.right_Top_X_Pos +
-                          "    " + value.right_Top_Y_Pos+ "   " + value.left_Top_X_Pos + " " + value.left_Top_Y_Pos );  */
+    System.out.println( value.left_Bottom_X_Pos + "  " + value.left_Bottom_Y_Pos + "  " +
+           "    " + value.right_Bottom_X_Pos + "   " + value.right_Bottom_Y_Pos + "   " + value.right_Top_X_Pos +
+         "    " + value.right_Top_Y_Pos+ "   " + value.left_Top_X_Pos + " " + value.left_Top_Y_Pos );
 
                 TextFieldArea tx = new TextFieldArea(text,left_Bottom_X_Pos, left_Bottom_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
                 label_hash_map.put(text,tx);
@@ -395,10 +395,10 @@ public class ImageContentAnalyser {
             TextFieldArea value_01 = (TextFieldArea) entry.getValue();
             //  System.out.print(key);
             //System.out.print(value.text);
-            System.out.println(key_01 + "------------------" + value_01.left_Bottom_X_Pos + "  " + value_01.left_Bottom_Y_Pos + "  " +
+          /*  System.out.println(key_01 + "------------------" + value_01.left_Bottom_X_Pos + "  " + value_01.left_Bottom_Y_Pos + "  " +
                     "    " + value_01.right_Bottom_X_Pos + "   " + value_01.right_Bottom_Y_Pos + "   " + value_01.right_Top_X_Pos +
                     "    " + value_01.right_Top_Y_Pos+ "   " + value_01.left_Top_X_Pos + " " + value_01.left_Top_Y_Pos );
-
+            */
         }
 
         return hashMap2;
@@ -495,24 +495,18 @@ public class ImageContentAnalyser {
 }
 
 
-class TextFieldArea
-{
+class TextFieldArea{
     float left_Top_X_Pos,right_Top_X_Pos,left_Bottom_X_Pos, right_Bottom_X_Pos,
-          left_Top_Y_Pos,right_Top_Y_Pos,left_Bottom_Y_Pos, right_Bottom_Y_Pos;
-    String text;
-
-    public TextFieldArea(String text, float left_Top_X_Pos,float right_Top_X_Pos,float left_Bottom_X_Pos,float right_Bottom_X_Pos,
-                        float left_Top_Y_Pos,float right_Top_Y_Pos,float left_Bottom_Y_Pos, float right_Bottom_Y_Pos)
-      {
-         this.text = text;
-         this.left_Top_X_Pos = left_Top_X_Pos;
-         this.right_Top_X_Pos = right_Top_X_Pos;
-         this.left_Bottom_X_Pos = left_Bottom_X_Pos;
-         this.right_Bottom_X_Pos = right_Bottom_X_Pos;
-         this.left_Top_Y_Pos = left_Top_Y_Pos;
-         this.right_Top_Y_Pos = right_Top_Y_Pos;
-         this.left_Bottom_Y_Pos = left_Bottom_Y_Pos;
-         this.right_Bottom_Y_Pos = right_Bottom_Y_Pos;
-      }
-
-}
+            left_Top_Y_Pos,right_Top_Y_Pos,left_Bottom_Y_Pos, right_Bottom_Y_Pos;
+    String text;       public TextFieldArea(String text, float left_Bottom_X_Pos,float left_Bottom_Y_Pos,float right_Bottom_X_Pos,float right_Bottom_Y_Pos,
+                                            float right_Top_X_Pos,float right_Top_Y_Pos,float left_Top_X_Pos, float left_Top_Y_Pos)
+    {        this.text = text;
+        this.left_Bottom_X_Pos = left_Bottom_X_Pos;
+        this.left_Bottom_Y_Pos = left_Bottom_Y_Pos;
+        this.right_Bottom_X_Pos = right_Bottom_X_Pos;
+        this.right_Bottom_Y_Pos = right_Bottom_Y_Pos;
+        this.right_Top_X_Pos = right_Top_X_Pos;
+        this.right_Top_Y_Pos = right_Top_Y_Pos;
+        this.left_Top_X_Pos = left_Top_X_Pos;
+        this.left_Top_Y_Pos = left_Top_Y_Pos;
+    }   }
