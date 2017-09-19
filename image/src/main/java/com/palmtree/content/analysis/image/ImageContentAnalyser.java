@@ -28,10 +28,11 @@ public class ImageContentAnalyser {
        // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
 
 
-     //  HashMap<String,TextFieldArea> newhashmap = new HashMap<String, TextFieldArea>();
-    analyser.DocumentExtractionTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png");
-      // System.out.println(analyser.extractTextValueForLabel("http://www.k-billing.com/example_invoices/professionalblue_example.png" , newhashmap));
-
+   // HashMap<String,TextFieldArea> newhashmap = new HashMap<String, TextFieldArea>();
+     analyser.DocumentExtractionTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png");
+ //   System.out.println(analyser.extractTextValueForLabel("http://www.k-billing.com/example_invoices/professionalblue_example.png" , newhashmap));
+     //  String TextFieldArea valueRectCoordinates = new TextFieldArea(text,left_Bottom_X_Pos, left_Bottom_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
+ //System.out.println(analyser.extractTextValueForLabel(,newhashmap));
     }
 
 
@@ -243,7 +244,7 @@ public class ImageContentAnalyser {
 
 
     /* Document Generating API */
-    public HashMap<String, TextFieldArea> DocumentExtractionTemplate(String imageURI) {
+    public boolean DocumentExtractionTemplate(String imageURI) {
         //  Map<LabelFieldArea,ValueFieldArea> map = new HashMap<LabelFieldArea, ValueFieldArea>();
 
         HashMap<String, TextFieldArea> hashMap = null;
@@ -321,30 +322,20 @@ public class ImageContentAnalyser {
 
 
                 TextFieldArea textFieldArea = new TextFieldArea(text, left_Bottom_X_Pos, left_Bottom_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
-
                 hashMap.put(text, textFieldArea);
                 // System.out.println(text);
+
+             String ebi = extractTextValueForLabel(textFieldArea,hashMap);
+          System.out.print(ebi);
             }
             //  Set<Map.Entry<String,TextFieldArea>> entrySet = hashMap.entrySet();
-
-            for (Map.Entry<String, TextFieldArea> entry : hashMap.entrySet()) {       //  System.out.println("key: " + entry.getKey());
-                //  System.out.println("Value: " + entry.getValue());
-                String key = (String) entry.getKey();
-                TextFieldArea value = (TextFieldArea) entry.getValue();
-                //  System.out.print(key);
-                //System.out.print(value.text);
-         /*  System.out.println(key + "------------------" + value.left_Bottom_X_Pos + "  " + value.left_Bottom_Y_Pos + "  " +
-                        "    " + value.right_Bottom_X_Pos + "   " + value.right_Bottom_Y_Pos + "   " + value.right_Top_X_Pos +
-                        "    " + value.right_Top_Y_Pos+ "   " + value.left_Top_X_Pos + " " + value.left_Top_Y_Pos + "Large_Rectangle"); */
-
-            }
 
 
         } catch (IOException exc) {
             logger.error("Exception while reading image from the url" + exc.getMessage());
         }
 
-        return generating_Template(hashMap);
+        return true;
 
     }
     private HashMap<String,TextFieldArea> generating_Template(HashMap<String, TextFieldArea> hashMap2)
@@ -372,14 +363,14 @@ public class ImageContentAnalyser {
             if( key.contains("Account"))
             {
                 String text = "Account";
-                float left_Bottom_X_Pos =value.left_Bottom_X_Pos;
-                float left_Bottom_Y_Pos = value.left_Bottom_Y_Pos;
-                float right_Bottom_X_Pos = value.right_Bottom_X_Pos;
-                float right_Bottom_Y_Pos = value.right_Bottom_Y_Pos;
+                float left_Top_X_Pos =value.left_Top_X_Pos;
+                float left_Top_Y_Pos = value.left_Top_Y_Pos;
                 float right_Top_X_Pos = value.right_Top_X_Pos;
                 float right_Top_Y_Pos = value.right_Top_Y_Pos;
-                float left_Top_X_Pos = value.right_Top_X_Pos;
-                float left_Top_Y_Pos = value.left_Top_Y_Pos;
+                float right_Bottom_X_Pos = value.right_Bottom_X_Pos;
+                float right_Bottom_Y_Pos = value.right_Bottom_Y_Pos;
+                float left_Bottom_X_Pos = value.right_Bottom_X_Pos;
+                float left_Bottom_Y_Pos = value.left_Bottom_Y_Pos;
     System.out.println( value.left_Bottom_X_Pos + "  " + value.left_Bottom_Y_Pos + "  " +
            "    " + value.right_Bottom_X_Pos + "   " + value.right_Bottom_Y_Pos + "   " + value.right_Top_X_Pos +
          "    " + value.right_Top_Y_Pos+ "   " + value.left_Top_X_Pos + " " + value.left_Top_Y_Pos );
@@ -405,17 +396,40 @@ public class ImageContentAnalyser {
     }
 
 // Method For Comparing Rectangle
-    private String extractTextValueForLabel(String imageURI , HashMap<String, TextFieldArea> docTextsCoordinates) {
+private String extractTextValueForLabel(TextFieldArea valueRectCoordinates , HashMap<String, TextFieldArea> docTextsCoordinates) {
+    Iterator it = docTextsCoordinates.entrySet().iterator();
+    StringBuilder builder = new StringBuilder();
+    String text = "";
+    while (it.hasNext())
+    {
+        Map.Entry entry = (Map.Entry) it.next();
+        String key = (String) entry.getKey();
+        TextFieldArea value = (TextFieldArea) entry.getValue();
+
+        if ((value.left_Top_X_Pos >= valueRectCoordinates.left_Top_X_Pos
+                && value.left_Top_Y_Pos >= valueRectCoordinates.left_Top_Y_Pos)
+
+                && (value.right_Bottom_X_Pos <= valueRectCoordinates.right_Bottom_X_Pos
+                && value.right_Bottom_Y_Pos <= valueRectCoordinates.right_Bottom_Y_Pos))
+        {     if(key.contains("Phone"))
+            builder.append(key);
+            builder.append(" ");
+        }
+    }
+   text = builder.toString();
+   return text;
+}
+
+ /*   private String extractTextValueForLabel(String imageURI , HashMap<String, TextFieldArea> docTextsCoordinates) {
         String text = "";
         float left_Top_X_Pos;
-        float right_Top_X_Pos;
-        float left_Bottom_X_Pos;
-        float right_Bottom_X_Pos;
         float left_Top_Y_Pos;
+        float right_Top_X_Pos;
         float right_Top_Y_Pos;
-        float left_Bottom_Y_Pos;
+        float right_Bottom_X_Pos;
         float right_Bottom_Y_Pos;
-
+        float left_Bottom_X_Pos;
+        float left_Bottom_Y_Pos;
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
@@ -450,14 +464,14 @@ public class ImageContentAnalyser {
                 Vertex Third_co_ordinate = polygon.get(2);
                 Vertex Forth_co_ordinate = polygon.get(3);
 
-                left_Bottom_X_Pos = First_co_ordinate.getX();
-                left_Bottom_Y_Pos = First_co_ordinate.getY();
-                right_Bottom_X_Pos = Second_co_ordinate.getX();
-                right_Bottom_Y_Pos = Second_co_ordinate.getY();
-                right_Top_X_Pos = Third_co_ordinate.getX();
-                right_Top_Y_Pos = Third_co_ordinate.getY();
-                left_Top_X_Pos = Forth_co_ordinate.getX();
-                left_Top_Y_Pos = Forth_co_ordinate.getY();
+                left_Top_X_Pos = First_co_ordinate.getX();
+                left_Top_Y_Pos = First_co_ordinate.getY();
+                right_Top_X_Pos = Second_co_ordinate.getX();
+                right_Top_Y_Pos = Second_co_ordinate.getY();
+                right_Bottom_X_Pos = Third_co_ordinate.getX();
+                right_Bottom_Y_Pos = Third_co_ordinate.getY();
+                left_Bottom_X_Pos = Forth_co_ordinate.getX();
+                left_Bottom_Y_Pos = Forth_co_ordinate.getY();
 
 
 
@@ -474,11 +488,11 @@ public class ImageContentAnalyser {
                 String key = (String) entry.getKey();
                 TextFieldArea value = (TextFieldArea) entry.getValue();
 
-                if ((value.left_Bottom_X_Pos >= valueRectCoordinates.left_Bottom_X_Pos
-                        && value.left_Bottom_Y_Pos >= valueRectCoordinates.left_Bottom_Y_Pos)
+                if ((value.left_Top_X_Pos >= valueRectCoordinates.left_Top_X_Pos
+                        && value.left_Top_Y_Pos >= valueRectCoordinates.left_Top_Y_Pos)
 
-                        && (value.right_Top_X_Pos <= valueRectCoordinates.right_Top_X_Pos
-                        && value.right_Top_Y_Pos <= valueRectCoordinates.right_Top_Y_Pos))
+                        && (value.right_Bottom_X_Pos <= valueRectCoordinates.right_Bottom_X_Pos
+                        && value.right_Bottom_Y_Pos <= valueRectCoordinates.right_Bottom_Y_Pos))
                 {
                     builder.append(key);
                     builder.append(" ");
@@ -490,7 +504,7 @@ public class ImageContentAnalyser {
             logger.error("Exception while reading image from the url" + exc.getMessage());
         }
         return text;
-    }
+    }   */
 
 }
 
@@ -498,15 +512,20 @@ public class ImageContentAnalyser {
 class TextFieldArea{
     float left_Top_X_Pos,right_Top_X_Pos,left_Bottom_X_Pos, right_Bottom_X_Pos,
             left_Top_Y_Pos,right_Top_Y_Pos,left_Bottom_Y_Pos, right_Bottom_Y_Pos;
-    String text;       public TextFieldArea(String text, float left_Bottom_X_Pos,float left_Bottom_Y_Pos,float right_Bottom_X_Pos,float right_Bottom_Y_Pos,
+    String text;
+    public TextFieldArea(String text, float left_Bottom_X_Pos,float left_Bottom_Y_Pos,float right_Bottom_X_Pos,float right_Bottom_Y_Pos,
                                             float right_Top_X_Pos,float right_Top_Y_Pos,float left_Top_X_Pos, float left_Top_Y_Pos)
-    {        this.text = text;
-        this.left_Bottom_X_Pos = left_Bottom_X_Pos;
-        this.left_Bottom_Y_Pos = left_Bottom_Y_Pos;
-        this.right_Bottom_X_Pos = right_Bottom_X_Pos;
-        this.right_Bottom_Y_Pos = right_Bottom_Y_Pos;
-        this.right_Top_X_Pos = right_Top_X_Pos;
-        this.right_Top_Y_Pos = right_Top_Y_Pos;
+    {
+        this.text = text;
         this.left_Top_X_Pos = left_Top_X_Pos;
         this.left_Top_Y_Pos = left_Top_Y_Pos;
+        this.right_Top_X_Pos = right_Top_X_Pos;
+        this.right_Top_Y_Pos = right_Top_Y_Pos;
+        this.right_Bottom_X_Pos = right_Bottom_X_Pos;
+        this.right_Bottom_Y_Pos = right_Bottom_Y_Pos;
+        this.left_Bottom_X_Pos = left_Bottom_X_Pos;
+        this.left_Bottom_Y_Pos = left_Bottom_Y_Pos;
+
+
+
     }   }
