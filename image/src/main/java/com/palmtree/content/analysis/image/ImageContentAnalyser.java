@@ -28,9 +28,9 @@ public class ImageContentAnalyser {
        // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
 
 
-       HashMap<String,TextFieldArea> newhashmap = new HashMap<String, TextFieldArea>();
-       newhashmap = analyser.DocumentExtractionTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png");
-       System.out.println(analyser.extractTextValueForLabel("http://www.k-billing.com/example_invoices/professionalblue_example.png" , newhashmap));
+     //  HashMap<String,TextFieldArea> newhashmap = new HashMap<String, TextFieldArea>();
+    analyser.DocumentExtractionTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png");
+      // System.out.println(analyser.extractTextValueForLabel("http://www.k-billing.com/example_invoices/professionalblue_example.png" , newhashmap));
 
     }
 
