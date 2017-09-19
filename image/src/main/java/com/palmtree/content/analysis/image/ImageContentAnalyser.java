@@ -5,6 +5,7 @@ import com.google.cloud.vision.v1.Feature.Type;
 import com.google.protobuf.ByteString;
 import org.apache.log4j.Logger;
 
+import javax.validation.constraints.Max;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +26,12 @@ public class ImageContentAnalyser {
        // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
        // System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
        // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
-        System.out.println(analyser.DocumentExtractionTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png"));
-        // analyser.extractTextValueForLabel()
+
+
+       HashMap<String,TextFieldArea> newhashmap = new HashMap<String, TextFieldArea>();
+       newhashmap = analyser.DocumentExtractionTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png");
+       System.out.println(analyser.extractTextValueForLabel("http://www.k-billing.com/example_invoices/professionalblue_example.png" , newhashmap));
+
     }
 
 
@@ -237,182 +242,256 @@ public class ImageContentAnalyser {
     }
 
 
- /* Document Generating API */
-
-    public boolean DocumentExtractionTemplate(String imageURI)
-    {
+    /* Document Generating API */
+    public HashMap<String, TextFieldArea> DocumentExtractionTemplate(String imageURI) {
         //  Map<LabelFieldArea,ValueFieldArea> map = new HashMap<LabelFieldArea, ValueFieldArea>();
-         try {
-             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
-             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-             Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
-             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
+
+        HashMap<String, TextFieldArea> hashMap = null;
+        try {
+            ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
+            ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
+            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
                     .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
                     .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
                     .build();
-             imageReqsList.add(imageReq);
+            imageReqsList.add(imageReq);
+            BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
+            List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
+            List<String> Description = new ArrayList<String>();
+            List<List<Vertex>> vertex = new ArrayList<List<Vertex>>();
+            List<Vertex> polygon = new ArrayList<Vertex>();
+            String text = "";
+            float left_Top_X_Pos = 0;
+            float right_Top_X_Pos = 0;
+            float left_Bottom_X_Pos = 0;
+            float right_Bottom_X_Pos = 0;
+            float left_Top_Y_Pos = 0;
+            float right_Top_Y_Pos = 0;
+            float left_Bottom_Y_Pos = 0;
+            float right_Bottom_Y_Pos = 0;
+            hashMap = new HashMap<String, TextFieldArea>();
 
+            for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
+                for (EntityAnnotation poly : annotateImageResponse.getTextAnnotationsList()) {
+                    // System.out.println(poly.getDescription() + poly.getBoundingPoly().getVerticesList());
+                    Description.add(poly.getDescription());
+                    vertex.add(poly.getBoundingPoly().getVerticesList());
+
+
+                }
+            }
+
+           /*System.out.print(Description.get(0));
+            polygon = vertex.get(0);
+           System.out.print(polygon.get(0));*/
+
+
+            for (int i = 0; i < vertex.size(); i++) {
+                text = Description.get(i);
+                polygon = vertex.get(i);
+
+           /* System.out.print(polygon.get(0));
+            System.out.print(polygon.get(1));
+            System.out.print(polygon.get(2));
+            System.out.print(polygon.get(3));  */
+                Vertex First_co_ordinate = polygon.get(0);
+                Vertex Second_co_ordinate = polygon.get(1);
+                Vertex Third_co_ordinate = polygon.get(2);
+                Vertex Forth_co_ordinate = polygon.get(3);
+
+                left_Bottom_X_Pos = First_co_ordinate.getX();
+                left_Bottom_Y_Pos = First_co_ordinate.getY();
+                right_Bottom_X_Pos = Second_co_ordinate.getX();
+                right_Bottom_Y_Pos = Second_co_ordinate.getY();
+                right_Top_X_Pos = Third_co_ordinate.getX();
+                right_Top_Y_Pos = Third_co_ordinate.getY();
+                left_Top_X_Pos = Forth_co_ordinate.getX();
+                left_Top_Y_Pos = Forth_co_ordinate.getY();
+
+                // System.out.println(text);
+        /*  System.out.println(" Left_top_x_pos :" + left_Top_X_Pos);
+            System.out.println(" Right_top_x_pos:" + left_Bottom_X_Pos);
+            System.out.println(" left_bootom_x_pos :" + left_Bottom_X_Pos);
+            System.out.println(" Right_bottom_x_pos:" + right_Bottom_X_Pos );
+            System.out.println(" Left_top_Y_pos :"+ left_Top_Y_Pos);
+             System.out.println(" Right_Top_Y_pos :" +  right_Top_Y_Pos);
+            System.out.println(" Left_Top_Y_pos :"+ left_Bottom_Y_Pos);
+            System.out.println(" Right_Bottom_Y_pos :" + right_Bottom_Y_Pos);    */
+
+
+                TextFieldArea textFieldArea = new TextFieldArea(text, left_Bottom_X_Pos, left_Bottom_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
+
+                hashMap.put(text, textFieldArea);
+                // System.out.println(text);
+            }
+            //  Set<Map.Entry<String,TextFieldArea>> entrySet = hashMap.entrySet();
+
+            for (Map.Entry<String, TextFieldArea> entry : hashMap.entrySet()) {       //  System.out.println("key: " + entry.getKey());
+                //  System.out.println("Value: " + entry.getValue());
+                String key = (String) entry.getKey();
+                TextFieldArea value = (TextFieldArea) entry.getValue();
+                //  System.out.print(key);
+                //System.out.print(value.text);
+         /*  System.out.println(key + "------------------" + value.left_Bottom_X_Pos + "  " + value.left_Bottom_Y_Pos + "  " +
+                        "    " + value.right_Bottom_X_Pos + "   " + value.right_Bottom_Y_Pos + "   " + value.right_Top_X_Pos +
+                        "    " + value.right_Top_Y_Pos+ "   " + value.left_Top_X_Pos + " " + value.left_Top_Y_Pos + "Large_Rectangle"); */
+
+            }
+
+
+        } catch (IOException exc) {
+            logger.error("Exception while reading image from the url" + exc.getMessage());
+        }
+
+        return generating_Template(hashMap);
+
+    }
+    private HashMap<String,TextFieldArea> generating_Template(HashMap<String, TextFieldArea> hashMap2)
+    {
+
+        //label.add("Text");//And so on..
+        // List<TextFieldArea> coordinates = new ArrayList<TextFieldArea>();
+
+//And so on...
+
+        HashMap<String,TextFieldArea> label_hash_map = new HashMap<String, TextFieldArea>();
+        //Iterator iterator = hashMap2.entrySet().iterator();
+
+        for (Map.Entry<String, TextFieldArea> entry : hashMap2.entrySet()) {
+            //  System.out.println("key: " + entry.getKey());
+            //  System.out.println("Value: " + entry.getValue());
+            String key = (String) entry.getKey();
+            TextFieldArea value = (TextFieldArea) entry.getValue();
+            //  System.out.print(key);
+
+           /*   System.out.println(key + "------------------" + value.left_Bottom_X_Pos + "  " + value.left_Bottom_Y_Pos + "  " +
+                        "    " + value.right_Bottom_X_Pos + "   " + value.right_Bottom_Y_Pos + "   " + value.right_Top_X_Pos +
+                        "    " + value.right_Top_Y_Pos+ "   " + value.left_Top_X_Pos + " " + value.left_Top_Y_Pos); */
+            // System.out.print(value.left_Bottom_X_Pos);
+            if( key.contains("Account"))
+            {
+                String text = "Account";
+                float left_Bottom_X_Pos =value.left_Bottom_X_Pos;
+                float left_Bottom_Y_Pos = value.left_Bottom_Y_Pos;
+                float right_Bottom_X_Pos = value.right_Bottom_X_Pos;
+                float right_Bottom_Y_Pos = value.right_Bottom_Y_Pos;
+                float right_Top_X_Pos = value.right_Top_X_Pos;
+                float right_Top_Y_Pos = value.right_Top_Y_Pos;
+                float left_Top_X_Pos = value.right_Top_X_Pos;
+                float left_Top_Y_Pos = value.left_Top_Y_Pos;
+            /*    System.out.println( value.left_Bottom_X_Pos + "  " + value.left_Bottom_Y_Pos + "  " +
+                          "    " + value.right_Bottom_X_Pos + "   " + value.right_Bottom_Y_Pos + "   " + value.right_Top_X_Pos +
+                          "    " + value.right_Top_Y_Pos+ "   " + value.left_Top_X_Pos + " " + value.left_Top_Y_Pos );  */
+
+                TextFieldArea tx = new TextFieldArea(text,left_Bottom_X_Pos, left_Bottom_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
+                label_hash_map.put(text,tx);
+            }
+        }
+
+        for (Map.Entry<String, TextFieldArea> entry : label_hash_map.entrySet()) {       //  System.out.println("key: " + entry.getKey());
+            //  System.out.println("Value: " + entry.getValue());
+            String key_01 = (String) entry.getKey();
+            TextFieldArea value_01 = (TextFieldArea) entry.getValue();
+            //  System.out.print(key);
+            //System.out.print(value.text);
+            System.out.println(key_01 + "------------------" + value_01.left_Bottom_X_Pos + "  " + value_01.left_Bottom_Y_Pos + "  " +
+                    "    " + value_01.right_Bottom_X_Pos + "   " + value_01.right_Bottom_Y_Pos + "   " + value_01.right_Top_X_Pos +
+                    "    " + value_01.right_Top_Y_Pos+ "   " + value_01.left_Top_X_Pos + " " + value_01.left_Top_Y_Pos );
+
+        }
+
+        return hashMap2;
+    }
+
+// Method For Comparing Rectangle
+    private String extractTextValueForLabel(String imageURI , HashMap<String, TextFieldArea> docTextsCoordinates) {
+        String text = "";
+        float left_Top_X_Pos;
+        float right_Top_X_Pos;
+        float left_Bottom_X_Pos;
+        float right_Bottom_X_Pos;
+        float left_Top_Y_Pos;
+        float right_Top_Y_Pos;
+        float left_Bottom_Y_Pos;
+        float right_Bottom_Y_Pos;
+
+        try {
+            ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
+            ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
+            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
+                    .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
+                    .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
+                    .build();
+            imageReqsList.add(imageReq);
             BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
             List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
             List<String> Description = new ArrayList<String>();
             List<List<Vertex>> vertex = new ArrayList<List<Vertex>>();
             List<Vertex> polygon = new ArrayList<Vertex>();
 
-            String text = "";
-            float left_Top_X_Pos = 0;
-            float right_Top_X_Pos =0 ;
-            float left_Bottom_X_Pos=0;
-            float right_Bottom_X_Pos=0;
-            float left_Top_Y_Pos=0 ;
-            float  right_Top_Y_Pos =0;
-            float left_Bottom_Y_Pos =0;
-            float right_Bottom_Y_Pos=0;
 
-            HashMap<String,TextFieldArea> hashMap = new HashMap<String,TextFieldArea>();
-
-            for (AnnotateImageResponse annotateImageResponse : annotateImageResponses)
-            {
-            for (EntityAnnotation poly : annotateImageResponse.getTextAnnotationsList())
-            {
-             // System.out.println(poly.getDescription() + poly.getBoundingPoly().getVerticesList());
-               Description.add(poly.getDescription());
-               vertex.add(poly.getBoundingPoly().getVerticesList());
-             }
-             }
-           /*System.out.print(Description.get(0));
-             polygon = vertex.get(0);
-             System.out.print(polygon.get(0));*/
-            for (int i=0;i < vertex.size();i++)
-            {
-               text =  Description.get(i);
-               polygon = vertex.get(i);
-            /* System.out.print(polygon.get(0));
-               System.out.print(polygon.get(1));
-               System.out.print(polygon.get(2));
-               System.out.print(polygon.get(3));  */
-               Vertex First_co_ordinate = polygon.get(0);
-               Vertex Second_co_ordinate = polygon.get(0);
-               Vertex Third_co_ordinate = polygon.get(0);
-               Vertex Forth_co_ordinate = polygon.get(0);
-               left_Top_X_Pos = First_co_ordinate.getX();
-               right_Top_X_Pos = First_co_ordinate.getX();
-               left_Bottom_X_Pos = Second_co_ordinate.getX();
-               right_Bottom_X_Pos = Second_co_ordinate.getX();
-               left_Top_Y_Pos = Third_co_ordinate.getY();
-               right_Top_Y_Pos = Third_co_ordinate.getY();
-               left_Bottom_Y_Pos = Forth_co_ordinate.getY();
-               right_Bottom_Y_Pos = Forth_co_ordinate.getY();
-            /* System.out.println(text);
-               System.out.println(" Left_top_x_pos :" + left_Top_X_Pos);
-               System.out.println(" Right_top_x_pos:" + left_Bottom_X_Pos);
-               System.out.println(" left_bootom_x_pos :" + left_Bottom_X_Pos);
-               System.out.println(" Right_bottom_x_pos:" + right_Bottom_X_Pos );
-               System.out.println(" Left_top_Y_pos :"+ left_Top_Y_Pos);
-               System.out.println(" Right_Top_Y_pos :" +  right_Top_Y_Pos);
-               System.out.println(" Left_Top_Y_pos :"+ left_Bottom_Y_Pos);
-               System.out.println(" Right_Bottom_Y_pos :" + right_Bottom_Y_Pos);    */
-
-               TextFieldArea textFieldArea = new TextFieldArea(text,left_Top_X_Pos,right_Top_X_Pos,
-                               left_Bottom_X_Pos,right_Bottom_X_Pos,left_Top_Y_Pos,right_Top_Y_Pos,
-                               left_Bottom_Y_Pos,right_Bottom_Y_Pos);
-               hashMap.put(text,textFieldArea);
-            // System.out.println(text);
+            for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
+                for (EntityAnnotation poly : annotateImageResponse.getTextAnnotationsList()) {
+                    // System.out.println(poly.getDescription() + poly.getBoundingPoly().getVerticesList());
+                    Description.add(poly.getDescription());
+                    vertex.add(poly.getBoundingPoly().getVerticesList());
+                }
             }
-           //  Set<Map.Entry<String,TextFieldArea>> entrySet = hashMap.entrySet();
-        for (Map.Entry<String,TextFieldArea> entry :hashMap.entrySet())
-            {
-             //  System.out.println("key: " + entry.getKey());
-             //  System.out.println("Value: " + entry.getValue());
+            for (int i = 0; i < vertex.size(); i++) {
+                text = Description.get(i);
+
+                polygon = vertex.get(i);
+
+
+                Vertex First_co_ordinate = polygon.get(0);
+                Vertex Second_co_ordinate = polygon.get(1);
+                Vertex Third_co_ordinate = polygon.get(2);
+                Vertex Forth_co_ordinate = polygon.get(3);
+
+                left_Bottom_X_Pos = First_co_ordinate.getX();
+                left_Bottom_Y_Pos = First_co_ordinate.getY();
+                right_Bottom_X_Pos = Second_co_ordinate.getX();
+                right_Bottom_Y_Pos = Second_co_ordinate.getY();
+                right_Top_X_Pos = Third_co_ordinate.getX();
+                right_Top_Y_Pos = Third_co_ordinate.getY();
+                left_Top_X_Pos = Forth_co_ordinate.getX();
+                left_Top_Y_Pos = Forth_co_ordinate.getY();
+
+
+
+        TextFieldArea valueRectCoordinates = new TextFieldArea(text, left_Bottom_X_Pos, left_Bottom_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
+
+                // System.out.println(text);
+
+            //  Set<Map.Entry<String,TextFieldArea>> entrySet = hashMap.entrySet();
+
+            Iterator it = docTextsCoordinates.entrySet().iterator();
+            StringBuilder builder = new StringBuilder();
+            while (it.hasNext()) {
+                Map.Entry entry = (Map.Entry) it.next();
                 String key = (String) entry.getKey();
                 TextFieldArea value = (TextFieldArea) entry.getValue();
-            //  System.out.print(key);
-            //  System.out.print(value.text);
-                System.out.println(key + "-----------------" + value.left_Top_X_Pos
-                        + "  " + value.right_Top_X_Pos
-                        + "  " + value.left_Bottom_X_Pos + "   " + value.right_Bottom_X_Pos
-                        + "  " + value.left_Top_Y_Pos + "   "  + value.right_Top_Y_Pos
-                        + "  " + value.left_Bottom_Y_Pos + " " + value.right_Bottom_Y_Pos);
+
+                if ((value.left_Bottom_X_Pos >= valueRectCoordinates.left_Bottom_X_Pos
+                        && value.left_Bottom_Y_Pos >= valueRectCoordinates.left_Bottom_Y_Pos)
+
+                        && (value.right_Top_X_Pos <= valueRectCoordinates.right_Top_X_Pos
+                        && value.right_Top_Y_Pos <= valueRectCoordinates.right_Top_Y_Pos))
+                {
+                    builder.append(key);
+                    builder.append(" ");
+                }
             }
-        }
-        catch (IOException exc)
-        {
-             logger.error("Exception while reading image from the url" + exc.getMessage());
-        }
-       return true;
-       }
-
-// Extracting value
-    private StringBuilder extractTextValueForLabel(TextFieldArea valueRectCoordinates , HashMap<String , TextFieldArea> docTextsCoordinates)
-    {
-        StringBuilder text = new StringBuilder();
-        Iterator it = docTextsCoordinates.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry entry = (Map.Entry)it.next();
-            String key = (String) entry.getKey();
-            TextFieldArea value = (TextFieldArea) entry.getValue();
-
-            float Small_Rect_Left_Bottom_X = value.left_Bottom_X_Pos;
-            float Small_Rect_Right_Bottom_X = value.right_Bottom_X_Pos;
-            float Small_Rect_Left_Top_X = value.left_Top_X_Pos;
-            float Small_Rect_Right_Top_X = value.right_Top_X_Pos;
-
-            float Big_Rect_Left_Bottom_X = valueRectCoordinates.left_Bottom_X_Pos;
-            float Big_Rect_Right_Bottom_X = valueRectCoordinates.right_Bottom_X_Pos;
-            float Big_Rect_Left_Top_X = valueRectCoordinates.left_Top_X_Pos;
-            float Big_Rect_Right_Top_X = valueRectCoordinates.right_Top_X_Pos;
-
-            float Min_Small_Rect_Bottom_X = Math.min(Small_Rect_Left_Bottom_X , Small_Rect_Right_Bottom_X);
-            float Min_Small_Rect_Top_X = Math.min(Small_Rect_Left_Top_X , Small_Rect_Right_Top_X);
-            float Min_Big_Rect_Bottom_X = Math.min(Big_Rect_Left_Bottom_X , Big_Rect_Right_Bottom_X);
-            float Min_Big_Rect_Top_X = Math.min(Big_Rect_Left_Top_X , Big_Rect_Right_Top_X);
-
-            float Max_Small_Rect_Bottom_X = Math.max(Small_Rect_Left_Bottom_X , Small_Rect_Right_Bottom_X);
-            float Max_Small_Rect_Top_X = Math.max(Small_Rect_Left_Top_X , Small_Rect_Right_Top_X);
-            float Max_Big_Rect_Bottom_X = Math.max(Big_Rect_Left_Bottom_X , Big_Rect_Right_Bottom_X);
-            float Max_Big_Rect_Top_X = Math.max(Big_Rect_Left_Top_X , Big_Rect_Right_Top_X);
-
-            float Min_Small_Rect_X = Math.min(Min_Small_Rect_Bottom_X , Min_Small_Rect_Top_X);
-            float Min_Big_Rect_X = Math.min(Min_Big_Rect_Bottom_X , Min_Big_Rect_Top_X);
-            float Max_Small_Rect_X = Math.max(Max_Small_Rect_Bottom_X , Max_Small_Rect_Top_X);
-            float Max_Big_Rect_X = Math.max(Max_Big_Rect_Bottom_X , Max_Big_Rect_Top_X);
-
-
-
-            float Small_Rect_Left_Bottom_Y = value.left_Bottom_Y_Pos;
-            float Small_Rect_Right_Bottom_Y = value.right_Bottom_Y_Pos;
-            float Small_Rect_Left_Top_Y = value.left_Top_Y_Pos;
-            float Small_Rect_Right_Top_Y = value.right_Top_Y_Pos;
-
-            float Big_Rect_Left_Bottom_Y = valueRectCoordinates.left_Bottom_Y_Pos;
-            float Big_Rect_Right_Bottom_Y = valueRectCoordinates.right_Bottom_Y_Pos;
-            float Big_Rect_Left_Top_Y = valueRectCoordinates.left_Top_Y_Pos;
-            float Big_Rect_Right_Top_Y = valueRectCoordinates.right_Top_Y_Pos;
-
-            float Min_Small_Rect_Bottom_Y = Math.min(Small_Rect_Left_Bottom_Y , Small_Rect_Right_Bottom_Y);
-            float Min_Small_Rect_Top_Y = Math.min(Small_Rect_Left_Top_Y , Small_Rect_Right_Top_Y);
-            float Min_Big_Rect_Bottom_Y = Math.min(Big_Rect_Left_Bottom_Y , Big_Rect_Right_Bottom_Y);
-            float Min_Big_Rect_Top_Y = Math.min(Big_Rect_Left_Top_Y , Big_Rect_Right_Top_Y);
-
-            float Max_Small_Rect_Bottom_Y = Math.max(Small_Rect_Left_Bottom_Y , Small_Rect_Right_Bottom_Y);
-            float Max_Small_Rect_Top_Y = Math.max(Small_Rect_Left_Top_Y , Small_Rect_Right_Top_Y);
-            float Max_Big_Rect_Bottom_Y = Math.max(Big_Rect_Left_Bottom_Y , Big_Rect_Right_Bottom_Y);
-            float Max_Big_Rect_Top_Y = Math.max(Big_Rect_Left_Top_Y , Big_Rect_Right_Top_Y);
-
-            float Min_Small_Rect_Y = Math.min(Min_Small_Rect_Bottom_Y , Min_Small_Rect_Top_Y);
-            float Min_Big_Rect_Y = Math.min(Min_Big_Rect_Bottom_Y , Min_Big_Rect_Top_Y);
-            float Max_Small_Rect_Y = Math.max(Max_Small_Rect_Bottom_Y , Max_Small_Rect_Top_Y);
-            float Max_Big_Rect_Y = Math.max(Max_Big_Rect_Bottom_Y , Max_Big_Rect_Top_Y);
-
-            if(((Min_Small_Rect_X >= Min_Big_Rect_X) && (Max_Small_Rect_X <= Max_Big_Rect_X))
-           && ((Min_Small_Rect_Y >= Min_Big_Rect_Y) && (Max_Small_Rect_Y <= Max_Big_Rect_Y)))
-            {
-              text.append(docTextsCoordinates.values());
-               text.append(" ");
+            text = builder.toString();
             }
+        } catch (IOException exc) {
+            logger.error("Exception while reading image from the url" + exc.getMessage());
         }
         return text;
     }
+
 }
 
 
