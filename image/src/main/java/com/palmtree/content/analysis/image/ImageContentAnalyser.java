@@ -4,7 +4,6 @@ import com.google.cloud.vision.v1.*;
 import com.google.cloud.vision.v1.Feature.Type;
 import com.google.protobuf.ByteString;
 import org.apache.log4j.Logger;
-
 import javax.validation.constraints.Max;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +12,8 @@ import java.util.*;
 
 /**
  * Created by kaarthikraaj on 10/8/17.
- */
+ **/
+
 public class ImageContentAnalyser {
 
     private static Logger logger = Logger.getLogger(ImageContentAnalyser.class.getName());
@@ -21,18 +21,14 @@ public class ImageContentAnalyser {
     public static void main(String args[]) {
         ImageContentAnalyser analyser = new ImageContentAnalyser();
         System.out.println(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
-       // System.out.println(analyser.isImageSafe("https://www.dailydot.com/wp-content/uploads/6c855233625ee8c7985a841c4bd068dd5e1.jpg/91/"));
-       // System.out.println(analyser.isValidImage("https://i.pinimg.com/736x/a1/7c/69/a17c694d0f8f25774847f9224529cb8f.jpg"));
-       // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
-       // System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
-       // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
+        // System.out.println(analyser.isImageSafe("https://www.dailydot.com/wp-content/uploads/6c855233625ee8c7985a841c4bd068dd5e1.jpg/91/"));
+        // System.out.println(analyser.isValidImage("https://i.pinimg.com/736x/a1/7c/69/a17c694d0f8f25774847f9224529cb8f.jpg"));
+        // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
+        // System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
+        // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
 
-
-   // HashMap<String,TextFieldArea> newhashmap = new HashMap<String, TextFieldArea>();
-     analyser.DocumentExtractionTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png");
- //   System.out.println(analyser.extractTextValueForLabel("http://www.k-billing.com/example_invoices/professionalblue_example.png" , newhashmap));
-     //  String TextFieldArea valueRectCoordinates = new TextFieldArea(text,left_Bottom_X_Pos, left_Bottom_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
- //System.out.println(analyser.extractTextValueForLabel(,newhashmap));
+HashMap smallRecthashMap = analyser.DocumentExtractionTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png");
+analyser.generate_Template("http://www.k-billing.com/example_invoices/professionalblue_example.png" , smallRecthashMap);
     }
 
 
@@ -102,7 +98,7 @@ public class ImageContentAnalyser {
             List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
             for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
 
-               List<EntityAnnotation> labelAnnotations = annotateImageResponse.getLabelAnnotationsList();
+                List<EntityAnnotation> labelAnnotations = annotateImageResponse.getLabelAnnotationsList();
                 WebDetection wb = annotateImageResponse.getWebDetection();
                 List<WebDetection.WebEntity> wb1 = wb.getWebEntitiesList();
                 boolean hasError = annotateImageResponse.hasError();
@@ -127,29 +123,29 @@ public class ImageContentAnalyser {
                     }
                 }
 
-               for (WebDetection.WebEntity webEntity : wb.getWebEntitiesList()) {
-                   if (webEntity.getDescription().equalsIgnoreCase("Optics")
-                        || webEntity.getDescription().equalsIgnoreCase("Visual perception"))
-                {
+                for (WebDetection.WebEntity webEntity : wb.getWebEntitiesList()) {
+                    if (webEntity.getDescription().equalsIgnoreCase("Optics")
+                            || webEntity.getDescription().equalsIgnoreCase("Visual perception"))
+                    {
 
-                    return true;
-                }
-                 else if (webEntity.getDescription().equalsIgnoreCase("Silhouette")
-                        || webEntity.getDescription().equalsIgnoreCase("Tattoo")
-                        || webEntity.getDescription().equalsIgnoreCase("Cartoon")
-                        || webEntity.getDescription().equalsIgnoreCase("Mask")
-                        || webEntity.getDescription().equalsIgnoreCase("Headwear")
-                        || webEntity.getDescription().equalsIgnoreCase("Headscarf")
-                        || webEntity.getDescription().equalsIgnoreCase("Animal")
-                        || webEntity.getDescription().equalsIgnoreCase("Mammal")
-                        || webEntity.getDescription().equalsIgnoreCase("Actress")
-                        || webEntity.getDescription().equalsIgnoreCase("Actor")) {
+                        return true;
+                    }
+                    else if (webEntity.getDescription().equalsIgnoreCase("Silhouette")
+                            || webEntity.getDescription().equalsIgnoreCase("Tattoo")
+                            || webEntity.getDescription().equalsIgnoreCase("Cartoon")
+                            || webEntity.getDescription().equalsIgnoreCase("Mask")
+                            || webEntity.getDescription().equalsIgnoreCase("Headwear")
+                            || webEntity.getDescription().equalsIgnoreCase("Headscarf")
+                            || webEntity.getDescription().equalsIgnoreCase("Animal")
+                            || webEntity.getDescription().equalsIgnoreCase("Mammal")
+                            || webEntity.getDescription().equalsIgnoreCase("Actress")
+                            || webEntity.getDescription().equalsIgnoreCase("Actor")) {
 
-                    return false;
-                }
+                        return false;
+                    }
                 }
             }
-           } catch (IOException exc) {
+        } catch (IOException exc) {
             logger.error("Exception while reading image from the url" + exc.getMessage());
         }
 
@@ -167,7 +163,6 @@ public class ImageContentAnalyser {
 
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
                     .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
-                    .addFeatures(Feature.newBuilder().setType(Type.LOGO_DETECTION).build())
                     .addFeatures(Feature.newBuilder().setType(Type.LANDMARK_DETECTION).build())
                     .build();
             imageReqsList.add(imageReq);
@@ -239,15 +234,13 @@ public class ImageContentAnalyser {
         } catch (Exception exc) {
             logger.error("Exception while reading image from the url" + exc.getMessage());
         }
-       return logosDetected;
+        return logosDetected;
     }
 
 
     /* Document Generating API */
-    public boolean DocumentExtractionTemplate(String imageURI) {
-        //  Map<LabelFieldArea,ValueFieldArea> map = new HashMap<LabelFieldArea, ValueFieldArea>();
-
-        HashMap<String, TextFieldArea> hashMap = null;
+    public HashMap DocumentExtractionTemplate(String imageURI) {
+        HashMap<String, TextFieldArea> smallRecthashMap = null;
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
@@ -271,154 +264,119 @@ public class ImageContentAnalyser {
             float right_Top_Y_Pos = 0;
             float left_Bottom_Y_Pos = 0;
             float right_Bottom_Y_Pos = 0;
-            hashMap = new HashMap<String, TextFieldArea>();
+
+            smallRecthashMap = new HashMap<String, TextFieldArea>();
 
             for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
                 for (EntityAnnotation poly : annotateImageResponse.getTextAnnotationsList()) {
-                    // System.out.println(poly.getDescription() + poly.getBoundingPoly().getVerticesList());
                     Description.add(poly.getDescription());
-                    vertex.add(poly.getBoundingPoly().getVerticesList());
-
-
-                }
-            }
-
-           /*System.out.print(Description.get(0));
-            polygon = vertex.get(0);
-           System.out.print(polygon.get(0));*/
-
-
-            for (int i = 0; i < vertex.size(); i++) {
+                    vertex.add(poly.getBoundingPoly().getVerticesList());  } }
+            for (int i = 1; i < vertex.size(); i++) {
                 text = Description.get(i);
                 polygon = vertex.get(i);
 
-           /* System.out.print(polygon.get(0));
-            System.out.print(polygon.get(1));
-            System.out.print(polygon.get(2));
-            System.out.print(polygon.get(3));  */
                 Vertex First_co_ordinate = polygon.get(0);
                 Vertex Second_co_ordinate = polygon.get(1);
                 Vertex Third_co_ordinate = polygon.get(2);
                 Vertex Forth_co_ordinate = polygon.get(3);
 
-                left_Bottom_X_Pos = First_co_ordinate.getX();
-                left_Bottom_Y_Pos = First_co_ordinate.getY();
-                right_Bottom_X_Pos = Second_co_ordinate.getX();
-                right_Bottom_Y_Pos = Second_co_ordinate.getY();
-                right_Top_X_Pos = Third_co_ordinate.getX();
-                right_Top_Y_Pos = Third_co_ordinate.getY();
-                left_Top_X_Pos = Forth_co_ordinate.getX();
-                left_Top_Y_Pos = Forth_co_ordinate.getY();
+                left_Top_X_Pos = First_co_ordinate.getX();
+                left_Top_Y_Pos = First_co_ordinate.getY();
+                right_Top_X_Pos = Second_co_ordinate.getX();
+                right_Top_Y_Pos = Second_co_ordinate.getY();
+                right_Bottom_X_Pos = Third_co_ordinate.getX();
+                right_Bottom_Y_Pos = Third_co_ordinate.getY();
+                left_Bottom_X_Pos = Forth_co_ordinate.getX();
+                left_Bottom_Y_Pos = Forth_co_ordinate.getY();
 
-                // System.out.println(text);
-        /*  System.out.println(" Left_top_x_pos :" + left_Top_X_Pos);
-            System.out.println(" Right_top_x_pos:" + left_Bottom_X_Pos);
-            System.out.println(" left_bootom_x_pos :" + left_Bottom_X_Pos);
-            System.out.println(" Right_bottom_x_pos:" + right_Bottom_X_Pos );
-            System.out.println(" Left_top_Y_pos :"+ left_Top_Y_Pos);
-             System.out.println(" Right_Top_Y_pos :" +  right_Top_Y_Pos);
-            System.out.println(" Left_Top_Y_pos :"+ left_Bottom_Y_Pos);
-            System.out.println(" Right_Bottom_Y_pos :" + right_Bottom_Y_Pos);    */
+     TextFieldArea textFieldArea = new TextFieldArea(left_Bottom_X_Pos, left_Bottom_Y_Pos,
+      right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
 
+      smallRecthashMap.put(text, textFieldArea);
 
-                TextFieldArea textFieldArea = new TextFieldArea(text, left_Bottom_X_Pos, left_Bottom_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
-                hashMap.put(text, textFieldArea);
-                // System.out.println(text);
-
-             String ebi = extractTextValueForLabel(textFieldArea,hashMap);
-          System.out.print(ebi);
             }
-            //  Set<Map.Entry<String,TextFieldArea>> entrySet = hashMap.entrySet();
-
 
         } catch (IOException exc) {
             logger.error("Exception while reading image from the url" + exc.getMessage());
         }
-
-        return true;
-
+        return smallRecthashMap;
     }
-    private HashMap<String,TextFieldArea> generating_Template(HashMap<String, TextFieldArea> hashMap2)
+
+    private boolean generate_Template(String imageURI,HashMap<String, TextFieldArea> bigRecthashMap)
+    {   HashMap<String,TextFieldArea> bigRecthashMapNew = new HashMap<String, TextFieldArea>();
+
+        float left_Top_X_Pos=0, left_Top_Y_Pos=0,
+                right_Top_X_Pos=0,right_Top_Y_Pos=0,
+                right_Bottom_X_Pos=0,right_Bottom_Y_Pos=0,
+                left_Bottom_X_Pos=0,left_Bottom_Y_Pos=0;
+        try {
+            ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
+            ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
+            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
+                    .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
+                    .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
+                    .build();
+            imageReqsList.add(imageReq);
+            BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
+
+
+            for (Map.Entry<String, TextFieldArea> entry: bigRecthashMap.entrySet()) {
+                String key = entry.getKey();
+                TextFieldArea value = entry.getValue();
+
+                if  (key.contentEquals("Test"))
+                { left_Top_X_Pos = value.left_Top_X_Pos;
+                    left_Top_Y_Pos = value.left_Top_Y_Pos;
+                    left_Bottom_X_Pos = value.left_Bottom_X_Pos;
+                    left_Bottom_Y_Pos = value.left_Bottom_Y_Pos;                }
+               if (key.contentEquals("Here"))
+              {    right_Top_X_Pos = value.right_Top_X_Pos;
+                  right_Top_Y_Pos = value.right_Top_Y_Pos;
+                  right_Bottom_X_Pos = value.right_Bottom_X_Pos;
+                  right_Bottom_Y_Pos = value.right_Bottom_Y_Pos;  }      }
+
+
+    TextFieldArea textFieldArea_bigRect = new TextFieldArea(left_Top_X_Pos,left_Top_Y_Pos,right_Top_X_Pos,
+            right_Top_Y_Pos,right_Bottom_X_Pos,right_Bottom_Y_Pos,
+            left_Bottom_X_Pos,left_Bottom_Y_Pos);
+
+       System.out.println(extractTextValueForLabel(textFieldArea_bigRect , bigRecthashMap));
+
+        }        catch (IOException exc) {
+            logger.error("Exception while reading image from the url" + exc.getMessage());
+        }
+        return true;
+    }
+
+
+    // Method For Comparing Rectangle
+    private String extractTextValueForLabel(TextFieldArea bigRect , HashMap<String, TextFieldArea> smallRect)
     {
+        Iterator it = smallRect.entrySet().iterator();
+        StringBuilder builder = new StringBuilder();
+        String text = "";
 
-        //label.add("Text");//And so on..
-        // List<TextFieldArea> coordinates = new ArrayList<TextFieldArea>();
+        while (it.hasNext())
+        {
 
-//And so on...
-
-        HashMap<String,TextFieldArea> label_hash_map = new HashMap<String, TextFieldArea>();
-        //Iterator iterator = hashMap2.entrySet().iterator();
-
-        for (Map.Entry<String, TextFieldArea> entry : hashMap2.entrySet()) {
-            //  System.out.println("key: " + entry.getKey());
-            //  System.out.println("Value: " + entry.getValue());
+            Map.Entry entry = (Map.Entry) it.next();
             String key = (String) entry.getKey();
             TextFieldArea value = (TextFieldArea) entry.getValue();
-            //  System.out.print(key);
 
-           /*   System.out.println(key + "------------------" + value.left_Bottom_X_Pos + "  " + value.left_Bottom_Y_Pos + "  " +
-                        "    " + value.right_Bottom_X_Pos + "   " + value.right_Bottom_Y_Pos + "   " + value.right_Top_X_Pos +
-                        "    " + value.right_Top_Y_Pos+ "   " + value.left_Top_X_Pos + " " + value.left_Top_Y_Pos); */
-            // System.out.print(value.left_Bottom_X_Pos);
-            if( key.contains("Account"))
+           if ((value.left_Top_X_Pos >=  bigRect.left_Top_X_Pos
+                    && value.left_Top_Y_Pos >= bigRect.left_Top_Y_Pos)
+
+                    && (value.right_Bottom_X_Pos <= bigRect.right_Bottom_X_Pos
+                    && value.right_Bottom_Y_Pos <= bigRect.right_Bottom_Y_Pos))
             {
-                String text = "Account";
-                float left_Top_X_Pos =value.left_Top_X_Pos;
-                float left_Top_Y_Pos = value.left_Top_Y_Pos;
-                float right_Top_X_Pos = value.right_Top_X_Pos;
-                float right_Top_Y_Pos = value.right_Top_Y_Pos;
-                float right_Bottom_X_Pos = value.right_Bottom_X_Pos;
-                float right_Bottom_Y_Pos = value.right_Bottom_Y_Pos;
-                float left_Bottom_X_Pos = value.right_Bottom_X_Pos;
-                float left_Bottom_Y_Pos = value.left_Bottom_Y_Pos;
-    System.out.println( value.left_Bottom_X_Pos + "  " + value.left_Bottom_Y_Pos + "  " +
-           "    " + value.right_Bottom_X_Pos + "   " + value.right_Bottom_Y_Pos + "   " + value.right_Top_X_Pos +
-         "    " + value.right_Top_Y_Pos+ "   " + value.left_Top_X_Pos + " " + value.left_Top_Y_Pos );
-
-                TextFieldArea tx = new TextFieldArea(text,left_Bottom_X_Pos, left_Bottom_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
-                label_hash_map.put(text,tx);
+                builder.append(key);
+                builder.append(" ");
             }
         }
-
-        for (Map.Entry<String, TextFieldArea> entry : label_hash_map.entrySet()) {       //  System.out.println("key: " + entry.getKey());
-            //  System.out.println("Value: " + entry.getValue());
-            String key_01 = (String) entry.getKey();
-            TextFieldArea value_01 = (TextFieldArea) entry.getValue();
-            //  System.out.print(key);
-            //System.out.print(value.text);
-          /*  System.out.println(key_01 + "------------------" + value_01.left_Bottom_X_Pos + "  " + value_01.left_Bottom_Y_Pos + "  " +
-                    "    " + value_01.right_Bottom_X_Pos + "   " + value_01.right_Bottom_Y_Pos + "   " + value_01.right_Top_X_Pos +
-                    "    " + value_01.right_Top_Y_Pos+ "   " + value_01.left_Top_X_Pos + " " + value_01.left_Top_Y_Pos );
-            */
-        }
-
-        return hashMap2;
+        text = builder.toString();
+        return text;
     }
-
-// Method For Comparing Rectangle
-private String extractTextValueForLabel(TextFieldArea valueRectCoordinates , HashMap<String, TextFieldArea> docTextsCoordinates) {
-    Iterator it = docTextsCoordinates.entrySet().iterator();
-    StringBuilder builder = new StringBuilder();
-    String text = "";
-    while (it.hasNext())
-    {
-        Map.Entry entry = (Map.Entry) it.next();
-        String key = (String) entry.getKey();
-        TextFieldArea value = (TextFieldArea) entry.getValue();
-
-        if ((value.left_Top_X_Pos >= valueRectCoordinates.left_Top_X_Pos
-                && value.left_Top_Y_Pos >= valueRectCoordinates.left_Top_Y_Pos)
-
-                && (value.right_Bottom_X_Pos <= valueRectCoordinates.right_Bottom_X_Pos
-                && value.right_Bottom_Y_Pos <= valueRectCoordinates.right_Bottom_Y_Pos))
-        {     if(key.contains("Phone"))
-            builder.append(key);
-            builder.append(" ");
-        }
-    }
-   text = builder.toString();
-   return text;
-}
 
  /*   private String extractTextValueForLabel(String imageURI , HashMap<String, TextFieldArea> docTextsCoordinates) {
         String text = "";
@@ -512,11 +470,10 @@ private String extractTextValueForLabel(TextFieldArea valueRectCoordinates , Has
 class TextFieldArea{
     float left_Top_X_Pos,right_Top_X_Pos,left_Bottom_X_Pos, right_Bottom_X_Pos,
             left_Top_Y_Pos,right_Top_Y_Pos,left_Bottom_Y_Pos, right_Bottom_Y_Pos;
-    String text;
-    public TextFieldArea(String text, float left_Bottom_X_Pos,float left_Bottom_Y_Pos,float right_Bottom_X_Pos,float right_Bottom_Y_Pos,
-                                            float right_Top_X_Pos,float right_Top_Y_Pos,float left_Top_X_Pos, float left_Top_Y_Pos)
+    public TextFieldArea(float left_Top_X_Pos,float left_Top_Y_Pos,float  right_Top_X_Pos,
+                         float right_Top_Y_Pos,float right_Bottom_X_Pos,float right_Bottom_Y_Pos,
+                         float left_Bottom_X_Pos, float left_Bottom_Y_Pos)
     {
-        this.text = text;
         this.left_Top_X_Pos = left_Top_X_Pos;
         this.left_Top_Y_Pos = left_Top_Y_Pos;
         this.right_Top_X_Pos = right_Top_X_Pos;
@@ -524,8 +481,4 @@ class TextFieldArea{
         this.right_Bottom_X_Pos = right_Bottom_X_Pos;
         this.right_Bottom_Y_Pos = right_Bottom_Y_Pos;
         this.left_Bottom_X_Pos = left_Bottom_X_Pos;
-        this.left_Bottom_Y_Pos = left_Bottom_Y_Pos;
-
-
-
-    }   }
+        this.left_Bottom_Y_Pos = left_Bottom_Y_Pos;  }}
