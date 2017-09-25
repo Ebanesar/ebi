@@ -27,8 +27,8 @@ public class ImageContentAnalyser {
         // System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
         // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
 
-HashMap smallRecthashMap = analyser.DocumentExtractionTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png");
-analyser.generate_Template("http://www.k-billing.com/example_invoices/professionalblue_example.png" , smallRecthashMap);
+        HashMap smallRecthashMap = analyser.DocumentExtractionTemplate("https://resumegenius.com/wp-content/uploads/2014/09/Resume-Template-Professional-Gray.jpg");
+        analyser.generate_Template("https://resumegenius.com/wp-content/uploads/2014/09/Resume-Template-Professional-Gray.jpg" , smallRecthashMap);
     }
 
 
@@ -271,6 +271,9 @@ analyser.generate_Template("http://www.k-billing.com/example_invoices/profession
                 for (EntityAnnotation poly : annotateImageResponse.getTextAnnotationsList()) {
                     Description.add(poly.getDescription());
                     vertex.add(poly.getBoundingPoly().getVerticesList());  } }
+
+
+
             for (int i = 1; i < vertex.size(); i++) {
                 text = Description.get(i);
                 polygon = vertex.get(i);
@@ -289,10 +292,10 @@ analyser.generate_Template("http://www.k-billing.com/example_invoices/profession
                 left_Bottom_X_Pos = Forth_co_ordinate.getX();
                 left_Bottom_Y_Pos = Forth_co_ordinate.getY();
 
-     TextFieldArea textFieldArea = new TextFieldArea(left_Bottom_X_Pos, left_Bottom_Y_Pos,
-      right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
+                TextFieldArea textFieldArea = new TextFieldArea(left_Bottom_X_Pos, left_Bottom_Y_Pos,
+                        right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
 
-      smallRecthashMap.put(text, textFieldArea);
+                smallRecthashMap.put(text, textFieldArea);
 
             }
 
@@ -319,31 +322,69 @@ analyser.generate_Template("http://www.k-billing.com/example_invoices/profession
                     .build();
             imageReqsList.add(imageReq);
             BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
+            List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
+            List<List<Vertex>> vertex = new ArrayList<List<Vertex>>();
+            List<Vertex> polygon = new ArrayList<Vertex>();
 
 
-            for (Map.Entry<String, TextFieldArea> entry: bigRecthashMap.entrySet()) {
-                String key = entry.getKey();
-                TextFieldArea value = entry.getValue();
+            for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
+                TextAnnotation annotation = annotateImageResponse.getFullTextAnnotation();
+                for (Page page: annotation.getPagesList()) {
+                    String pageText = "";
+                    for (Block block : page.getBlocksList()) {
+                        String blockText = " ";
+                        for (Paragraph para : block.getParagraphsList()) {
+                            String paraText = " \n ";
+                            for (Word word: para.getWordsList()) {
+                                String   wordText = "  ";
+                                for (Symbol symbol: word.getSymbolsList()) {
+                                    wordText = wordText + symbol.getText();
+                                }
+                                paraText = paraText + wordText;
+                            }
+                            blockText = blockText + paraText;
+                        }
 
-                if  (key.contentEquals("Test"))
-                { left_Top_X_Pos = value.left_Top_X_Pos;
-                    left_Top_Y_Pos = value.left_Top_Y_Pos;
-                    left_Bottom_X_Pos = value.left_Bottom_X_Pos;
-                    left_Bottom_Y_Pos = value.left_Bottom_Y_Pos;                }
-               if (key.contentEquals("Here"))
-              {    right_Top_X_Pos = value.right_Top_X_Pos;
-                  right_Top_Y_Pos = value.right_Top_Y_Pos;
-                  right_Bottom_X_Pos = value.right_Bottom_X_Pos;
-                  right_Bottom_Y_Pos = value.right_Bottom_Y_Pos;  }      }
+                        vertex.add(block.getBoundingBox().getVerticesList());
+                        if(blockText.contains("Proficient"))
+                        {
+                            for (int i=1; i<vertex.size(); i++)
+                            {
+                                polygon = vertex.get(i);
 
+                                Vertex First_co_ordinate = polygon.get(0);
+                                Vertex Second_co_ordinate = polygon.get(1);
+                                Vertex Third_co_ordinate = polygon.get(2);
+                                Vertex Forth_co_ordinate = polygon.get(3);
 
-    TextFieldArea textFieldArea_bigRect = new TextFieldArea(left_Top_X_Pos,left_Top_Y_Pos,right_Top_X_Pos,
-            right_Top_Y_Pos,right_Bottom_X_Pos,right_Bottom_Y_Pos,
-            left_Bottom_X_Pos,left_Bottom_Y_Pos);
+                                left_Top_X_Pos = First_co_ordinate.getX();
+                                left_Top_Y_Pos = First_co_ordinate.getY();
+                                right_Top_X_Pos = Second_co_ordinate.getX();
+                                right_Top_Y_Pos = Second_co_ordinate.getY();
+                                right_Bottom_X_Pos = Third_co_ordinate.getX();
+                                right_Bottom_Y_Pos = Third_co_ordinate.getY();
+                                left_Bottom_X_Pos = Forth_co_ordinate.getX();
+                                left_Bottom_Y_Pos = Forth_co_ordinate.getY();
 
-       System.out.println(extractTextValueForLabel(textFieldArea_bigRect , bigRecthashMap));
+                            }
 
-        }        catch (IOException exc) {
+                            // System.out.println("block: \n" + blockText);
+                        }
+
+                        //  System.out.println("block: \n" + blockText);
+                        //       System.out.println("block Bounds: \n" + block.getBoundingBox() + "\n");
+
+                    }
+
+                }
+
+                TextFieldArea textFieldArea_bigRect = new TextFieldArea(left_Top_X_Pos,left_Top_Y_Pos,right_Top_X_Pos,
+                        right_Top_Y_Pos,right_Bottom_X_Pos,right_Bottom_Y_Pos,
+                        left_Bottom_X_Pos,left_Bottom_Y_Pos);
+
+                System.out.println(extractTextValueForLabel(textFieldArea_bigRect , bigRecthashMap));
+
+            }    }   catch (IOException exc) {
             logger.error("Exception while reading image from the url" + exc.getMessage());
         }
         return true;
@@ -364,7 +405,7 @@ analyser.generate_Template("http://www.k-billing.com/example_invoices/profession
             String key = (String) entry.getKey();
             TextFieldArea value = (TextFieldArea) entry.getValue();
 
-           if ((value.left_Top_X_Pos >=  bigRect.left_Top_X_Pos
+            if ((value.left_Top_X_Pos >=  bigRect.left_Top_X_Pos
                     && value.left_Top_Y_Pos >= bigRect.left_Top_Y_Pos)
 
                     && (value.right_Bottom_X_Pos <= bigRect.right_Bottom_X_Pos
