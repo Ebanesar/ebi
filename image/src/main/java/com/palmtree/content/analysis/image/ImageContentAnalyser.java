@@ -27,10 +27,69 @@ public class ImageContentAnalyser {
         // System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
         // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
 
-        HashMap smallRecthashMap = analyser.DocumentExtractionTemplate("https://resumegenius.com/wp-content/uploads/2014/09/Resume-Template-Professional-Gray.jpg");
-        analyser.generate_Template("https://resumegenius.com/wp-content/uploads/2014/09/Resume-Template-Professional-Gray.jpg" , smallRecthashMap);
+      //  HashMap smallRecthashMap = analyser.DocumentExtractionTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png");
+       // analyser.generate_Template("http://www.k-billing.com/example_invoices/professionalblue_example.png" , smallRecthashMap);
+        HashMap<String,String> input_hashmap = new HashMap<String, String>();
+        input_hashmap.put("Name","Hamsa");
+        input_hashmap.put("Branch","IT");
+System.out.println(analyser.big("https://00e9e64bac4d57508bbf4eb53ae3e7b75a8c20592560303540-apidata.googleusercontent.com/download/storage/v1/b/palmtree-image-02.appspot.com/o/jjj.jpg?qk=AD5uMEtU69PFkT6UsfSYOT16lZ8ZN6E1rQzxgpWL-n5RtKoHrFkAcp0mw2eDlYzoQRdTy7zK0GPsgx_7XFtmpIlxMSK8OZsphjV7mQotZ9blQfRFLNzYl0KBU11DhRIBoy9TV8y3-TtcDqn_W_Orj8-w6eLy-xtkFHQlTGIIS_Q32qsfJl0RgXK9jmKgYprV071lbjSbc5-pZTgmybKs2RWirKOWdJgpxwqXJWmtaGprs75yyZUTI5OdRzWmhdLrVfujU9tpVO57iC5T4MciS-v6CS1Zcfp1_PPdmFj5GF39aTetPO5ap7O3ZDRJ0IxGVViVXTSh47bjhtyqT6KM8s-UTPCl7qq_HB5QuH9Jmp-YssSy6QDbi0he5cc4xwuMXIuXBbsaP4vqaxBWWHEbI4veNi5c0Q57uLMy0UdEBPjKIwXgEPBceCwL3EH5v1aj9x6fkDkYMQm42opeg5Y641WpCdXjjwaIs59zMEFv5tJbkHU_QElwt8dCCUBKZ8ROAxc63t21HFnAOd5a9wq_LdsWCDSSzMt-3vIqvgtD-M3SXXo_WFeE3ZiVJPhI4S-XYpplNkiyZiFMcycp-fqoZxNrGcJEYWQ-O0DeIlGVD-3ElXF_k_qzudwTM3jsK7E_lQHU6rTJM6gsOJEah6iLMmaDGwc28SbiXNpksGV06EQ7AkfK5HTXtN4j0-5mJE8zsgyY8YmsTQXOVmpVPZ1aEAKB3ZImBcS55Z4vDF7DGKokTcpGYRTxdniy-5nK0p-25O93s0IlM4kH", input_hashmap));
     }
+    public boolean big(String imageURI , HashMap<String,String> input)
+    {
 
+        float left_Top_X_Pos=0, left_Top_Y_Pos=0,
+                right_Top_X_Pos=0,right_Top_Y_Pos=0,
+                right_Bottom_X_Pos=0,right_Bottom_Y_Pos=0,
+                left_Bottom_X_Pos=0,left_Bottom_Y_Pos=0;
+        String str = "";
+        try {
+            ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
+            ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
+            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
+                    .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
+                    .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
+                    .build();
+            imageReqsList.add(imageReq);
+            BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
+            List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
+            List<String> Description = new ArrayList<String>();
+            List<String> k1 = new ArrayList<String>();
+            List<String> v1 = new ArrayList<String>();
+
+            for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
+                for (EntityAnnotation entityAnnotation : annotateImageResponse.getTextAnnotationsList()) {
+                    Description.add(entityAnnotation.getDescription());
+
+                  }
+                System.out.println(Description);
+
+
+            for (Map.Entry<String, String> entry: input.entrySet())
+            {       String key = entry.getKey();
+                     String value = entry.getValue();
+                    k1.add(key);
+                    v1.add(value);
+
+            }
+
+                for(int i=0;i<Description.size();i++)
+                {
+                    for(int j=0; j<k1.size();j++)
+                {             //    System.out.println(k1.get(j));
+               if(Description.equals(k1))
+                {
+                    System.out.println(v1);
+               }
+                }}}
+
+
+
+        }       catch (IOException exc) {
+            logger.error("Exception while reading image from the url" + exc.getMessage());
+        }
+        return true;
+    }
 
     public boolean isImageSafe(String imageURI) {
         boolean isSafe = true;
@@ -267,38 +326,6 @@ public class ImageContentAnalyser {
 
             smallRecthashMap = new HashMap<String, TextFieldArea>();
 
-            for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
-                for (EntityAnnotation poly : annotateImageResponse.getTextAnnotationsList()) {
-                    Description.add(poly.getDescription());
-                    vertex.add(poly.getBoundingPoly().getVerticesList());  } }
-
-
-
-            for (int i = 1; i < vertex.size(); i++) {
-                text = Description.get(i);
-                polygon = vertex.get(i);
-
-                Vertex First_co_ordinate = polygon.get(0);
-                Vertex Second_co_ordinate = polygon.get(1);
-                Vertex Third_co_ordinate = polygon.get(2);
-                Vertex Forth_co_ordinate = polygon.get(3);
-
-                left_Top_X_Pos = First_co_ordinate.getX();
-                left_Top_Y_Pos = First_co_ordinate.getY();
-                right_Top_X_Pos = Second_co_ordinate.getX();
-                right_Top_Y_Pos = Second_co_ordinate.getY();
-                right_Bottom_X_Pos = Third_co_ordinate.getX();
-                right_Bottom_Y_Pos = Third_co_ordinate.getY();
-                left_Bottom_X_Pos = Forth_co_ordinate.getX();
-                left_Bottom_Y_Pos = Forth_co_ordinate.getY();
-
-                TextFieldArea textFieldArea = new TextFieldArea(left_Bottom_X_Pos, left_Bottom_Y_Pos,
-                        right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
-
-                smallRecthashMap.put(text, textFieldArea);
-
-            }
-
         } catch (IOException exc) {
             logger.error("Exception while reading image from the url" + exc.getMessage());
         }
@@ -322,69 +349,10 @@ public class ImageContentAnalyser {
                     .build();
             imageReqsList.add(imageReq);
             BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
-            List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
-            List<List<Vertex>> vertex = new ArrayList<List<Vertex>>();
-            List<Vertex> polygon = new ArrayList<Vertex>();
 
 
-            for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
-                TextAnnotation annotation = annotateImageResponse.getFullTextAnnotation();
-                for (Page page: annotation.getPagesList()) {
-                    String pageText = "";
-                    for (Block block : page.getBlocksList()) {
-                        String blockText = " ";
-                        for (Paragraph para : block.getParagraphsList()) {
-                            String paraText = " \n ";
-                            for (Word word: para.getWordsList()) {
-                                String   wordText = "  ";
-                                for (Symbol symbol: word.getSymbolsList()) {
-                                    wordText = wordText + symbol.getText();
-                                }
-                                paraText = paraText + wordText;
-                            }
-                            blockText = blockText + paraText;
-                        }
 
-                        vertex.add(block.getBoundingBox().getVerticesList());
-                        if(blockText.contains("Proficient"))
-                        {
-                            for (int i=1; i<vertex.size(); i++)
-                            {
-                                polygon = vertex.get(i);
-
-                                Vertex First_co_ordinate = polygon.get(0);
-                                Vertex Second_co_ordinate = polygon.get(1);
-                                Vertex Third_co_ordinate = polygon.get(2);
-                                Vertex Forth_co_ordinate = polygon.get(3);
-
-                                left_Top_X_Pos = First_co_ordinate.getX();
-                                left_Top_Y_Pos = First_co_ordinate.getY();
-                                right_Top_X_Pos = Second_co_ordinate.getX();
-                                right_Top_Y_Pos = Second_co_ordinate.getY();
-                                right_Bottom_X_Pos = Third_co_ordinate.getX();
-                                right_Bottom_Y_Pos = Third_co_ordinate.getY();
-                                left_Bottom_X_Pos = Forth_co_ordinate.getX();
-                                left_Bottom_Y_Pos = Forth_co_ordinate.getY();
-
-                            }
-
-                            // System.out.println("block: \n" + blockText);
-                        }
-
-                        //  System.out.println("block: \n" + blockText);
-                        //       System.out.println("block Bounds: \n" + block.getBoundingBox() + "\n");
-
-                    }
-
-                }
-
-                TextFieldArea textFieldArea_bigRect = new TextFieldArea(left_Top_X_Pos,left_Top_Y_Pos,right_Top_X_Pos,
-                        right_Top_Y_Pos,right_Bottom_X_Pos,right_Bottom_Y_Pos,
-                        left_Bottom_X_Pos,left_Bottom_Y_Pos);
-
-                System.out.println(extractTextValueForLabel(textFieldArea_bigRect , bigRecthashMap));
-
-            }    }   catch (IOException exc) {
+        }       catch (IOException exc) {
             logger.error("Exception while reading image from the url" + exc.getMessage());
         }
         return true;
