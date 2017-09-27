@@ -32,7 +32,10 @@ public class ImageContentAnalyser {
         HashMap<String,String> input_hashmap = new HashMap<String, String>();
         input_hashmap.put("Name","Hamsa");
         input_hashmap.put("Branch","IT");
-System.out.println(analyser.big("https://00e9e64bac4d57508bbf4eb53ae3e7b75a8c20592560303540-apidata.googleusercontent.com/download/storage/v1/b/palmtree-image-02.appspot.com/o/jjj.jpg?qk=AD5uMEtU69PFkT6UsfSYOT16lZ8ZN6E1rQzxgpWL-n5RtKoHrFkAcp0mw2eDlYzoQRdTy7zK0GPsgx_7XFtmpIlxMSK8OZsphjV7mQotZ9blQfRFLNzYl0KBU11DhRIBoy9TV8y3-TtcDqn_W_Orj8-w6eLy-xtkFHQlTGIIS_Q32qsfJl0RgXK9jmKgYprV071lbjSbc5-pZTgmybKs2RWirKOWdJgpxwqXJWmtaGprs75yyZUTI5OdRzWmhdLrVfujU9tpVO57iC5T4MciS-v6CS1Zcfp1_PPdmFj5GF39aTetPO5ap7O3ZDRJ0IxGVViVXTSh47bjhtyqT6KM8s-UTPCl7qq_HB5QuH9Jmp-YssSy6QDbi0he5cc4xwuMXIuXBbsaP4vqaxBWWHEbI4veNi5c0Q57uLMy0UdEBPjKIwXgEPBceCwL3EH5v1aj9x6fkDkYMQm42opeg5Y641WpCdXjjwaIs59zMEFv5tJbkHU_QElwt8dCCUBKZ8ROAxc63t21HFnAOd5a9wq_LdsWCDSSzMt-3vIqvgtD-M3SXXo_WFeE3ZiVJPhI4S-XYpplNkiyZiFMcycp-fqoZxNrGcJEYWQ-O0DeIlGVD-3ElXF_k_qzudwTM3jsK7E_lQHU6rTJM6gsOJEah6iLMmaDGwc28SbiXNpksGV06EQ7AkfK5HTXtN4j0-5mJE8zsgyY8YmsTQXOVmpVPZ1aEAKB3ZImBcS55Z4vDF7DGKokTcpGYRTxdniy-5nK0p-25O93s0IlM4kH", input_hashmap));
+   System.out.println(analyser.big("https://00e9e64bacfe67a36b6c6a06c1b094600c8856eda83377c12c-apidata.googleusercontent.com/download/storage/v1/b/palmtree-image-02.appspot.com/o/jjj.jpg?qk=AD5uMEtpd7yR-B9a4w9YrY77t3HB7E1GpgCE4py0nH917WkSY6KlXVS-0JlE_uKhclpEz4s176QSdIaHVX1CJYLNJJJ-eDWYrSDi-bm0imI6D8u0oSNbov6QheBecwTqU1hFrDrxCJ306n4a1GJoE-2V4wAHvGeV_kVELigsBJ73tAmWsfcGled2-8V3CS6BHRkm7fv3yZB73Al-E5EhUcSTv8igh0bZMI1hlFW0Lh-flbqTsUojdo5616OMUsU0tLjZ35Qr7II-iG_mgYoRwtCvBkDTbi_4PGW7TFAImwVidStP90qgLzi9rNHQYFVpXyq3zf7LTXCZQHVVDWmShAmrB4gG7xSJ8To6Ms3FKf4i0fDei9yHC9xwjn6Kh8D06wCBLzg4BmH_xUsR8p8vYkx4YSvg0oAcKOZqSzvpK-E_DWixKI2iWGDB-4MXaIXQp4PwEQiYzIV6FWq1frfd8VbKZDrBZEdl6RRsBRplel1ELG6hb09RDz3ntsyXroHbPZkDGc6KLYsiOFfwrg-SCfT4A8YAVMJdzcysl76gzKgBN9DCRh755ZxnPzfcYZAmuHZOab8f0RE77wnXVOFTyFdY7_nRI2zSnaSk42zsD2ISsNCrY1EyXTX1pP_ufxh5TdcskJArVgJeUpm4RQ9Ogdjokf7o4hFmVMuVOzUINw2L2of16QzDobZtVELtUt5n1ELDjPJmkOxlrumtdUu-lcg6meoKCAaZwJLwFZ2vcOZTgCtsjCmUeVk8ZlvzSl0AznGo8KinPcRE", input_hashmap));
+
+    System.out.println(analyser.making_hashmap_from_image("https://00e9e64bac5c74e1a738074aec5ffde1a1f94b9c56bb4e6983-apidata.googleusercontent.com/download/storage/v1/b/palmtree-image-02.appspot.com/o/jjj.jpg?qk=AD5uMEvaiSarJIwuqdGQo2CahMTFjdMw4BaE22swAx5A6v-7WP7r-3WtEHbtS894p5aGBqYsL-5P9ITSnMH2WB24yH177MUIApThtusaMK50Ml-3jIEqwYNSE4ga_ULzgoyx__ZXkU_xGQihSdeUecmAcVXay9ZuvXG3IvjYK3FFqa5aN33GnTm9SB3ehaW7ddKEIl1O6sUnb8TsKIlzpS1UYu3UbYaRWCaxrKVaQa6Iuu1-oI6gje6X-ioShOGBbbNpi-smL_9Wd77BIJusM0WNOEG4CvX9ZHdqyW6m7tAUgSdLgUK92YeEz_ucxZx9aZwLGNWzO4qHEni9FVmGZWdvuyBT8Q8nvylBqbFc_5iThBxa7zVgpVslERKIY0QcQaZNs1pFKFvMprNSCpo8tB64TJ_00_CN9HD07aFlz9J7Hb3Yew80ozUK6s_NU5eDNVDfPCYeGod76tsr9O-t1ESW0X0uy0gHGBgpKQwwQp-qO3rf5Vx6SynAs07CcapSxutSc1T0ucoRgQYJGXZuZ0p5rwtmH7KErZjiytOTynD_2_GvEPZ3Gov52wrP9H3yxeTYC3RHuakGCjerde89tNlB3KhwmCbcyU0Bj7PwJxclM9KelMsszWK6wICoxHKV6ZwEV1puP-u7q_SJ_aDN4Wuj3J5Hf4S08LP5707yGRoVica9fDtId-_Z_0FFRKjdl-W2Ho2S3lP471MoLFFVy2Bn2SbV3eQ_7Is_vm3OigLengKGdcJQCZ3Yohkjec_QN2n9gfVNA7Dp", input_hashmap));
+
     }
     public boolean big(String imageURI , HashMap<String,String> input)
     {
@@ -81,7 +84,9 @@ System.out.println(analyser.big("https://00e9e64bac4d57508bbf4eb53ae3e7b75a8c205
                 {
                     System.out.println(v1);
                }
-                }}}
+                }
+                }
+            }
 
 
 
@@ -90,6 +95,103 @@ System.out.println(analyser.big("https://00e9e64bac4d57508bbf4eb53ae3e7b75a8c205
         }
         return true;
     }
+
+
+
+    public boolean making_hashmap_from_image(String imageURI, HashMap<String, String> input_hashmap) {
+        try {
+            ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
+            ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
+            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
+                    .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
+                    .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
+                    .build();
+            imageReqsList.add(imageReq);
+            BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
+            List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
+            List<String> Description = new ArrayList<String>();
+            List<List<Vertex>> vertex = new ArrayList<List<Vertex>>();
+            List<Vertex> polygon = new ArrayList<Vertex>();
+          HashMap<String,TextFieldArea> hm = new HashMap<String, TextFieldArea>();
+            String text = "";
+            float left_Top_X_Pos = 0;               float right_Top_X_Pos = 0;
+            float left_Bottom_X_Pos = 0;              float right_Bottom_X_Pos = 0;
+            float left_Top_Y_Pos = 0;                    float right_Top_Y_Pos = 0;
+            float left_Bottom_Y_Pos = 0;                  float right_Bottom_Y_Pos = 0;
+
+
+            for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
+                for (EntityAnnotation poly : annotateImageResponse.getTextAnnotationsList()) {
+                    Description.add(poly.getDescription());
+                    vertex.add(poly.getBoundingPoly().getVerticesList());   }  }
+
+            for (int i = 1; i < vertex.size(); i++) {
+                text = Description.get(i);
+                polygon = vertex.get(i);
+
+                Vertex First_co_ordinate = polygon.get(0);
+                Vertex Second_co_ordinate = polygon.get(1);
+                Vertex Third_co_ordinate = polygon.get(2);
+                Vertex Forth_co_ordinate = polygon.get(3);
+
+                left_Top_X_Pos = First_co_ordinate.getX();
+                left_Top_Y_Pos = First_co_ordinate.getY();
+                right_Top_X_Pos = Second_co_ordinate.getX();
+                right_Top_Y_Pos = Second_co_ordinate.getY();
+                right_Bottom_X_Pos = Third_co_ordinate.getX();
+                right_Bottom_Y_Pos = Third_co_ordinate.getY();
+                left_Bottom_X_Pos = Forth_co_ordinate.getX();
+                left_Bottom_Y_Pos = Forth_co_ordinate.getY();
+System.out.println(text);
+                TextFieldArea textFieldArea = new TextFieldArea(left_Bottom_X_Pos, left_Bottom_Y_Pos,
+                        right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
+                  hm.put(text,textFieldArea);
+            }
+
+
+ System.out.println("equals: " + input_hashmap.equals(hm));
+
+
+
+        } catch (IOException exc) {
+            logger.error("Exception while reading image from the url" + exc.getMessage());
+        }
+        return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public boolean isImageSafe(String imageURI) {
         boolean isSafe = true;
