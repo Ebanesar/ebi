@@ -30,14 +30,15 @@ public class ImageContentAnalyser {
       //  HashMap smallRecthashMap = analyser.DocumentExtractionTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png");
        // analyser.generate_Template("http://www.k-billing.com/example_invoices/professionalblue_example.png" , smallRecthashMap);
         HashMap<String,String> input_hashmap = new HashMap<String, String>();
-        input_hashmap.put("Name","Hamsa");
-        input_hashmap.put("Branch","IT");
-   System.out.println(analyser.big("https://00e9e64bacfe67a36b6c6a06c1b094600c8856eda83377c12c-apidata.googleusercontent.com/download/storage/v1/b/palmtree-image-02.appspot.com/o/jjj.jpg?qk=AD5uMEtpd7yR-B9a4w9YrY77t3HB7E1GpgCE4py0nH917WkSY6KlXVS-0JlE_uKhclpEz4s176QSdIaHVX1CJYLNJJJ-eDWYrSDi-bm0imI6D8u0oSNbov6QheBecwTqU1hFrDrxCJ306n4a1GJoE-2V4wAHvGeV_kVELigsBJ73tAmWsfcGled2-8V3CS6BHRkm7fv3yZB73Al-E5EhUcSTv8igh0bZMI1hlFW0Lh-flbqTsUojdo5616OMUsU0tLjZ35Qr7II-iG_mgYoRwtCvBkDTbi_4PGW7TFAImwVidStP90qgLzi9rNHQYFVpXyq3zf7LTXCZQHVVDWmShAmrB4gG7xSJ8To6Ms3FKf4i0fDei9yHC9xwjn6Kh8D06wCBLzg4BmH_xUsR8p8vYkx4YSvg0oAcKOZqSzvpK-E_DWixKI2iWGDB-4MXaIXQp4PwEQiYzIV6FWq1frfd8VbKZDrBZEdl6RRsBRplel1ELG6hb09RDz3ntsyXroHbPZkDGc6KLYsiOFfwrg-SCfT4A8YAVMJdzcysl76gzKgBN9DCRh755ZxnPzfcYZAmuHZOab8f0RE77wnXVOFTyFdY7_nRI2zSnaSk42zsD2ISsNCrY1EyXTX1pP_ufxh5TdcskJArVgJeUpm4RQ9Ogdjokf7o4hFmVMuVOzUINw2L2of16QzDobZtVELtUt5n1ELDjPJmkOxlrumtdUu-lcg6meoKCAaZwJLwFZ2vcOZTgCtsjCmUeVk8ZlvzSl0AznGo8KinPcRE", input_hashmap));
 
-    System.out.println(analyser.making_hashmap_from_image("https://00e9e64bac5c74e1a738074aec5ffde1a1f94b9c56bb4e6983-apidata.googleusercontent.com/download/storage/v1/b/palmtree-image-02.appspot.com/o/jjj.jpg?qk=AD5uMEvaiSarJIwuqdGQo2CahMTFjdMw4BaE22swAx5A6v-7WP7r-3WtEHbtS894p5aGBqYsL-5P9ITSnMH2WB24yH177MUIApThtusaMK50Ml-3jIEqwYNSE4ga_ULzgoyx__ZXkU_xGQihSdeUecmAcVXay9ZuvXG3IvjYK3FFqa5aN33GnTm9SB3ehaW7ddKEIl1O6sUnb8TsKIlzpS1UYu3UbYaRWCaxrKVaQa6Iuu1-oI6gje6X-ioShOGBbbNpi-smL_9Wd77BIJusM0WNOEG4CvX9ZHdqyW6m7tAUgSdLgUK92YeEz_ucxZx9aZwLGNWzO4qHEni9FVmGZWdvuyBT8Q8nvylBqbFc_5iThBxa7zVgpVslERKIY0QcQaZNs1pFKFvMprNSCpo8tB64TJ_00_CN9HD07aFlz9J7Hb3Yew80ozUK6s_NU5eDNVDfPCYeGod76tsr9O-t1ESW0X0uy0gHGBgpKQwwQp-qO3rf5Vx6SynAs07CcapSxutSc1T0ucoRgQYJGXZuZ0p5rwtmH7KErZjiytOTynD_2_GvEPZ3Gov52wrP9H3yxeTYC3RHuakGCjerde89tNlB3KhwmCbcyU0Bj7PwJxclM9KelMsszWK6wICoxHKV6ZwEV1puP-u7q_SJ_aDN4Wuj3J5Hf4S08LP5707yGRoVica9fDtId-_Z_0FFRKjdl-W2Ho2S3lP471MoLFFVy2Bn2SbV3eQ_7Is_vm3OigLengKGdcJQCZ3Yohkjec_QN2n9gfVNA7Dp", input_hashmap));
+        input_hashmap.put("Branch","IT");
+        input_hashmap.put("Name","Hamsa");
+  // System.out.println(analyser.big("https://00e9e64bacfe67a36b6c6a06c1b094600c8856eda83377c12c-apidata.googleusercontent.com/download/storage/v1/b/palmtree-image-02.appspot.com/o/jjj.jpg?qk=AD5uMEtpd7yR-B9a4w9YrY77t3HB7E1GpgCE4py0nH917WkSY6KlXVS-0JlE_uKhclpEz4s176QSdIaHVX1CJYLNJJJ-eDWYrSDi-bm0imI6D8u0oSNbov6QheBecwTqU1hFrDrxCJ306n4a1GJoE-2V4wAHvGeV_kVELigsBJ73tAmWsfcGled2-8V3CS6BHRkm7fv3yZB73Al-E5EhUcSTv8igh0bZMI1hlFW0Lh-flbqTsUojdo5616OMUsU0tLjZ35Qr7II-iG_mgYoRwtCvBkDTbi_4PGW7TFAImwVidStP90qgLzi9rNHQYFVpXyq3zf7LTXCZQHVVDWmShAmrB4gG7xSJ8To6Ms3FKf4i0fDei9yHC9xwjn6Kh8D06wCBLzg4BmH_xUsR8p8vYkx4YSvg0oAcKOZqSzvpK-E_DWixKI2iWGDB-4MXaIXQp4PwEQiYzIV6FWq1frfd8VbKZDrBZEdl6RRsBRplel1ELG6hb09RDz3ntsyXroHbPZkDGc6KLYsiOFfwrg-SCfT4A8YAVMJdzcysl76gzKgBN9DCRh755ZxnPzfcYZAmuHZOab8f0RE77wnXVOFTyFdY7_nRI2zSnaSk42zsD2ISsNCrY1EyXTX1pP_ufxh5TdcskJArVgJeUpm4RQ9Ogdjokf7o4hFmVMuVOzUINw2L2of16QzDobZtVELtUt5n1ELDjPJmkOxlrumtdUu-lcg6meoKCAaZwJLwFZ2vcOZTgCtsjCmUeVk8ZlvzSl0AznGo8KinPcRE", input_hashmap));
+
+    System.out.println(analyser.documentExtraction("https://00e9e64bac0f52aa6f241eca5e262ac4bf10fb7b859341f80b-apidata.googleusercontent.com/download/storage/v1/b/palmtree-image-02.appspot.com/o/jjj.jpg?qk=AD5uMEsKo57JgyT47sd_DsKej3pet0mUmzGpDru14Qg4b6FGtf4RGL8SL0IvyflHP-CUn76JXnq0LdA0oTP3XKUoGC2tkK9IzUVp3hL_Ld82qRwnqVGMHt7rXefoIg_shdWKgsYJj6NRaEggUMITrZYLuBmfQvU5mDhcmoG-MNCTCQzjbqDmebAHh8JaNFP1csWnsnLeUKiZkqMn57PgwAT80lwoa9ihzCcLVWs7PGjOWxxxDnmTAyB_oIjrAWgxfRRTnZNSslC4Bl9hYscAKgc3mggBkDNFCG27uchw6kELU8ReZtIOCPAwgxzdhgddooAMdFyS6h0oS9VkEoVuXxBI9MuIwy4E3R4Crp2ui8-SW9NnvKB1QOv0FH3waiqNKOAKc6MEwkqkuOmJ-FXRdqKBPgeprAaOsfE0QGqdkTvc0wj4x59LzjrmkMq8URGHRYVz9RCLyMRHNOxqgJbP2_aTmyYf2Wvv_eqnXENLfR9TyHRXfxPS-7IDy60nCR_bC0SVRoxw_1_rolwDpKajyQXJu57dS080CI7P0CZK0BeC05ft_kcvJo5SVnGd6dHGSD2Dllb1nm_msJGlDQ5ItHhDgvDPlenSuDRmAk7PsHFCyvQI1dKcr_ZEgKT0pp0POBP-jM6i9E1y-fk6qAHi3EspQTjUDvwc1otiUcagyFMQj8k13BrKUIEahfVh2cbNpQKioAD4MRYXX5iRKk4qItZ_YpcOZjwcYlk8Aq2wxwZ7IT_5i7urFAZ7vElE7q585wkPxwswTT_P", input_hashmap));
 
     }
-    public boolean big(String imageURI , HashMap<String,String> input)
+  /*  public boolean big(String imageURI , HashMap<String,String> input)
     {
 
         float left_Top_X_Pos=0, left_Top_Y_Pos=0,
@@ -95,10 +96,10 @@ public class ImageContentAnalyser {
         }
         return true;
     }
+              */
 
 
-
-    public boolean making_hashmap_from_image(String imageURI, HashMap<String, String> input_hashmap) {
+    public boolean documentExtraction(String imageURI, HashMap<String, String> input_hashmap) {
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
@@ -113,8 +114,10 @@ public class ImageContentAnalyser {
             List<String> Description = new ArrayList<String>();
             List<List<Vertex>> vertex = new ArrayList<List<Vertex>>();
             List<Vertex> polygon = new ArrayList<Vertex>();
-          HashMap<String,TextFieldArea> hm = new HashMap<String, TextFieldArea>();
+          HashMap<String,TextFieldArea> textPositionHM = new HashMap<String, TextFieldArea>();
+     //       HashMap<String,String> hm1 = new HashMap<String, String>();
             String text = "";
+
             float left_Top_X_Pos = 0;               float right_Top_X_Pos = 0;
             float left_Bottom_X_Pos = 0;              float right_Bottom_X_Pos = 0;
             float left_Top_Y_Pos = 0;                    float right_Top_Y_Pos = 0;
@@ -143,15 +146,45 @@ public class ImageContentAnalyser {
                 right_Bottom_Y_Pos = Third_co_ordinate.getY();
                 left_Bottom_X_Pos = Forth_co_ordinate.getX();
                 left_Bottom_Y_Pos = Forth_co_ordinate.getY();
-System.out.println(text);
+//System.out.println(text);
                 TextFieldArea textFieldArea = new TextFieldArea(left_Bottom_X_Pos, left_Bottom_Y_Pos,
                         right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
-                  hm.put(text,textFieldArea);
+                  textPositionHM.put(text,textFieldArea);
+      //        hm1.put(text, text);
             }
 
+          Set<String> inputHMset = input_hashmap.keySet();
+            Set<String> textPositionset = textPositionHM.keySet();
+            Iterator<String> inputHMiter =inputHMset.iterator();
+            Iterator<String> textPositioniter =textPositionset.iterator();
+            String val1="";
 
- System.out.println("equals: " + input_hashmap.equals(hm));
+            while (inputHMiter.hasNext())
+            {   val1=inputHMiter.next();
+               // System.out.println(v);
+               textPositioniter=textPositionset.iterator();
+                  while (textPositioniter.hasNext())
+                  {
+                  String val2 = textPositioniter.next();
+               //  System.out.println(v2);
+                 if(input_hashmap.get(val1).equals(val2))
+             {
+    System.out.println(val1 +"---------------"+ val2);
 
+
+          }    }     }
+
+            TextFieldArea textFieldArea_bigRect = new TextFieldArea(left_Top_X_Pos,left_Top_Y_Pos,right_Top_X_Pos,
+                    right_Top_Y_Pos,right_Bottom_X_Pos,right_Bottom_Y_Pos,
+                    left_Bottom_X_Pos,left_Bottom_Y_Pos);
+
+            System.out.println(extractTextValueForLabel(textFieldArea_bigRect , textPositionHM));
+
+
+
+
+  //       System.out.println(input_hashmap.);
+// System.out.println("equals: " + input_hashmap.equals(hm1));
 
 
         } catch (IOException exc) {
