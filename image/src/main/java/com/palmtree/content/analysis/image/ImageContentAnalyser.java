@@ -26,21 +26,46 @@ public class ImageContentAnalyser {
         // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
         // System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
         // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
+
         HashMap<String,String> input_hashmap = new HashMap<String, String>();
-        input_hashmap.put("Branch","IT");
-        input_hashmap.put("Name","Hamsa");
+        input_hashmap.put("Nationality", "Bangladeshi");
+        input_hashmap.put("Religion","Hindu");
+
         String docType = null;
-        String label = "Name";
-        HashMap<String,String> textLocationHM = analyser.extractTextsAndLocation("http://www.k-billing.com/example_invoices/professionalblue_example.png");
-        analyser.getPostionOfValueForLabel(label,textLocationHM);
-        analyser.generateTemplate("http://www.k-billing.com/example_invoices/professionalblue_example.png",input_hashmap,docType);
-         }
+        analyser.generateTemplate("https://i.ytimg.com/vi/bz4dkMQoXAg/maxresdefault.jpg", input_hashmap, docType);
+    }
+
+    public boolean generateTemplate(String imageURI, HashMap<String, String> input_hashmap,String docType) {
+        try {
+            ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
+            ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
+            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
+                    .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
+                    .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
+                    .build();
+            imageReqsList.add(imageReq);
+            BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
+            List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
+
+            Set<String> label = input_hashmap.keySet();
+            HashMap<String,TextFieldArea> template = new HashMap<String, TextFieldArea>();
+            for (String labels:label)
+            {
+                String labelofinputhashmap = input_hashmap.get(labels);
+                HashMap <String,TextFieldArea> text_positionhashmap = extractTextsAndLocation(imageURI);
+                TextFieldArea textFieldArea = getPostionOfValueForLabel(labelofinputhashmap, text_positionhashmap);
+                template.put(labelofinputhashmap,textFieldArea);
+            }
+            HashMap<String, HashMap> templateRegistery = new HashMap<String, HashMap>();
+            templateRegistery.put(docType,template);
+            }
+        catch (IOException exc) {
+            logger.error("Exception while reading image from the url" + exc.getMessage());
+        }     return true;    }
 
 
-
-
-
-    public boolean generateTemplate(String imageURI, HashMap<String, String> input_hashmap,String docType)
+    public HashMap extractFieldValueUsingTemplate(String imageURI, String docType)
     {
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
@@ -51,28 +76,13 @@ public class ImageContentAnalyser {
                     .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
                     .build();
             imageReqsList.add(imageReq);
-
-            for (Map.Entry<String, String> entry: input_hashmap.entrySet())
-            {       String key = entry.getKey();
-                String value = entry.getValue();
-                System.out.println(key + "---------------");
-                System.out.println(value);
-            }
-
         } catch (IOException exc) {
             logger.error("Exception while reading image from the url" + exc.getMessage());
-        }
-
-        return true;
-    }
-
-
-
-
+        }   return null;    }
 
 
     private HashMap extractTextsAndLocation(String imageURI) {
-        HashMap<String,TextFieldArea> textPositionHM  = null;
+        HashMap<String,TextFieldArea> textPositionHM = new HashMap<String, TextFieldArea>();
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
@@ -87,13 +97,11 @@ public class ImageContentAnalyser {
             List<String> Description = new ArrayList<String>();
             List<List<Vertex>> vertex = new ArrayList<List<Vertex>>();
             List<Vertex> polygon = new ArrayList<Vertex>();
-            textPositionHM = new HashMap<String, TextFieldArea>();
             String text = "";
-
-            float left_Top_X_Pos = 0;               float right_Top_X_Pos = 0;
-            float left_Bottom_X_Pos = 0;            float right_Bottom_X_Pos = 0;
-            float left_Top_Y_Pos = 0;               float right_Top_Y_Pos = 0;
-            float left_Bottom_Y_Pos = 0;            float right_Bottom_Y_Pos = 0;
+            float left_Top_X_Pos = 0;                   float right_Top_X_Pos = 0;
+            float left_Bottom_X_Pos = 0;                float right_Bottom_X_Pos = 0;
+            float left_Top_Y_Pos = 0;                   float right_Top_Y_Pos = 0;
+            float left_Bottom_Y_Pos = 0;                float right_Bottom_Y_Pos = 0;
 
 
             for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
@@ -118,27 +126,33 @@ public class ImageContentAnalyser {
                 right_Bottom_Y_Pos = Third_co_ordinate.getY();
                 left_Bottom_X_Pos = Forth_co_ordinate.getX();
                 left_Bottom_Y_Pos = Forth_co_ordinate.getY();
-
                 TextFieldArea textFieldArea = new TextFieldArea(left_Bottom_X_Pos, left_Bottom_Y_Pos,
                         right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
                 textPositionHM.put(text,textFieldArea);
-            } }
-        catch (IOException exc) {
+
+            }
+
+        } catch (IOException exc) {
             logger.error("Exception while reading image from the url" + exc.getMessage());
         }
         return textPositionHM;
     }
 
-
-
-
-    public HashMap getPostionOfValueForLabel(String valueForLabel, HashMap<String,String> TextAndPosition)
+    public TextFieldArea getPostionOfValueForLabel(String valueForLabel, HashMap<String,TextFieldArea> TextAndPosition)
     {
+        float left_Top_X_Pos=0, left_Top_Y_Pos=0,
+                right_Top_X_Pos=0,right_Top_Y_Pos=0,
+                right_Bottom_X_Pos=0,right_Bottom_Y_Pos=0,
+                left_Bottom_X_Pos=0,left_Bottom_Y_Pos=0;
+        System.out.println(valueForLabel);
 
+        System.out.println(TextAndPosition.get(valueForLabel));
 
-        return null;
+        TextFieldArea textFieldArea_bigRect = new TextFieldArea(left_Top_X_Pos,left_Top_Y_Pos,right_Top_X_Pos,
+                right_Top_Y_Pos,right_Bottom_X_Pos,right_Bottom_Y_Pos,
+                left_Bottom_X_Pos,left_Bottom_Y_Pos);
+        return textFieldArea_bigRect;
     }
-
 
 
     // Method For Comparing Rectangle
