@@ -28,57 +28,68 @@ public class ImageContentAnalyser {
         // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
 
         HashMap<String,String> input_hashmap = new HashMap<String, String>();
-        input_hashmap.put("Nationality", "Bangladeshi");
-        input_hashmap.put("Religion","Hindu");
-
+        input_hashmap.put("Name", "Jinesh");
+        input_hashmap.put("Occupation","Pharmacist");
         String docType = null;
-        analyser.generateTemplate("https://i.ytimg.com/vi/bz4dkMQoXAg/maxresdefault.jpg", input_hashmap, docType);
+        analyser.generateTemplate("http://www.biodatasheet.com/wp-content/uploads/2016/05/clear-biodata-form-bio.jpg", input_hashmap, docType);
     }
 
-    public boolean generateTemplate(String imageURI, HashMap<String, String> input_hashmap,String docType) {
-        try {
-            ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
-            ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
-            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
-                    .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
-                    .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
-                    .build();
-            imageReqsList.add(imageReq);
-            BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
-            List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
+    HashMap<String,TextFieldArea> template = new HashMap<String, TextFieldArea>();
 
-            Set<String> label = input_hashmap.keySet();
-            HashMap<String,TextFieldArea> template = new HashMap<String, TextFieldArea>();
-            for (String labels:label)
-            {
-                String labelofinputhashmap = input_hashmap.get(labels);
-                HashMap <String,TextFieldArea> text_positionhashmap = extractTextsAndLocation(imageURI);
-                TextFieldArea textFieldArea = getPostionOfValueForLabel(labelofinputhashmap, text_positionhashmap);
-                template.put(labelofinputhashmap,textFieldArea);
-            }
-            HashMap<String, HashMap> templateRegistery = new HashMap<String, HashMap>();
-            templateRegistery.put(docType,template);
-            }
-        catch (IOException exc) {
-            logger.error("Exception while reading image from the url" + exc.getMessage());
-        }     return true;    }
+    public boolean generateTemplate(String imageURI, HashMap<String, String> input_hashmap,String docType) {
+        HashMap<String, HashMap> templateRegistry = new HashMap<String, HashMap>();
+        Set<String> label = input_hashmap.keySet();
+        TextFieldArea textFieldArea = null;
+        HashMap <String,TextFieldArea> text_positionhashmap = new HashMap<String, TextFieldArea>();
+        HashMap<String,String> outputHashMap = new HashMap<String, String>();
+        for (String labels:label)
+        {
+           String valueForLabel = input_hashmap.get(labels);
+
+            text_positionhashmap = extractTextsAndLocation(imageURI);
+
+            textFieldArea= getPostionOfValueForLabel(valueForLabel, text_positionhashmap);
+
+            template.put(labels,textFieldArea);
+
+            outputHashMap = extractFieldValueUsingTemplate(imageURI,docType);
+            System.out.println(outputHashMap);
+         }
+        templateRegistry.put(docType,template);
+        return true;
+    }
+
 
 
     public HashMap extractFieldValueUsingTemplate(String imageURI, String docType)
     {
-        try {
-            ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
-            ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
-            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
-                    .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
-                    .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
-                    .build();
-            imageReqsList.add(imageReq);
-        } catch (IOException exc) {
-            logger.error("Exception while reading image from the url" + exc.getMessage());
-        }   return null;    }
+
+        Set<String> labelValue = template.keySet();
+        HashMap <String,TextFieldArea> text_positionhashmap = new HashMap<String, TextFieldArea>();
+        HashMap<String,String> outputHashmap = new HashMap<String, String>();
+        text_positionhashmap = extractTextsAndLocation(imageURI);
+
+
+            for (String value:labelValue)
+        {
+            TextFieldArea textFieldArea_bigRect =  template.get(value);
+
+            String value_text = extractTextValueForLabel(textFieldArea_bigRect,text_positionhashmap);
+            outputHashmap.put(value,value_text);
+        }
+        return outputHashmap;
+    }
+
+
+
+
+    public TextFieldArea getPostionOfValueForLabel(String valueForLabel, HashMap<String,TextFieldArea> TextAndPosition)
+    {
+        TextFieldArea textFieldArea_bigRect = TextAndPosition.get(valueForLabel);
+
+        return textFieldArea_bigRect;
+    }
+
 
 
     private HashMap extractTextsAndLocation(String imageURI) {
@@ -129,30 +140,13 @@ public class ImageContentAnalyser {
                 TextFieldArea textFieldArea = new TextFieldArea(left_Bottom_X_Pos, left_Bottom_Y_Pos,
                         right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
                 textPositionHM.put(text,textFieldArea);
-
             }
-
         } catch (IOException exc) {
             logger.error("Exception while reading image from the url" + exc.getMessage());
         }
         return textPositionHM;
     }
 
-    public TextFieldArea getPostionOfValueForLabel(String valueForLabel, HashMap<String,TextFieldArea> TextAndPosition)
-    {
-        float left_Top_X_Pos=0, left_Top_Y_Pos=0,
-                right_Top_X_Pos=0,right_Top_Y_Pos=0,
-                right_Bottom_X_Pos=0,right_Bottom_Y_Pos=0,
-                left_Bottom_X_Pos=0,left_Bottom_Y_Pos=0;
-        System.out.println(valueForLabel);
-
-        System.out.println(TextAndPosition.get(valueForLabel));
-
-        TextFieldArea textFieldArea_bigRect = new TextFieldArea(left_Top_X_Pos,left_Top_Y_Pos,right_Top_X_Pos,
-                right_Top_Y_Pos,right_Bottom_X_Pos,right_Bottom_Y_Pos,
-                left_Bottom_X_Pos,left_Bottom_Y_Pos);
-        return textFieldArea_bigRect;
-    }
 
 
     // Method For Comparing Rectangle
@@ -166,7 +160,6 @@ public class ImageContentAnalyser {
         {
 
             Map.Entry entry = (Map.Entry) it.next();
-
             String key = (String) entry.getKey();
             TextFieldArea value = (TextFieldArea) entry.getValue();
 
@@ -183,7 +176,6 @@ public class ImageContentAnalyser {
         text = builder.toString();
         return text;
     }
-
 
 
     ///////////////////////////////////////////////////////////
@@ -415,3 +407,9 @@ class TextFieldArea{
         this.right_Bottom_Y_Pos = right_Bottom_Y_Pos;
         this.left_Bottom_X_Pos = left_Bottom_X_Pos;
         this.left_Bottom_Y_Pos = left_Bottom_Y_Pos;  }}
+
+ /*        //finding template
+        for (String value:labelValue)
+        {      if(value=="Religion")
+            {        docType = "Indian PAssPort";
+          System.out.println(docType);  }}      */
