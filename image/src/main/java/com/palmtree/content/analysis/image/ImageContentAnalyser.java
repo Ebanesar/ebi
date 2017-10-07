@@ -88,18 +88,17 @@ public class ImageContentAnalyser {
         int j = splitValue.length;
         first = splitValue[0];
         last = splitValue[j-1];
+        Set<String> label = TextAndPosition.keySet();
 
-        for(Map.Entry<String,TextFieldArea> entry:TextAndPosition.entrySet())
-        {   String key = entry.getKey();
-            TextFieldArea value = entry.getValue();
-
-            if (key.contains(first))
-            {   left_Top_X_Pos = value.left_Top_X_Pos;
-                left_Top_Y_Pos = value.left_Top_Y_Pos;}
-            if (key.contains(last))
-            {   right_Bottom_X_Pos = value.right_Bottom_X_Pos;
-                right_Bottom_Y_Pos = value.right_Bottom_Y_Pos;}
-       }
+        for (String labels:label)
+        {
+            if (labels.contains(first))
+            {   left_Top_X_Pos = TextAndPosition.get(first).left_Top_X_Pos;
+                left_Top_Y_Pos = TextAndPosition.get(first).left_Top_Y_Pos;}
+            if (labels.contains(last))
+            {   right_Bottom_X_Pos = TextAndPosition.get(last).right_Bottom_X_Pos;
+                right_Bottom_Y_Pos = TextAndPosition.get(last).right_Bottom_Y_Pos;}
+        }
         right_Top_X_Pos = right_Bottom_X_Pos;
         right_Top_Y_Pos = left_Top_Y_Pos;
         left_Bottom_X_Pos = left_Top_X_Pos;
@@ -434,3 +433,16 @@ class TextFieldArea{
         {      if(value=="Religion")
             {        docType = "Indian PAssPort";
           System.out.println(docType);  }}      */
+
+
+/*           for(Map.Entry<String,TextFieldArea> entry:TextAndPosition.entrySet())
+        {   String key = entry.getKey();
+            TextFieldArea value = entry.getValue();
+
+            if (key.contains(first))
+            {   left_Top_X_Pos = value.left_Top_X_Pos;
+                left_Top_Y_Pos = value.left_Top_Y_Pos;}
+            if (key.contains(last))
+            {   right_Bottom_X_Pos = value.right_Bottom_X_Pos;
+                right_Bottom_Y_Pos = value.right_Bottom_Y_Pos;}
+       }                 */
