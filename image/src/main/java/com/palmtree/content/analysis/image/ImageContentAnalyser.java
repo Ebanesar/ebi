@@ -28,10 +28,10 @@ public class ImageContentAnalyser {
         // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
 
         HashMap<String,String> input_hashmap = new HashMap<String, String>();
-        input_hashmap.put("Name", "Jinesh");
-        input_hashmap.put("Occupation","Pharmacist");
+        input_hashmap.put("Name","Gonzalo LLorens Chanza");
+        input_hashmap.put("Nationality","Spanish");
         String docType = null;
-        analyser.generateTemplate("http://www.biodatasheet.com/wp-content/uploads/2016/05/clear-biodata-form-bio.jpg", input_hashmap, docType);
+        analyser.generateTemplate("http://www.bongdaao.com/wp-content/uploads/2017/10/professional-resume-format-samples-free-download-unique-free-cv-europass-pdf-europass-home-european-cv-format-pdf-of-professional-resume-format-samples-free-download.png", input_hashmap, docType);
     }
 
     HashMap<String,TextFieldArea> template = new HashMap<String, TextFieldArea>();
@@ -45,35 +45,28 @@ public class ImageContentAnalyser {
         for (String labels:label)
         {
            String valueForLabel = input_hashmap.get(labels);
-
             text_positionhashmap = extractTextsAndLocation(imageURI);
-
             textFieldArea= getPostionOfValueForLabel(valueForLabel, text_positionhashmap);
-
             template.put(labels,textFieldArea);
-
             outputHashMap = extractFieldValueUsingTemplate(imageURI,docType);
-            System.out.println(outputHashMap);
-         }
+        }
+        System.out.println(outputHashMap);
         templateRegistry.put(docType,template);
         return true;
-    }
-
+        }
 
 
     public HashMap extractFieldValueUsingTemplate(String imageURI, String docType)
     {
 
         Set<String> labelValue = template.keySet();
-        HashMap <String,TextFieldArea> text_positionhashmap = new HashMap<String, TextFieldArea>();
+        HashMap <String,TextFieldArea> text_positionhashmap = new HashMap<String,TextFieldArea>();
         HashMap<String,String> outputHashmap = new HashMap<String, String>();
         text_positionhashmap = extractTextsAndLocation(imageURI);
-
 
             for (String value:labelValue)
         {
             TextFieldArea textFieldArea_bigRect =  template.get(value);
-
             String value_text = extractTextValueForLabel(textFieldArea_bigRect,text_positionhashmap);
             outputHashmap.put(value,value_text);
         }
@@ -84,10 +77,38 @@ public class ImageContentAnalyser {
 
 
     public TextFieldArea getPostionOfValueForLabel(String valueForLabel, HashMap<String,TextFieldArea> TextAndPosition)
-    {
-        TextFieldArea textFieldArea_bigRect = TextAndPosition.get(valueForLabel);
+    {      float left_Top_X_Pos=0, left_Top_Y_Pos=0,
+            right_Top_X_Pos=0,right_Top_Y_Pos=0,
+            right_Bottom_X_Pos=0,right_Bottom_Y_Pos=0,
+            left_Bottom_X_Pos=0,left_Bottom_Y_Pos=0;
 
-        return textFieldArea_bigRect;
+        String first = "";
+        String last = "";
+        String[] splitValue = valueForLabel.split(" ");
+        int j = splitValue.length;
+        first = splitValue[0];
+        last = splitValue[j-1];
+
+        for(Map.Entry<String,TextFieldArea> entry:TextAndPosition.entrySet())
+        {   String key = entry.getKey();
+            TextFieldArea value = entry.getValue();
+
+            if (key.contains(first))
+            {   left_Top_X_Pos = value.left_Top_X_Pos;
+                left_Top_Y_Pos = value.left_Top_Y_Pos;}
+            if (key.contains(last))
+            {   right_Bottom_X_Pos = value.right_Bottom_X_Pos;
+                right_Bottom_Y_Pos = value.right_Bottom_Y_Pos;}
+       }
+        right_Top_X_Pos = right_Bottom_X_Pos;
+        right_Top_Y_Pos = left_Top_Y_Pos;
+        left_Bottom_X_Pos = left_Top_X_Pos;
+        left_Bottom_Y_Pos = right_Bottom_Y_Pos;
+
+        TextFieldArea textFieldArea_bigRect = new TextFieldArea(left_Top_X_Pos,left_Top_Y_Pos,right_Top_X_Pos,
+                right_Top_Y_Pos,right_Bottom_X_Pos,right_Bottom_Y_Pos,
+                left_Bottom_X_Pos,left_Bottom_Y_Pos);
+           return textFieldArea_bigRect;
     }
 
 
