@@ -27,13 +27,13 @@ public class ImageContentAnalyser {
         // System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
         // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
 
-        HashMap<String,String> input_hashmap = new HashMap<String, String>();
-        input_hashmap.put("Name","Ebanesar");
-        input_hashmap.put("GENDER","Male");
+        HashMap<String,String> input = new HashMap<String, String>();
+        input.put("NAME","Sangeetha Bregit");
+        input.put("GENDER","Female");
         String docType = null;
-        analyser.generateTemplate("https://00e9e64bac6ee59dd9d5bfe291832270f2d8ac4ff822079bcf-apidata.googleusercontent.com/download/storage/v1/b/staging.palmtree-image-01.appspot.com/o/id-1919331104995787.jpg?qk=AD5uMEu-VJl5uoZWm6PD9-4ZOKxXw-eAJsE2TVjuPiRNze1FyT0iqBI2y1i2BywzLo0-_3spSSz1ysFyB_sBK6b02dy-AqMd5_P30GJ3c8ckmo0SRMHbTBZWzBb-XVrTPVBNqxzd662pZY-ip0ljaJPdGx5JaqKjxLcoPzPqB7vxx6NWsLGi6PiGyT9veIJKD8sTgm6YJhkFr6tFhbFqawJp11tEGN_vvk13CavKmd43WStf_1vGUcoJ5QWvcvWJJ8ljfQQu2WHoilmiTQUzGyIwXNCsIYYhjc6YClem9GUfmKyaUiGZvotrEvRRFWHmvuoCh5DQfkTD1PrgGtfTEHkwCOq59GTRZGEc5bY4s_ogiECmXpTO-NMSHaZ7AgGB--mpN_6zZ9CchOa7I93SBmraIlJip1hQl4Shxjd3yPi8rSQswwULKhyttl72yRrdOt8tbnIIhUplnNw-q0NuTf85vI2DJ6IugNyeb1Q2Qaz1HLoDur3RRl7nSSe-K249QYnTNoWUwf6ZN10O-wH7KDkq11XEcSOn4xvdnNTCs3f394wIa3uogaUNI6_Ub_jBx_X6UOKdjah231mi1pqS_MeuczZcK4CpCifTBk64jvzcTm-lWvFupeG_10I6C-M0mhKH3qkP-LNwrjo-S9uCnTQjoy7-8Ed7wy0QF-rPpJbxoZn-lQg_5Pqq0Fep2J3t0hzlJyvJxCOI0LG8Vx5Yy59X7PhEtro4Xnk6VoJJnPJMq4jTT06vzjAQmNFpz-mzRYlyl4GtdOeAF5J7pv_yETxGMrVE4-XcOg", input_hashmap, docType);
-      System.out.println(analyser.extractFieldValueUsingTemplate("https://00e9e64bac21237c842d75ca29eba29d20429f112df766bd55-apidata.googleusercontent.com/download/storage/v1/b/staging.palmtree-image-01.appspot.com/o/id-804450479735093.jpg?qk=AD5uMEs6UocotM0ZqD-n99lMzuJSszpA4iHET3WuIxSxMjcepRLkVzXi9UTbgKRgskf_PiNkVOPa_O3UVBfI90NYS3FbAA9u34pWC7dWfVjFX2HxJDrmmtwH04eyPEyBjalJdCt88e5pG-qp4WQfv_OopYHNciKzFgcIbkOXHM1YPpcJnnGITJ4pU3zEWsx5sm_KrjsbWqSpdQm1DiOttM8kB-5fkNVmNGc8x21x-exnlL6G0COD6Rm2USc9itBPtwnELA-lyiXIw0rrHGRPoZoQeDq-ibhYdXadRFtWhnRe3rNYDb2ilsbOD2bN_LJh-C5_vBc0zfCdzPdqq1LzZtPa1_64comiB2w-grVRCIhT3UwUgqu6oYiPhAzgD1UxeWGrkcMQT3vc-indWfeb2P_TcCUSqYZSru31av1q9y_7wm8GWVJr0FpJbOxHBBPa68x4CBjMCtiY5KmzaM3Diaj7DfWLX4X4ZSIpVRVWv4iIRgs-Vaa7Z3-wsP2lAhmV1Ao1xrrFjLE6env3dCKRjkk1xLlBgtY1KFcr_YAwy4XDp_3LT0zNP1ZsEO5Y9cbu_U-YIfksdEDRgvWXYm6Ym6z6eqdS9xXojnL9USOMIzX0XhMuasT7vmgmmz_YyTf45NmP9pT7ubbV28DdfWzMWDvkAruzggu-Nbmndd-8n9WbOwqtUa7IzyOoUn5wCb50W6X8kExnDyczMO-hZ3VHXvih654bAOXz6D29cYx0i_OZp_oYwxCFxPAd8ZjhaYnSHVV0DAjFVAnZgFCUwG13r7C3m8jfB1TdeQ" , docType));
-    }
+       analyser.generateTemplate("https://00e9e64bac5f3661c72877f9dca51e583dd787844949b054b3-apidata.googleusercontent.com/download/storage/v1/b/staging.palmtree-image-01.appspot.com/o/id-779405708897475.jpg?qk=AD5uMEu7mWsjNHUjiRFgf1UEDiu3BJtppaM5Pmw1T0SvfJuaiMaNQaLcg_pkVo-bQyvm9iR6Sas3FPA9CVk1Ru4-uVwRzLKiFcETkGrjFYCrmTEUj8GoZeXwSjn-4-NuP-UbTuAFfk30JBY1qmkEgPvlbHaYNF77EG9HeA_nQfw6jH7-Pu4Pd_lQF40zPR2BOu4EnWMFU9J34Wr2vj6JXJUKNKnGnt1FU--NTHamZyUKPknF8RdrbmE0GokFwWQ1QMmpHZRsZ8JcStqArb-IEJKiBVE7A0Chyb3hgQbXS_OwpgjnLJ21Jcklod_YVm5HqU9yGO_l4GkRdYigTR0WbcU9unqlJcc_ZHYBbzk34eU4FvxYpUEcH7pltPcXk4Nyh8MHOCPAjLaji7O0TDf_qPCslkXR05syU2zQ88HQ0FqnHz4gnlIeJCXtiv_1kL2mYtt7JonWxdcVHK223_j6uBHBEV49wo3JOtSCrSyQFvd2VtxWzw3shl1MRZkUBsJhtZf1AhMjjUBaxGl_AuyREwJpmDJ016vICaylPSJtPcq0JgsyJXsVLmy1Tr1yVQUYu-4zkaCv_5e8uGeRB3tt6goy2XLLK32nkH9UPjqSkcVCqIl4JhbbonTdqeIIaFd127xO6gLAEoMmzVjueCTj5vSP0UOKZXYX1JG0TeYBkcInYwevxMC-f2zsLCt0vHrrWcELGmCkscRz-lMIItLfDHUe4CVlMNND-FtNy2o1oHkHwlt6EKbRZlGSIaxMwykk2zdKwDDkBQtinwDReKbXn2jlvlATDbZ4Ig", input, docType);
+     System.out.println(analyser.extractFieldValueUsingTemplate("https://00e9e64bac2fb2188cba72841a16635d014f7f477bb97d6b77-apidata.googleusercontent.com/download/storage/v1/b/staging.palmtree-image-01.appspot.com/o/id-1919331104995787.jpg?qk=AD5uMEsPxonbha6VveSun-2RK7qHezi5XImff_BB1Sxj3EeCEVNzSHLTxOLyotlMdldU75r_Nne84tguwEZnnmDxSrwGmojAQNUXAZDWFuOC-ams6I5-JqSF_UQOduRdIjlY1tNeRl0yPySxFmAmnzb9jl0Jq97XOG-kICuL-J2PBAjYH-BcHOH7eR8BRRkj45cEL76WezLFm7OHMUvG2rNqNNfYVyMe2kspVR-aL5O363624DcoU6QJijuHfbFBiulXBjiy4bDKjeLsLCXaBbTj7-DwS3EXElqBAX9z9ZCXDAwZ17OhkuF66L4ATO7aDKo3GTa03lkLp9LX5F5yFYuv3lNhg5GW9udp4ozeWol9Cgx-ae_8UZU3mXwWhOQH6mLVUq3zsvhdtqZjoCEoiX4LR7MpYTa_RqMLK99lyeBbIVJI_L7wJU2POV_AYbBV3KNePf1qbHz_o9rxEDnMiK_d6QJGE0YltkN90oQBc3JqUvjzARgU4BxDdaDDw16X6jGS7DsK3QwJ3NI_eFCncENsBr1vve6wY5GU7AHoQ63eNscVmGoCtYX__92ACgtYN2ygVR3_vAiwIOzmXtNZn2yPlAkCBaZIkQZUr9NbBMa3G7zMvMsi6Z19p4wYDsDATXeycM_qf84U5mg4ahZ7EDIowAVoSY3pkAAwLtN1cxS56Wq0w-J3Z5VEDPHW559iJRZ-Zrvqd9Ijlu8iUpKoWwHSFqJeRjasEfpw-3h9LHQZXlJEurP3C1AiAIl189ctKM5DNInNqPILwfYxBEgUESgxdfVvi7_FKQ" , docType));
+   }
 
     HashMap<String,TextFieldArea> template = new HashMap<String, TextFieldArea>();
 
@@ -95,17 +95,21 @@ public class ImageContentAnalyser {
         for (String labels:label)
         {
             if (labels.contains(first))
-            {   left_Top_X_Pos = TextAndPosition.get(first).left_Top_X_Pos;
-                left_Top_Y_Pos = TextAndPosition.get(first).left_Top_Y_Pos;}
+            {   left_Top_X_Pos = TextAndPosition.get(first).left_Top_X_Pos - 5;
+                left_Top_Y_Pos = TextAndPosition.get(first).left_Top_Y_Pos -2;}
             if (labels.contains(last))
-            {   right_Bottom_X_Pos = TextAndPosition.get(last).right_Bottom_X_Pos;
-                right_Bottom_Y_Pos = TextAndPosition.get(last).right_Bottom_Y_Pos;}
+            {   right_Bottom_X_Pos = TextAndPosition.get(last).right_Bottom_X_Pos +5;
+                right_Bottom_Y_Pos = TextAndPosition.get(last).right_Bottom_Y_Pos +2;}
         }
         right_Top_X_Pos = right_Bottom_X_Pos;
         right_Top_Y_Pos = left_Top_Y_Pos;
         left_Bottom_X_Pos = left_Top_X_Pos;
         left_Bottom_Y_Pos = right_Bottom_Y_Pos;
 
+   //     System.out.println("\n left_Top_X_Pos:" +left_Top_X_Pos + "\n left_Top_Y_Pos: " +left_Top_Y_Pos +
+     //           "\n right_Top_X_Pos " + right_Top_X_Pos + "\n right_Top_Y_Pos " + right_Top_Y_Pos +
+       //         "\n right_Bottom_X_Pos " + right_Bottom_X_Pos + "\n right_Bottom_Y_Pos " + right_Bottom_Y_Pos +
+         //       "\n left_Bottom_X_Pos" + left_Bottom_X_Pos + "\n left_Bottom_Y_Pos " + left_Bottom_Y_Pos);
         TextFieldArea textFieldArea_bigRect = new TextFieldArea(left_Top_X_Pos,left_Top_Y_Pos,right_Top_X_Pos,
                 right_Top_Y_Pos,right_Bottom_X_Pos,right_Bottom_Y_Pos,
                 left_Bottom_X_Pos,left_Bottom_Y_Pos);
@@ -159,8 +163,10 @@ public class ImageContentAnalyser {
                 right_Bottom_Y_Pos = Third_co_ordinate.getY();
                 left_Bottom_X_Pos = Forth_co_ordinate.getX();
                 left_Bottom_Y_Pos = Forth_co_ordinate.getY();
-                TextFieldArea textFieldArea = new TextFieldArea(left_Bottom_X_Pos, left_Bottom_Y_Pos,
-                        right_Bottom_X_Pos, right_Bottom_Y_Pos, right_Top_X_Pos, right_Top_Y_Pos, left_Top_X_Pos, left_Top_Y_Pos);
+                TextFieldArea textFieldArea = new TextFieldArea(left_Top_X_Pos, left_Top_Y_Pos,
+                        right_Top_X_Pos, right_Top_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos,
+                        left_Bottom_X_Pos, left_Bottom_Y_Pos);
+
                 textPositionHM.put(text,textFieldArea);
             }
         } catch (IOException exc) {
