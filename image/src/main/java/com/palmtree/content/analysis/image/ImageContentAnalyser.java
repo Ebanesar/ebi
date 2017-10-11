@@ -5,6 +5,8 @@ import com.google.cloud.vision.v1.Feature.Type;
 import com.google.protobuf.ByteString;
 import org.apache.log4j.Logger;
 import javax.validation.constraints.Max;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,7 @@ public class ImageContentAnalyser {
 
     private static Logger logger = Logger.getLogger(ImageContentAnalyser.class.getName());
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         ImageContentAnalyser analyser = new ImageContentAnalyser();
         System.out.println(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
         // System.out.println(analyser.isImageSafe("https://www.dailydot.com/wp-content/uploads/6c855233625ee8c7985a841c4bd068dd5e1.jpg/91/"));
@@ -26,50 +28,57 @@ public class ImageContentAnalyser {
         // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
         // System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
         // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
+        String generateTemplate_filepath = "/home/palm_tree/Downloads/id-779405708897475.jpg";
+        String extractValue_filePath = "/home/palm_tree/Downloads/id-804450479735093.jpg";
+        ByteString imgBytes_1 = ByteString.readFrom(new FileInputStream(generateTemplate_filepath));
+        ByteString imgBytes_2 = ByteString.readFrom(new FileInputStream(extractValue_filePath));
 
-        HashMap<String,String> input = new HashMap<String, String>();
-        input.put("NAME","Sangeetha Bregit");
-        input.put("GENDER","Female");
+        // ByteString imgBytes = ByteString.readFrom(new FileInputStream(filepath));
+        //  System.out.print( analyser.detectLandmark(imgBytes));
+        HashMap<String,String> input_hashmap = new HashMap<String, String>();
+        input_hashmap.put("NAME","Sangeetha Bregit");
+        input_hashmap.put("GENDER","Female");
         String docType = null;
-       analyser.generateTemplate("https://00e9e64bac5f3661c72877f9dca51e583dd787844949b054b3-apidata.googleusercontent.com/download/storage/v1/b/staging.palmtree-image-01.appspot.com/o/id-779405708897475.jpg?qk=AD5uMEu7mWsjNHUjiRFgf1UEDiu3BJtppaM5Pmw1T0SvfJuaiMaNQaLcg_pkVo-bQyvm9iR6Sas3FPA9CVk1Ru4-uVwRzLKiFcETkGrjFYCrmTEUj8GoZeXwSjn-4-NuP-UbTuAFfk30JBY1qmkEgPvlbHaYNF77EG9HeA_nQfw6jH7-Pu4Pd_lQF40zPR2BOu4EnWMFU9J34Wr2vj6JXJUKNKnGnt1FU--NTHamZyUKPknF8RdrbmE0GokFwWQ1QMmpHZRsZ8JcStqArb-IEJKiBVE7A0Chyb3hgQbXS_OwpgjnLJ21Jcklod_YVm5HqU9yGO_l4GkRdYigTR0WbcU9unqlJcc_ZHYBbzk34eU4FvxYpUEcH7pltPcXk4Nyh8MHOCPAjLaji7O0TDf_qPCslkXR05syU2zQ88HQ0FqnHz4gnlIeJCXtiv_1kL2mYtt7JonWxdcVHK223_j6uBHBEV49wo3JOtSCrSyQFvd2VtxWzw3shl1MRZkUBsJhtZf1AhMjjUBaxGl_AuyREwJpmDJ016vICaylPSJtPcq0JgsyJXsVLmy1Tr1yVQUYu-4zkaCv_5e8uGeRB3tt6goy2XLLK32nkH9UPjqSkcVCqIl4JhbbonTdqeIIaFd127xO6gLAEoMmzVjueCTj5vSP0UOKZXYX1JG0TeYBkcInYwevxMC-f2zsLCt0vHrrWcELGmCkscRz-lMIItLfDHUe4CVlMNND-FtNy2o1oHkHwlt6EKbRZlGSIaxMwykk2zdKwDDkBQtinwDReKbXn2jlvlATDbZ4Ig", input, docType);
-     System.out.println(analyser.extractFieldValueUsingTemplate("https://00e9e64bac2fb2188cba72841a16635d014f7f477bb97d6b77-apidata.googleusercontent.com/download/storage/v1/b/staging.palmtree-image-01.appspot.com/o/id-1919331104995787.jpg?qk=AD5uMEsPxonbha6VveSun-2RK7qHezi5XImff_BB1Sxj3EeCEVNzSHLTxOLyotlMdldU75r_Nne84tguwEZnnmDxSrwGmojAQNUXAZDWFuOC-ams6I5-JqSF_UQOduRdIjlY1tNeRl0yPySxFmAmnzb9jl0Jq97XOG-kICuL-J2PBAjYH-BcHOH7eR8BRRkj45cEL76WezLFm7OHMUvG2rNqNNfYVyMe2kspVR-aL5O363624DcoU6QJijuHfbFBiulXBjiy4bDKjeLsLCXaBbTj7-DwS3EXElqBAX9z9ZCXDAwZ17OhkuF66L4ATO7aDKo3GTa03lkLp9LX5F5yFYuv3lNhg5GW9udp4ozeWol9Cgx-ae_8UZU3mXwWhOQH6mLVUq3zsvhdtqZjoCEoiX4LR7MpYTa_RqMLK99lyeBbIVJI_L7wJU2POV_AYbBV3KNePf1qbHz_o9rxEDnMiK_d6QJGE0YltkN90oQBc3JqUvjzARgU4BxDdaDDw16X6jGS7DsK3QwJ3NI_eFCncENsBr1vve6wY5GU7AHoQ63eNscVmGoCtYX__92ACgtYN2ygVR3_vAiwIOzmXtNZn2yPlAkCBaZIkQZUr9NbBMa3G7zMvMsi6Z19p4wYDsDATXeycM_qf84U5mg4ahZ7EDIowAVoSY3pkAAwLtN1cxS56Wq0w-J3Z5VEDPHW559iJRZ-Zrvqd9Ijlu8iUpKoWwHSFqJeRjasEfpw-3h9LHQZXlJEurP3C1AiAIl189ctKM5DNInNqPILwfYxBEgUESgxdfVvi7_FKQ" , docType));
-   }
+        analyser.generateTemplate(imgBytes_1, input_hashmap, docType);
+        System.out.println(analyser.extractFieldValueUsingTemplate(imgBytes_2 , docType));
+//  analyser.extractTextsAndLocation("http://www.universalcards.co.in/images/school_big_2.jpg");  */
+    }
 
     HashMap<String,TextFieldArea> template = new HashMap<String, TextFieldArea>();
 
-    public boolean generateTemplate(String imageURI, HashMap<String, String> input_hashmap,String docType) {
+    public boolean generateTemplate(ByteString image, HashMap<String, String> input_hashmap,String docType) {
         HashMap<String, HashMap> templateRegistry = new HashMap<String, HashMap>();
         Set<String> label = input_hashmap.keySet();
         TextFieldArea textFieldArea = null;
-        HashMap <String,TextFieldArea> text_positionhashmap = new HashMap<String, TextFieldArea>();
+        HashMap text_positionhashmap = new HashMap<String, TextFieldArea>();
         HashMap<String,String> outputHashMap = new HashMap<String, String>();
         for (String labels:label)
         {
-           String valueForLabel = input_hashmap.get(labels);
-            text_positionhashmap = extractTextsAndLocation(imageURI);
+            String valueForLabel = input_hashmap.get(labels);
+            text_positionhashmap = extractTextsAndLocation(image);
             textFieldArea= getPostionOfValueForLabel(valueForLabel, text_positionhashmap);
             template.put(labels,textFieldArea);
-          //  outputHashMap = extractFieldValueUsingTemplate(imageURI,docType);
+            //  outputHashMap = extractFieldValueUsingTemplate(imageURI,docType);
         }
-       // System.out.println(outputHashMap);
-       // templateRegistry.put(docType,template);
+        // System.out.println(outputHashMap);
+        // templateRegistry.put(docType,template);
         return true;
-        }
+    }
 
 
-    public HashMap extractFieldValueUsingTemplate(String imageURI, String docType)
+    public HashMap extractFieldValueUsingTemplate(ByteString image, String docType)
     {
 
         Set<String> labelValue = template.keySet();
         HashMap <String,TextFieldArea> text_positionhashmap = new HashMap<String,TextFieldArea>();
         HashMap <String,String> outputHashmap = new HashMap<String, String>();
-        text_positionhashmap = extractTextsAndLocation(imageURI);
+        text_positionhashmap = extractTextsAndLocation(image);
 
         for (String value:labelValue)
         {
             TextFieldArea textFieldArea_bigRect =  template.get(value);
-           String value_text = extractTextValueForLabel(textFieldArea_bigRect,text_positionhashmap);
-           outputHashmap.put(value,value_text);
+            String value_text = extractTextValueForLabel(textFieldArea_bigRect,text_positionhashmap);
+            outputHashmap.put(value,value_text);
         }
 
         return outputHashmap;
@@ -106,25 +115,26 @@ public class ImageContentAnalyser {
         left_Bottom_X_Pos = left_Top_X_Pos;
         left_Bottom_Y_Pos = right_Bottom_Y_Pos;
 
-   //     System.out.println("\n left_Top_X_Pos:" +left_Top_X_Pos + "\n left_Top_Y_Pos: " +left_Top_Y_Pos +
-     //           "\n right_Top_X_Pos " + right_Top_X_Pos + "\n right_Top_Y_Pos " + right_Top_Y_Pos +
-       //         "\n right_Bottom_X_Pos " + right_Bottom_X_Pos + "\n right_Bottom_Y_Pos " + right_Bottom_Y_Pos +
-         //       "\n left_Bottom_X_Pos" + left_Bottom_X_Pos + "\n left_Bottom_Y_Pos " + left_Bottom_Y_Pos);
+        //     System.out.println("\n left_Top_X_Pos:" +left_Top_X_Pos + "\n left_Top_Y_Pos: " +left_Top_Y_Pos +
+        //           "\n right_Top_X_Pos " + right_Top_X_Pos + "\n right_Top_Y_Pos " + right_Top_Y_Pos +
+        //         "\n right_Bottom_X_Pos " + right_Bottom_X_Pos + "\n right_Bottom_Y_Pos " + right_Bottom_Y_Pos +
+        //       "\n left_Bottom_X_Pos" + left_Bottom_X_Pos + "\n left_Bottom_Y_Pos " + left_Bottom_Y_Pos);
         TextFieldArea textFieldArea_bigRect = new TextFieldArea(left_Top_X_Pos,left_Top_Y_Pos,right_Top_X_Pos,
                 right_Top_Y_Pos,right_Bottom_X_Pos,right_Bottom_Y_Pos,
                 left_Bottom_X_Pos,left_Bottom_Y_Pos);
-           return textFieldArea_bigRect;
+        return textFieldArea_bigRect;
     }
 
 
 
-    private HashMap extractTextsAndLocation(String imageURI) {
+    private HashMap extractTextsAndLocation(ByteString image) {
         HashMap<String,TextFieldArea> textPositionHM = new HashMap<String, TextFieldArea>();
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
-            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
+            Image img = Image.newBuilder().setContent(image).build();
+            // Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(img)).build();
+            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(img)
                     .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
                     .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
                     .build();
@@ -423,15 +433,20 @@ public class ImageContentAnalyser {
         return detectedLandMarks;
     }
 
-    public List<String> detectLandmark(byte[] imageContent) {
+    public List<String> detectLandmark(ByteString imageContent) {
         List<String> detectedLandMarks = new ArrayList<String>();
-
+        List<AnnotateImageRequest> requests = new ArrayList<AnnotateImageRequest>();
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-            Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageContent)).build();
+            //Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageContent)).build();
+            Image img = Image.newBuilder().setContent(imageContent).build();
+            // Feature feat = Feature.newBuilder().setType(Type.FACE_DETECTION).build();
+            //  AnnotateImageRequest request =
+            // AnnotateImageRequest.newBuilder().addFeatures(feat).setImage(img).build();
+            //requests.add(request);
 
-            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
+            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(img)
                     .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
                     .addFeatures(Feature.newBuilder().setType(Type.LOGO_DETECTION).build())
                     .addFeatures(Feature.newBuilder().setType(Type.LANDMARK_DETECTION).build())
