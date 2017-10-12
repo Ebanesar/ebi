@@ -4,10 +4,12 @@ import com.google.cloud.vision.v1.*;
 import com.google.cloud.vision.v1.Feature.Type;
 import com.google.protobuf.ByteString;
 import org.apache.log4j.Logger;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+
+import javax.imageio.ImageIO;
 import javax.validation.constraints.Max;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
@@ -28,25 +30,39 @@ public class ImageContentAnalyser {
         // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
         // System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
         // System.out.println(analyser.detectTexts("http://www.gsproducts.co.uk/wordpress/wp-content/uploads/2015/04/Boat-name-Mariah.jpg"));
-        String generateTemplate_filepath = "/home/palm_tree/Downloads/id-779405708897475.jpg";
-        String extractValue_filePath = "/home/palm_tree/Downloads/id-804450479735093.jpg";
-        ByteString imgBytes_1 = ByteString.readFrom(new FileInputStream(generateTemplate_filepath));
-        ByteString imgBytes_2 = ByteString.readFrom(new FileInputStream(extractValue_filePath));
-
+    //    String generateTemplate_filepath = "/home/palm_tree/Downloads/id-779405708897475.jpg";
+   //     String extractValue_filePath = "/home/palm_tree/Downloads/id-804450479735093.jpg";
+   //     ByteString imgBytes_1 = ByteString.readFrom(new FileInputStream(generateTemplate_filepath));
+   //     ByteString imgBytes_2 = ByteString.readFrom(new FileInputStream(extractValue_filePath));
         // ByteString imgBytes = ByteString.readFrom(new FileInputStream(filepath));
         //  System.out.print( analyser.detectLandmark(imgBytes));
+
+        BufferedImage image1 = ImageIO.read(new File("/home/palm_tree/Downloads/id-779405708897475.jpg"));
+        BufferedImage image2 = ImageIO.read(new File("/home/palm_tree/Downloads/id-804450479735093.jpg"));
+
+        ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+
+        ImageIO.write(image1,"jpg",baos1);
+        ImageIO.write(image2,"jpg",baos2);
+
+        byte [] generateTemplate = baos1.toByteArray();
+        byte [] extractValue = baos2.toByteArray();
+
+
         HashMap<String,String> input_hashmap = new HashMap<String, String>();
         input_hashmap.put("NAME","Sangeetha Bregit");
         input_hashmap.put("GENDER","Female");
         String docType = null;
-        analyser.generateTemplate(imgBytes_1, input_hashmap, docType);
-        System.out.println(analyser.extractFieldValueUsingTemplate(imgBytes_2 , docType));
+
+        analyser.generateTemplate(generateTemplate, input_hashmap, docType);
+        System.out.println(analyser.extractFieldValueUsingTemplate(extractValue , docType));
 //  analyser.extractTextsAndLocation("http://www.universalcards.co.in/images/school_big_2.jpg");  */
     }
 
     HashMap<String,TextFieldArea> template = new HashMap<String, TextFieldArea>();
 
-    public boolean generateTemplate(ByteString image, HashMap<String, String> input_hashmap,String docType) {
+    public boolean generateTemplate(byte[] image, HashMap<String, String> input_hashmap,String docType) {
         HashMap<String, HashMap> templateRegistry = new HashMap<String, HashMap>();
         Set<String> label = input_hashmap.keySet();
         TextFieldArea textFieldArea = null;
@@ -66,7 +82,7 @@ public class ImageContentAnalyser {
     }
 
 
-    public HashMap extractFieldValueUsingTemplate(ByteString image, String docType)
+    public HashMap extractFieldValueUsingTemplate(byte[] image, String docType)
     {
 
         Set<String> labelValue = template.keySet();
@@ -127,12 +143,12 @@ public class ImageContentAnalyser {
 
 
 
-    private HashMap extractTextsAndLocation(ByteString image) {
+    private HashMap extractTextsAndLocation(byte[] image) {
         HashMap<String,TextFieldArea> textPositionHM = new HashMap<String, TextFieldArea>();
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-            Image img = Image.newBuilder().setContent(image).build();
+            Image img = Image.newBuilder().setContent(ByteString.copyFrom(image)).build();
             // Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(img)).build();
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(img)
                     .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
