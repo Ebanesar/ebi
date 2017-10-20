@@ -17,8 +17,8 @@ import java.util.Map;
 @RestController
 public class ImageContentAnalysisResourceController {
     ImageContentAnalyser contentAnalyser = new ImageContentAnalyser();
-
-    @RequestMapping(value = "/imageValidity", method = RequestMethod.POST)
+  /*
+   @RequestMapping(value = "/imageValidity", method = RequestMethod.POST)
     public @ResponseBody
     ResponseEntity<ImageValidityResponse> isImageValid(@RequestParam String imageURI) {
         boolean isValid = contentAnalyser.isValidImage(imageURI);
@@ -26,39 +26,17 @@ public class ImageContentAnalysisResourceController {
         response.setValid(isValid);
         return ResponseEntity.ok(response);
     }
-
-    @RequestMapping(value = "/safeImage", method = RequestMethod.POST)
+ */
+  /*  @RequestMapping(value = "/safeImage", method = RequestMethod.POST)
     public @ResponseBody
     ResponseEntity<ImageSafetyResponse> isImageSafe(@RequestParam String imageURI) {
         boolean isSafe = contentAnalyser.isImageSafe(imageURI);
         ImageSafetyResponse response = new ImageSafetyResponse();
         response.setSafe(isSafe);
         return ResponseEntity.ok(response);
-    }
+    }          */
 
-  /*  @RequestMapping(value = "/detectLogos", method = RequestMethod.POST)
-    public @ResponseBody
-    ResponseEntity<ImageLogoResponse> isLogoValid(@RequestParam String imageURI) {
-        List<String> detectedLogos = contentAnalyser.detectLogos(imageURI);
-        ImageLogoResponse response = new ImageLogoResponse();
-
-        response.setDetectedLogos(detectedLogos);
-
-        return ResponseEntity.ok(response);
-    }
-
-    @RequestMapping(value = "/detectLandmarks", method = RequestMethod.POST)
-    public @ResponseBody
-    ResponseEntity<ImageLandmarkResponse> isLandmarkValid(@RequestParam String imageURI) {
-        List<String> landMarksDetected = contentAnalyser.detectLandmarks(imageURI);
-        ImageLandmarkResponse response = new ImageLandmarkResponse();
-
-        response.setDetectedLandmarks(landMarksDetected);
-
-        return ResponseEntity.ok(response);
-    }     */
-
-
+    /*
     @CrossOrigin
     @RequestMapping(value = "/generateTemplate", method = RequestMethod.POST)
     public @ResponseBody
@@ -72,13 +50,11 @@ public class ImageContentAnalysisResourceController {
         }
         return ResponseEntity.ok(response);
     }
+      */
 
 
 
-
-
-
-
+  /*
     @CrossOrigin
     @RequestMapping(value = "/extractValue", method = RequestMethod.POST)
     public @ResponseBody
@@ -92,32 +68,67 @@ public class ImageContentAnalysisResourceController {
         }
         return ResponseEntity.ok(response);
     }
+       */
 
 
+  @CrossOrigin
+    @RequestMapping(value = "/imageValidity", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<ImageValidityResponse> imageValidityResponseResponseEntity(@RequestParam("file") MultipartFile imageContent) throws IOException {
+        System.out.println("The request is received");
+ImageValidityResponse response = new ImageValidityResponse();
+      try {
+            boolean isValid =contentAnalyser.isValidImage(imageContent.getBytes());
+          response.setValid(isValid);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/safeImage", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<ImageSafetyResponse> imageSafetyResponseResponseEntity(@RequestParam("file") MultipartFile imageContent) throws IOException {
+        System.out.println("The request is received");
+        ImageSafetyResponse response = new ImageSafetyResponse();
+        try {
+            boolean isSafe =contentAnalyser.isImageSafe(imageContent.getBytes());
+            response.setSafe(isSafe);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(response);
+    }
 
 
+  /*  @CrossOrigin
+    @RequestMapping(value = "/detectLogos", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<Imag> isLogoValid(@RequestParam String imageURI) {
+        List<String> detectedLogos = contentAnalyser.detectLogos(imageURI);
+        ImageLogoResponse response = new ImageLogoResponse();
 
+        response.setDetectedLogos(detectedLogos);
+
+        return ResponseEntity.ok(response);
+    }   */
+
+    @CrossOrigin
+    @RequestMapping(value = "/detectLandmarks", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<ImageDetectLandmarkResponse> imageDetectLandmarkResponseResponseEntity(@RequestParam("file") MultipartFile imageContent) throws IOException
+    {   System.out.println("The request is received");
+        ImageDetectLandmarkResponse response = new ImageDetectLandmarkResponse();
+        try {
+        List<String> landMarksDetected = contentAnalyser.detectLandmarks(imageContent.getBytes());
+        response.setDetectLandmarks(landMarksDetected);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(response);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
