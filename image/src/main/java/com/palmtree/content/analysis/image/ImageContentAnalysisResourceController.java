@@ -1,8 +1,12 @@
 package com.palmtree.content.analysis.image;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.palmtree.content.analysis.image.model.*;
 import com.palmtree.content.analysis.image.model.ImageDetectLandmarkResponse;
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -99,23 +103,6 @@ ImageValidityResponse response = new ImageValidityResponse();
 
 
 
-    @CrossOrigin
-    @RequestMapping(value = "/generateTemplate", method = RequestMethod.POST)
-    public @ResponseBody
-    ResponseEntity<Boolean> generateTemplateResponseResponseEntity(@RequestParam("file") MultipartFile imageContent, HashMap<String, String> stringMap, String docType) {
-        System.out.println("The request is received");
-       boolean response = true;
-        try {
-            response = contentAnalyser.generateTemplate(imageContent.getBytes(),stringMap,docType);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok(response);
-    }
-
-
-
-
   /*
     @CrossOrigin
     @RequestMapping(value = "/extractValue", method = RequestMethod.POST)
@@ -132,9 +119,48 @@ ImageValidityResponse response = new ImageValidityResponse();
     }
        */
 
+   /*
+   @CrossOrigin
+    @RequestMapping(value = "/generateTemplate", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<GenerateTemplateResponse> generateTemplateResponseResponseEntity(@RequestParam("file") MultipartFile imageContent, HashMap<String, String> stringMap, String docType) {
+        System.out.println("The request is received");
+     GenerateTemplateResponse response = new GenerateTemplateResponse();
+        try {
+            boolean ww=contentAnalyser.generateTemplate(imageContent.getBytes(),stringMap,docType);
+            response.setSample(ww);
+      } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(response);
+    }
+    */
+
+
+    @CrossOrigin
+    @RequestMapping (value = "/extractvalueusingtemplate" , method =  RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<ExtractValueResponse> jsonObjectResponseEntity1(@RequestParam("file") MultipartFile multipartFile, HashMap inputhashmap, String doctype) throws HttpMessageNotWritableException {
+        ObjectMapper mapper = new ObjectMapper();
+        ExtractValueResponse response = new ExtractValueResponse();
+        {
+            System.out.print("The Request is received");
+
+
+            try
+            {
+                String jsonObject = contentAnalyser.extractFieldValueUsingTemplate(multipartFile.getBytes(), doctype);
+                response.setJson(jsonObject);
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            return ResponseEntity.ok(response);
+        }
 
 
 
+
+}
 }
 
 

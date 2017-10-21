@@ -22,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ImageContentAnalysisTest {
     ImageContentAnalyser imageContentAnalyser = new ImageContentAnalyser();
 
-    //TestCase for Validating the image 
+    //TestCase for Validating the image
 
     @Test
   /*  public void testImageValidityWithCoolingGlass(){
@@ -93,11 +93,11 @@ public class ImageContentAnalysisTest {
         boolean safe= imageContentAnalyser.isImageSafe("http://vignette1.wikia.nocookie.net/warhammer40k/images/2/23/Bloodletter.jpg/revision/latest?cb=20111021182614");
         Assert.assertFalse(safe);
     }   */
- /*  public void testImageWithStabbing()
+  /* public void testImageWithStabbing()
     {
         boolean safe = imageContentAnalyser.isImageSafe("http://assets.nydailynews.com/polopoly_fs/1.1706765.1393626005!/img/httpImage/image.jpg_gen/derivatives/article_750/177867420.jpg");
         Assert.assertFalse(safe);
-    }    */
+    }   */
   /*  public void testImageWithShooting()
     {
 
@@ -162,12 +162,13 @@ public class ImageContentAnalysisTest {
         List<String> landmark_detect = Arrays.asList("Moai");
         Assert.assertEquals(landmark_detect,landmark);
     }   */
-    public void testImageWithPisaLandmark()
+   /* public void testImageWithPisaLandmark()
     {
         List<String> landmark = imageContentAnalyser.detectLandmarks("http://billiger-leihwagen.autoeurope.de/images/pisa2.jpg");
        List<String> landmark_detect = Arrays.asList("Piazza dei Miracoli");
         Assert.assertEquals(landmark_detect,landmark);
-    }
+    }   */
+
    /* public void testImageWithRedFortLandmark()
     {
         List<String> landmark = imageContentAnalyser.detectLandmarks("http://s3.india.com/travel/wp-content/uploads/red-fort-preset3.jpg");
@@ -180,11 +181,22 @@ public class ImageContentAnalysisTest {
         List<String> landmark_detect = Arrays.asList("Statue of Liberty");
         Assert.assertEquals(landmark_detect,landmark);
          }     */
-  /*  public void testImageWithMultipleLandmark()
+ /*  public void testImageWithMultipleLandmark()
     {
-        List<String> landmark = imageContentAnalyser.detectLandmarks("http://1.bp.blogspot.com/-n6KfRZ4xp7M/TcaF_G0SkaI/AAAAAAAAAMs/o-SVolIyH3w/s1600/thenew7wonders.jpg");
+        List<String> landmark = imageContentAnalyser.detectLandmarks("/home/palm_tree/Documents/thenew7wonders.jpg");
         List<String> landmark_detect = Arrays.asList("Christ The Redeemer" , "Petra" ,
                 "Taj Mahal" , "Colosseum" , "Machu Picchu");
         Assert.assertEquals(landmark_detect,landmark);
-    }     */
+    } */
+
+
+
+
+        public void testImageWithAdidasLogo()
+    {
+        List<String> logo = imageContentAnalyser.detectLogosDuplicate("https://n1.sdlcdn.com/imgs/a/8/u/Adidas-White-Running-Sports-Shoes-SDL070564296-3-053d6.jpg");
+        List<String> logo_detect = Arrays.asList("Adidas");
+        Assert.assertEquals(logo_detect,logo);
+    }
+
 }

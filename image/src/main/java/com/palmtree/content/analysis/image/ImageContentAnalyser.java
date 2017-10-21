@@ -1,10 +1,12 @@
 package com.palmtree.content.analysis.image;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.vision.v1.*;
 import com.google.cloud.vision.v1.Feature.Type;
 import com.google.protobuf.ByteString;
 import org.apache.log4j.Logger;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -52,15 +54,15 @@ public class ImageContentAnalyser {
         System.out.println(analyser.detectLandmarks(landmark));
       */
   // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
-
+    /*
         BufferedImage logoimage = ImageIO.read(new File("/home/palm_tree/Pictures/m-bk7098white-adidas-originals-original-imaewgv6nwxkfek7.jpeg"));
         ByteArrayOutputStream logobaos = new ByteArrayOutputStream();
         ImageIO.write(logoimage,"jpg",logobaos);
         byte [] logo = logobaos.toByteArray();
         System.out.println(analyser.detectLogos(logo));
+     */
 
 
-   /*
         BufferedImage image1 = ImageIO.read(new File("/home/palm_tree/Downloads/id-779405708897475.jpg"));
         BufferedImage image2 = ImageIO.read(new File("/home/palm_tree/Downloads/id-804450479735093.jpg"));
         ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
@@ -75,11 +77,13 @@ public class ImageContentAnalyser {
         String docType = null;
         analyser.generateTemplate(generateTemplate, input_hashmap, docType);
         System.out.println(analyser.extractFieldValueUsingTemplate(extractValue , docType));
-       */
+
     }
 
+    JSONObject templat_json = new JSONObject();
+
     HashMap<String,TextFieldArea> template = new HashMap<String, TextFieldArea>();
-     public boolean generateTemplate(byte[] image, HashMap<String, String> input_hashmap,String docType) {
+    public boolean generateTemplate(byte[] image, HashMap<String, String> input_hashmap,String docType) {
         HashMap<String, HashMap> templateRegistry = new HashMap<String, HashMap>();
         Set<String> label = input_hashmap.keySet();
         TextFieldArea textFieldArea = null;
@@ -91,29 +95,43 @@ public class ImageContentAnalyser {
             text_positionhashmap = extractTextsAndLocation(image);
             textFieldArea= getPostionOfValueForLabel(valueForLabel, text_positionhashmap);
             template.put(labels,textFieldArea);
+            templat_json.put(labels,textFieldArea);
         }
         return true;
     }
 
 
-    public HashMap extractFieldValueUsingTemplate(byte[] image, String docType)
-    {
+    public String extractFieldValueUsingTemplate(byte[] image, String docType) {
 
         Set<String> labelValue = template.keySet();
-        HashMap <String,TextFieldArea> text_positionhashmap = new HashMap<String,TextFieldArea>();
-        HashMap <String,String> outputHashmap = new HashMap<String, String>();
-        text_positionhashmap = extractTextsAndLocation(image);
 
-        for (String value:labelValue)
+        HashMap<String, TextFieldArea> text_positionhashmap = new HashMap<String, TextFieldArea>();
+        HashMap<String, String> outputHashmap = new HashMap<String, String>();
+        text_positionhashmap = extractTextsAndLocation(image);
+        ObjectMapper mapperObj = new ObjectMapper();
+
+        // Set<String> labelValue = template.keySet();
+        Set<String> label_json_value = templat_json.keySet();
+
+        text_positionhashmap = extractTextsAndLocation(image);
+        JSONObject json = new JSONObject();
+        for (String value_json : label_json_value)
         {
-            TextFieldArea textFieldArea_bigRect =  template.get(value);
-            String value_text = extractTextValueForLabel(textFieldArea_bigRect,text_positionhashmap);
-            outputHashmap.put(value,value_text);
+            TextFieldArea textFieldArea_big = (TextFieldArea) templat_json.get(value_json);
+            String value_text_json = extractTextValueForLabel(textFieldArea_big,text_positionhashmap);
+            outputHashmap.put(value_json,value_text_json) ;
+        }
+        String jsonResp = null;
+        try {
+            jsonResp = mapperObj.writeValueAsString(outputHashmap);
+            System.out.println(jsonResp);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
-        return outputHashmap;
+        return jsonResp;
     }
-
 
 
 
@@ -494,6 +512,34 @@ public class ImageContentAnalyser {
     }
 
 
+
+
+
+    public List<String> detectLogosDuplicate(String imageURI) {
+        List<String> logosDetected = new ArrayList<String>();
+
+        try {
+            ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
+            ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
+              Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+        //    Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageURI)).build();
+            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
+                    .addFeatures(Feature.newBuilder().setType(Type.LOGO_DETECTION).build())
+                    .build();
+            imageReqsList.add(imageReq);
+
+            BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
+            List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
+            for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
+                for (EntityAnnotation logo : annotateImageResponse.getLogoAnnotationsList()) {
+                    logosDetected.add(logo.getDescription());
+                }
+            }
+        } catch (Exception exc) {
+            logger.error("Exception while reading image from the url" + exc.getMessage());
+        }
+        return logosDetected;
+    }
 }
 
 

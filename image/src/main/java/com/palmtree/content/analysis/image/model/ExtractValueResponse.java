@@ -1,5 +1,7 @@
 package com.palmtree.content.analysis.image.model;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 /**
@@ -11,14 +13,14 @@ import java.util.HashMap;
  */
 public class ExtractValueResponse {
 
-    HashMap<String,String> stringHashMap;
+    String  json = " ";
 
-    public HashMap<String,String>  getStringHashMap()
+    public String getJsonObject(String jsonObject)
     {
-        return stringHashMap;
+        return json;
     }
-    public void setStringHashMap(HashMap<String,String> output)
+    public void setJson(String output)
     {
-        stringHashMap=output;
+        json = output;
     }
 }
