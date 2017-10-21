@@ -36,41 +36,6 @@ public class ImageContentAnalysisResourceController {
         return ResponseEntity.ok(response);
     }          */
 
-    /*
-    @CrossOrigin
-    @RequestMapping(value = "/generateTemplate", method = RequestMethod.POST)
-    public @ResponseBody
-    ResponseEntity<Boolean> generateTemplateResponseResponseEntity(@RequestParam("file") MultipartFile imageContent, HashMap<String, String> stringMap, String docType) {
-        System.out.println("The request is received");
-       boolean response = true;
-        try {
-            response = contentAnalyser.generateTemplate(imageContent.getBytes(),stringMap,docType);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok(response);
-    }
-      */
-
-
-
-  /*
-    @CrossOrigin
-    @RequestMapping(value = "/extractValue", method = RequestMethod.POST)
-    public @ResponseBody
-    ResponseEntity<HashMap> extractValueResponseResponseEntity(@RequestParam("file") MultipartFile imageContent, String docType) {
-        System.out.println("The request is received");
-      HashMap response = null;
-        try {
-            response =contentAnalyser.extractFieldValueUsingTemplate(imageContent.getBytes() , docType);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok(response);
-    }
-       */
-
-
   @CrossOrigin
     @RequestMapping(value = "/imageValidity", method = RequestMethod.POST)
     public @ResponseBody
@@ -102,18 +67,6 @@ ImageValidityResponse response = new ImageValidityResponse();
     }
 
 
-  /*  @CrossOrigin
-    @RequestMapping(value = "/detectLogos", method = RequestMethod.POST)
-    public @ResponseBody
-    ResponseEntity<Imag> isLogoValid(@RequestParam String imageURI) {
-        List<String> detectedLogos = contentAnalyser.detectLogos(imageURI);
-        ImageLogoResponse response = new ImageLogoResponse();
-
-        response.setDetectedLogos(detectedLogos);
-
-        return ResponseEntity.ok(response);
-    }   */
-
     @CrossOrigin
     @RequestMapping(value = "/detectLandmarks", method = RequestMethod.POST)
     public @ResponseBody
@@ -128,6 +81,60 @@ ImageValidityResponse response = new ImageValidityResponse();
         }
         return ResponseEntity.ok(response);
     }
+
+    @CrossOrigin
+    @RequestMapping(value = "/detectLogos", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<ImageDetectLogoResponse> imageDetectLogoResponseResponseEntity(@RequestParam("file") MultipartFile imageContent) throws IOException
+    {   System.out.println("The request is received");
+        ImageDetectLogoResponse response = new ImageDetectLogoResponse();
+        try {
+            List<String> logosDetected = contentAnalyser.detectLogos(imageContent.getBytes());
+            response.setDetectLogos(logosDetected);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+
+
+    @CrossOrigin
+    @RequestMapping(value = "/generateTemplate", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<Boolean> generateTemplateResponseResponseEntity(@RequestParam("file") MultipartFile imageContent, HashMap<String, String> stringMap, String docType) {
+        System.out.println("The request is received");
+       boolean response = true;
+        try {
+            response = contentAnalyser.generateTemplate(imageContent.getBytes(),stringMap,docType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+
+
+
+  /*
+    @CrossOrigin
+    @RequestMapping(value = "/extractValue", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<HashMap> extractValueResponseResponseEntity(@RequestParam("file") MultipartFile imageContent, String docType) {
+        System.out.println("The request is received");
+      HashMap response = null;
+        try {
+            response =contentAnalyser.extractFieldValueUsingTemplate(imageContent.getBytes() , docType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(response);
+    }
+       */
+
+
+
+
 }
 
 

@@ -27,7 +27,7 @@ public class ImageContentAnalyser {
         ImageContentAnalyser analyser = new ImageContentAnalyser();
         System.out.println(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
 
-        // System.out.println(analyser.isImageSafe("https://www.dailydot.com/wp-content/uploads/6c855233625ee8c7985a841c4bd068dd5e1.jpg/91/"));
+   // System.out.println(analyser.isImageSafe("https://www.dailydot.com/wp-content/uploads/6c855233625ee8c7985a841c4bd068dd5e1.jpg/91/"));
    /*
         BufferedImage safeimage = ImageIO.read(new File("/home/palm_tree/Music/13758862-Masked-gunman-taking-aim-with-a-gun-Stock-Photo-leather.jpg"));
         ByteArrayOutputStream safebaos = new ByteArrayOutputStream();
@@ -35,30 +35,33 @@ public class ImageContentAnalyser {
         byte [] safe = safebaos.toByteArray();
         System.out.println(analyser.isImageSafe(safe));
      */
-
-  //  System.out.println(analyser.isValidImage("https://ichef.bbci.co.uk/images/ic/480x270/p049tgdb.jpg"));
-  /*      BufferedImage validimage = ImageIO.read(new File("/home/palm_tree/Music/ebi.jpg"));
+//  System.out.println(analyser.isValidImage("https://ichef.bbci.co.uk/images/ic/480x270/p049tgdb.jpg"));
+     /*
+           BufferedImage validimage = ImageIO.read(new File("/home/palm_tree/Music/ebi.jpg"));
         ByteArrayOutputStream validbaos = new ByteArrayOutputStream();
         ImageIO.write(validimage,"jpg",validbaos);
         byte [] valid = validbaos.toByteArray();
         System.out.println(analyser.isValidImage(valid));
-            */
-
- // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
-
+       */
 // System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
-
+      /*
         BufferedImage landmarkimage = ImageIO.read(new File("/home/palm_tree/Pictures/stonehenge-landmark-2.jpg"));
         ByteArrayOutputStream landmarkbaos = new ByteArrayOutputStream();
         ImageIO.write(landmarkimage,"jpg",landmarkbaos);
         byte [] landmark = landmarkbaos.toByteArray();
         System.out.println(analyser.detectLandmarks(landmark));
+      */
+  // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
+
+        BufferedImage logoimage = ImageIO.read(new File("/home/palm_tree/Pictures/m-bk7098white-adidas-originals-original-imaewgv6nwxkfek7.jpeg"));
+        ByteArrayOutputStream logobaos = new ByteArrayOutputStream();
+        ImageIO.write(logoimage,"jpg",logobaos);
+        byte [] logo = logobaos.toByteArray();
+        System.out.println(analyser.detectLogos(logo));
 
 
-
-
-    // OCR from Local Machine
-   /*     BufferedImage image1 = ImageIO.read(new File("/home/palm_tree/Downloads/id-779405708897475.jpg"));
+   /*
+        BufferedImage image1 = ImageIO.read(new File("/home/palm_tree/Downloads/id-779405708897475.jpg"));
         BufferedImage image2 = ImageIO.read(new File("/home/palm_tree/Downloads/id-804450479735093.jpg"));
         ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
         ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
@@ -312,11 +315,10 @@ public class ImageContentAnalyser {
 
     public boolean isImageSafe(byte[] imageURI) {
         boolean isSafe = true;
-
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-       //     Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+       //   Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
             Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageURI)).build();
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
                     .addFeatures(Feature.newBuilder().setType(Type.SAFE_SEARCH_DETECTION).build())
@@ -365,7 +367,7 @@ public class ImageContentAnalyser {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
             Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageURI)).build();
-   //         Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+   //       Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
                     .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
                     .addFeatures(Feature.newBuilder().setType(Type.SAFE_SEARCH_DETECTION).build())
@@ -438,7 +440,7 @@ public class ImageContentAnalyser {
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-      //      Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+      //    Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
             Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageURI)).build();
             System.out.println(image.getSource().getImageUri());
 
@@ -463,48 +465,16 @@ public class ImageContentAnalyser {
         return detectedLandMarks;
     }
 
-    public List<String> detectLandmark(ByteString imageContent) {
-        List<String> detectedLandMarks = new ArrayList<String>();
-        List<AnnotateImageRequest> requests = new ArrayList<AnnotateImageRequest>();
-        try {
-            ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
-            ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-            //Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageContent)).build();
-            Image img = Image.newBuilder().setContent(imageContent).build();
-            // Feature feat = Feature.newBuilder().setType(Type.FACE_DETECTION).build();
-            //  AnnotateImageRequest request =
-            // AnnotateImageRequest.newBuilder().addFeatures(feat).setImage(img).build();
-            //requests.add(request);
 
-            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(img)
-                    .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
-                    .addFeatures(Feature.newBuilder().setType(Type.LOGO_DETECTION).build())
-                    .addFeatures(Feature.newBuilder().setType(Type.LANDMARK_DETECTION).build())
-                    .build();
-            imageReqsList.add(imageReq);
 
-            BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
-            List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
-            for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
-                for (EntityAnnotation landmark : annotateImageResponse.getLandmarkAnnotationsList()) {
-                    detectedLandMarks.add(landmark.getDescription());
-                }
-            }
-        } catch (IOException exc) {
-            logger.error("Exception while reading image from the url" + exc.getMessage());
-
-        }
-
-        return detectedLandMarks;
-    }
-
-    public List<String> detectLogos(String imageURI) {
+    public List<String> detectLogos(byte[] imageURI) {
         List<String> logosDetected = new ArrayList<String>();
 
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+   //       Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageURI)).build();
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
                     .addFeatures(Feature.newBuilder().setType(Type.LOGO_DETECTION).build())
                     .build();
