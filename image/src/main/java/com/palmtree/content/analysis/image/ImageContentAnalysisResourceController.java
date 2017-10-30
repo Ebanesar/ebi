@@ -39,7 +39,7 @@ public class ImageContentAnalysisResourceController {
         response.setSafe(isSafe);
         return ResponseEntity.ok(response);
     }          */
-
+ /*
   @CrossOrigin
     @RequestMapping(value = "/imageValidity", method = RequestMethod.POST)
     public @ResponseBody
@@ -100,9 +100,24 @@ ImageValidityResponse response = new ImageValidityResponse();
         }
         return ResponseEntity.ok(response);
     }
+            */
+  /*     @CrossOrigin
+    @RequestMapping(value = "/extractValue" , method = RequestMethod.POST)
+    public  @ResponseBody
+    ResponseEntity<ExtractValueResponse> extractValueResponseResponseEntity (@RequestParam("file") MultipartFile imageContent, String docType)
+       {
+      System.out.println("The request is received");
+     ExtractValueResponse response = new ExtractValueResponse();
+     try {
+    String outputDetected = contentAnalyser.extractFieldValueUsingTemplate(imageContent.getBytes(), docType);
+      response.setSample(outputDetected);
+     } catch (IOException e)
+     {
+         e.printStackTrace();
+     }
+    return ResponseEntity.ok(response);
 
-
-
+       }   */
   /*
     @CrossOrigin
     @RequestMapping(value = "/extractValue", method = RequestMethod.POST)
@@ -140,20 +155,18 @@ ImageValidityResponse response = new ImageValidityResponse();
     @CrossOrigin
     @RequestMapping (value = "/extractvalueusingtemplate" , method =  RequestMethod.POST)
     public @ResponseBody
-    ResponseEntity<ExtractValueResponse> jsonObjectResponseEntity1(@RequestParam("file") MultipartFile multipartFile, HashMap inputhashmap, String doctype) throws HttpMessageNotWritableException {
-        ObjectMapper mapper = new ObjectMapper();
-        ExtractValueResponse response = new ExtractValueResponse();
+    ResponseEntity<TemplateGeneratorInput> jsonObjectResponseEntity1(@RequestParam String image, String doctype) throws HttpMessageNotWritableException {
+
+        TemplateGeneratorInput response = new TemplateGeneratorInput();
         {
             System.out.print("The Request is received");
 
 
-            try
-            {
-                String jsonObject = contentAnalyser.extractFieldValueUsingTemplate(multipartFile.getBytes(), doctype);
-                response.setJson(jsonObject);
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            HashMap hashMap = contentAnalyser.extractFieldValueUsingTemplate(image, doctype);
+
+            response.setHashmap(hashMap);
+
+
             return ResponseEntity.ok(response);
         }
 

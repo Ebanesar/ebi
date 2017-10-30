@@ -3,11 +3,13 @@ package com.palmtree.content.analysis.image;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.vision.v1.*;
 import com.google.cloud.vision.v1.Feature.Type;
+import com.google.gson.Gson;
 import com.google.protobuf.ByteString;
 import org.apache.log4j.Logger;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Decoder;
 
 import javax.imageio.ImageIO;
 import javax.validation.constraints.Max;
@@ -16,6 +18,15 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
+
+
+
+import  java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 /**
  * Created by kaarthikraaj on 10/8/17.
@@ -29,7 +40,7 @@ public class ImageContentAnalyser {
         ImageContentAnalyser analyser = new ImageContentAnalyser();
         System.out.println(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
 
-   // System.out.println(analyser.isImageSafe("https://www.dailydot.com/wp-content/uploads/6c855233625ee8c7985a841c4bd068dd5e1.jpg/91/"));
+        // System.out.println(analyser.isImageSafe("https://www.dailydot.com/wp-content/uploads/6c855233625ee8c7985a841c4bd068dd5e1.jpg/91/"));
    /*
         BufferedImage safeimage = ImageIO.read(new File("/home/palm_tree/Music/13758862-Masked-gunman-taking-aim-with-a-gun-Stock-Photo-leather.jpg"));
         ByteArrayOutputStream safebaos = new ByteArrayOutputStream();
@@ -53,7 +64,7 @@ public class ImageContentAnalyser {
         byte [] landmark = landmarkbaos.toByteArray();
         System.out.println(analyser.detectLandmarks(landmark));
       */
-  // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
+        // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
     /*
         BufferedImage logoimage = ImageIO.read(new File("/home/palm_tree/Pictures/m-bk7098white-adidas-originals-original-imaewgv6nwxkfek7.jpeg"));
         ByteArrayOutputStream logobaos = new ByteArrayOutputStream();
@@ -63,6 +74,26 @@ public class ImageContentAnalyser {
      */
 
 
+        File file = new File("/home/palm_tree/Downloads/id-779405708897475.jpg");
+        FileInputStream imageInFile = new FileInputStream(file);
+        byte imageData[] = new byte[(int) file.length()];
+        imageInFile.read(imageData);
+        // Converting Image byte array into Base64 String
+        String generateTemplate = com.sun.org.apache.xerces.internal.impl.dv.util.Base64.encode(imageData);
+
+
+
+        File file2 = new File("/home/palm_tree/Downloads/id-804450479735093.jpg");
+        FileInputStream imageInFile2 = new FileInputStream(file2);
+        byte imageData2[] = new byte[(int) file2.length()];
+        imageInFile2.read(imageData2);
+        // Converting Image byte array into Base64 String
+        String extractValue = com.sun.org.apache.xerces.internal.impl.dv.util.Base64.encode(imageData2);
+
+
+
+
+    /*
         BufferedImage image1 = ImageIO.read(new File("/home/palm_tree/Downloads/id-779405708897475.jpg"));
         BufferedImage image2 = ImageIO.read(new File("/home/palm_tree/Downloads/id-804450479735093.jpg"));
         ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
@@ -71,68 +102,52 @@ public class ImageContentAnalyser {
         ImageIO.write(image2,"jpg",baos2);
         byte [] generateTemplate = baos1.toByteArray();
         byte [] extractValue = baos2.toByteArray();
+    */
         HashMap<String,String> input_hashmap = new HashMap<String, String>();
         input_hashmap.put("NAME","Sangeetha Bregit");
         input_hashmap.put("GENDER","Female");
         String docType = null;
         analyser.generateTemplate(generateTemplate, input_hashmap, docType);
         System.out.println(analyser.extractFieldValueUsingTemplate(extractValue , docType));
-
     }
 
-    JSONObject templat_json = new JSONObject();
 
     HashMap<String,TextFieldArea> template = new HashMap<String, TextFieldArea>();
-    public boolean generateTemplate(byte[] image, HashMap<String, String> input_hashmap,String docType) {
+    public boolean generateTemplate(String image, HashMap<String, String> input_hashmap,String docType)
+    {
         HashMap<String, HashMap> templateRegistry = new HashMap<String, HashMap>();
         Set<String> label = input_hashmap.keySet();
         TextFieldArea textFieldArea = null;
-        HashMap text_positionhashmap = new HashMap<String, TextFieldArea>();
-        HashMap<String,String> outputHashMap = new HashMap<String, String>();
+        HashMap<String,TextFieldArea> text_positionhashmap = new HashMap<String,TextFieldArea>();
         for (String labels:label)
         {
             String valueForLabel = input_hashmap.get(labels);
             text_positionhashmap = extractTextsAndLocation(image);
             textFieldArea= getPostionOfValueForLabel(valueForLabel, text_positionhashmap);
             template.put(labels,textFieldArea);
-            templat_json.put(labels,textFieldArea);
         }
         return true;
     }
 
 
-    public String extractFieldValueUsingTemplate(byte[] image, String docType) {
-
+    public HashMap extractFieldValueUsingTemplate(String image, String docType)
+    {
         Set<String> labelValue = template.keySet();
-
-        HashMap<String, TextFieldArea> text_positionhashmap = new HashMap<String, TextFieldArea>();
-        HashMap<String, String> outputHashmap = new HashMap<String, String>();
+        HashMap <String,TextFieldArea> text_positionhashmap = new HashMap<String,TextFieldArea>();
+        HashMap <String,String> outputHashmap = new HashMap<String, String>();
         text_positionhashmap = extractTextsAndLocation(image);
-        ObjectMapper mapperObj = new ObjectMapper();
-
-        // Set<String> labelValue = template.keySet();
-        Set<String> label_json_value = templat_json.keySet();
-
-        text_positionhashmap = extractTextsAndLocation(image);
-        JSONObject json = new JSONObject();
-        for (String value_json : label_json_value)
+        for (String value:labelValue)
         {
-            TextFieldArea textFieldArea_big = (TextFieldArea) templat_json.get(value_json);
-            String value_text_json = extractTextValueForLabel(textFieldArea_big,text_positionhashmap);
-            outputHashmap.put(value_json,value_text_json) ;
+            TextFieldArea textFieldArea_bigRect =  template.get(value);
+            String value_text = extractTextValueForLabel(textFieldArea_bigRect,text_positionhashmap);
+            outputHashmap.put(value,value_text);
         }
-        String jsonResp = null;
-        try {
-            jsonResp = mapperObj.writeValueAsString(outputHashmap);
-            System.out.println(jsonResp);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        Gson gson = new Gson();
+        //    String  json_String = gson.toJson(outputHashmap);
+        String image_string = gson.toJson(image);
 
-        return jsonResp;
+        return outputHashmap;
     }
-
 
 
     public TextFieldArea getPostionOfValueForLabel(String valueForLabel, HashMap<String,TextFieldArea> TextAndPosition)
@@ -175,13 +190,18 @@ public class ImageContentAnalyser {
 
 
 
-    private HashMap extractTextsAndLocation(byte[] image) {
+    private HashMap extractTextsAndLocation(String image) {
         HashMap<String,TextFieldArea> textPositionHM = new HashMap<String, TextFieldArea>();
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-            Image img = Image.newBuilder().setContent(ByteString.copyFrom(image)).build();
-            // Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(img)).build();
+
+            BASE64Decoder decoder = new BASE64Decoder();
+            byte[] imgBytes = decoder.decodeBuffer(image);
+
+
+            Image img = Image.newBuilder().setContent(ByteString.copyFrom(imgBytes)).build();
+         //   Image img = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(image)).build();
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(img)
                     .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
                     .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
@@ -336,7 +356,7 @@ public class ImageContentAnalyser {
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-       //   Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            //   Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
             Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageURI)).build();
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
                     .addFeatures(Feature.newBuilder().setType(Type.SAFE_SEARCH_DETECTION).build())
@@ -385,7 +405,7 @@ public class ImageContentAnalyser {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
             Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageURI)).build();
-   //       Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            //       Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
                     .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
                     .addFeatures(Feature.newBuilder().setType(Type.SAFE_SEARCH_DETECTION).build())
@@ -458,7 +478,7 @@ public class ImageContentAnalyser {
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-      //    Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            //    Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
             Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageURI)).build();
             System.out.println(image.getSource().getImageUri());
 
@@ -491,7 +511,7 @@ public class ImageContentAnalyser {
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-   //       Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            //       Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
             Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageURI)).build();
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
                     .addFeatures(Feature.newBuilder().setType(Type.LOGO_DETECTION).build())
@@ -521,8 +541,8 @@ public class ImageContentAnalyser {
         try {
             ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
             ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-              Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
-        //    Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageURI)).build();
+            Image image = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(imageURI)).build();
+            //    Image image = Image.newBuilder().setContent(ByteString.copyFrom(imageURI)).build();
             AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(image)
                     .addFeatures(Feature.newBuilder().setType(Type.LOGO_DETECTION).build())
                     .build();

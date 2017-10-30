@@ -13,14 +13,15 @@ import java.util.HashMap;
  */
 public class ExtractValueResponse {
 
-    String  json = " ";
+    String sample;
 
-    public String getJsonObject(String jsonObject)
+    public String isSample()
     {
-        return json;
+        return sample;
     }
-    public void setJson(String output)
+
+    public void setSample (String samples)
     {
-        json = output;
+        sample = samples;
     }
 }
