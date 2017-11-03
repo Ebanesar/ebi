@@ -41,21 +41,21 @@ public class ImageContentAnalyser {
         System.out.println(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
 
         // System.out.println(analyser.isImageSafe("https://www.dailydot.com/wp-content/uploads/6c855233625ee8c7985a841c4bd068dd5e1.jpg/91/"));
-   /*
-        BufferedImage safeimage = ImageIO.read(new File("/home/palm_tree/Music/13758862-Masked-gunman-taking-aim-with-a-gun-Stock-Photo-leather.jpg"));
+
+      /*  BufferedImage safeimage = ImageIO.read(new File("/home/palm_tree/Music/13758862-Masked-gunman-taking-aim-with-a-gun-Stock-Photo-leather.jpg"));
         ByteArrayOutputStream safebaos = new ByteArrayOutputStream();
         ImageIO.write(safeimage,"jpg",safebaos);
         byte [] safe = safebaos.toByteArray();
-        System.out.println(analyser.isImageSafe(safe));
-     */
-//  System.out.println(analyser.isValidImage("https://ichef.bbci.co.uk/images/ic/480x270/p049tgdb.jpg"));
-     /*
-           BufferedImage validimage = ImageIO.read(new File("/home/palm_tree/Music/ebi.jpg"));
+        System.out.println(analyser.isImageSafe(safe));  */
+
+//System.out.println(analyser.isValidImage("https://ichef.bbci.co.uk/images/ic/480x270/p049tgdb.jpg"));
+
+      /*   BufferedImage validimage = ImageIO.read(new File("/home/palm_tree/Music/ebi.jpg"));
         ByteArrayOutputStream validbaos = new ByteArrayOutputStream();
         ImageIO.write(validimage,"jpg",validbaos);
         byte [] valid = validbaos.toByteArray();
-        System.out.println(analyser.isValidImage(valid));
-       */
+        System.out.println(analyser.isValidImage(valid));  */
+
 // System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
       /*
         BufferedImage landmarkimage = ImageIO.read(new File("/home/palm_tree/Pictures/stonehenge-landmark-2.jpg"));
@@ -65,13 +65,13 @@ public class ImageContentAnalyser {
         System.out.println(analyser.detectLandmarks(landmark));
       */
         // System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
-    /*
+      /*
         BufferedImage logoimage = ImageIO.read(new File("/home/palm_tree/Pictures/m-bk7098white-adidas-originals-original-imaewgv6nwxkfek7.jpeg"));
         ByteArrayOutputStream logobaos = new ByteArrayOutputStream();
         ImageIO.write(logoimage,"jpg",logobaos);
         byte [] logo = logobaos.toByteArray();
         System.out.println(analyser.detectLogos(logo));
-     */
+          */
 
 
         File file = new File("/home/palm_tree/Downloads/id-779405708897475.jpg");
@@ -101,8 +101,8 @@ public class ImageContentAnalyser {
         ImageIO.write(image1,"jpg",baos1);
         ImageIO.write(image2,"jpg",baos2);
         byte [] generateTemplate = baos1.toByteArray();
-        byte [] extractValue = baos2.toByteArray();
-    */
+        byte [] extractValue = baos2.toByteArray();  */
+
         HashMap<String,String> input_hashmap = new HashMap<String, String>();
         input_hashmap.put("NAME","Sangeetha Bregit");
         input_hashmap.put("GENDER","Female");
