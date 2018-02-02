@@ -21,16 +21,16 @@ import java.util.Map;
 @RestController
 public class ImageContentAnalysisResourceController {
     ImageContentAnalyser contentAnalyser = new ImageContentAnalyser();
-  /*
-   @RequestMapping(value = "/imageValidity", method = RequestMethod.POST)
+
+/*   @RequestMapping(value = "/imageValidity", method = RequestMethod.POST)
     public @ResponseBody
     ResponseEntity<ImageValidityResponse> isImageValid(@RequestParam String imageURI) {
         boolean isValid = contentAnalyser.isValidImage(imageURI);
         ImageValidityResponse response = new ImageValidityResponse();
         response.setValid(isValid);
         return ResponseEntity.ok(response);
-    }
- */
+    }  */
+
   /*  @RequestMapping(value = "/safeImage", method = RequestMethod.POST)
     public @ResponseBody
     ResponseEntity<ImageSafetyResponse> isImageSafe(@RequestParam String imageURI) {
@@ -152,7 +152,7 @@ ImageValidityResponse response = new ImageValidityResponse();
     */
 
 
-    @CrossOrigin
+  /*  @CrossOrigin
     @RequestMapping (value = "/extractvalueusingtemplate" , method =  RequestMethod.POST)
     public @ResponseBody
     ResponseEntity<TemplateGeneratorInput> jsonObjectResponseEntity1(@RequestParam String image, String doctype) throws HttpMessageNotWritableException {
@@ -160,21 +160,23 @@ ImageValidityResponse response = new ImageValidityResponse();
         TemplateGeneratorInput response = new TemplateGeneratorInput();
         {
             System.out.print("The Request is received");
-
-
             HashMap hashMap = contentAnalyser.extractFieldValueUsingTemplate(image, doctype);
-
             response.setHashmap(hashMap);
-
-
             return ResponseEntity.ok(response);
-        }
+        }    }         */
+
 
 
 
 
 }
-}
+
+
+
+
+
+
+
 
 
 
