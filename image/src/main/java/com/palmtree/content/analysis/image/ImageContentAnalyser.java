@@ -42,42 +42,42 @@ public class ImageContentAnalyser {
         ImageContentAnalyser analyser = new ImageContentAnalyser();
         System.out.println(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
 
- //     with urlimage  "---ImageSafe---"
- //     System.out.println(analyser.isImageSafe("https://www.dailydot.com/wp-content/uploads/6c855233625ee8c7985a841c4bd068dd5e1.jpg/91/"));
+        //     with urlimage  "---ImageSafe---"
+        //     System.out.println(analyser.isImageSafe("https://www.dailydot.com/wp-content/uploads/6c855233625ee8c7985a841c4bd068dd5e1.jpg/91/"));
 
 
- //     with localimage  "---ImageSafe---"
+        //     with localimage  "---ImageSafe---"
  /*     BufferedImage safeimage = ImageIO.read(new File("/home/palm_tree/Pictures/safety/13758862-Masked-gunman-taking-aim-with-a-gun-Stock-Photo-leather.jpg"));
         ByteArrayOutputStream safebaos = new ByteArrayOutputStream();
         ImageIO.write(safeimage,"jpg",safebaos);
         byte [] safe = safebaos.toByteArray();
         System.out.println(analyser.isImageSafe(safe));                 */
 
- //     with urlimage  "---ImageValid---"
- //     System.out.println(analyser.isValidImage("https://ichef.bbci.co.uk/images/ic/480x270/p049tgdb.jpg"));
+        //     with urlimage  "---ImageValid---"
+        //     System.out.println(analyser.isValidImage("https://ichef.bbci.co.uk/images/ic/480x270/p049tgdb.jpg"));
 
- //     with localimage  "---ImageValid---"
+        //     with localimage  "---ImageValid---"
  /*     BufferedImage validimage = ImageIO.read(new File("/home/palm_tree/Music/ebi.jpg"));
         ByteArrayOutputStream validbaos = new ByteArrayOutputStream();
         ImageIO.write(validimage,"jpg",validbaos);
         byte [] valid = validbaos.toByteArray();
         System.out.println(analyser.isValidImage(valid));                */
 
- //     with urlimage  "---LandmarkDetection---"
- //     System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
+        //     with urlimage  "---LandmarkDetection---"
+        //     System.out.println(analyser.detectLandmarks("https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg"));
 
- //     with localimage  "---LandmarkDetection---"
+        //     with localimage  "---LandmarkDetection---"
  /*     BufferedImage landmarkimage = ImageIO.read(new File("/home/palm_tree/Pictures/stonehenge-landmark-2.jpg"));
         ByteArrayOutputStream landmarkbaos = new ByteArrayOutputStream();
         ImageIO.write(landmarkimage,"jpg",landmarkbaos);
         byte [] landmark = landmarkbaos.toByteArray();
         System.out.println(analyser.detectLandmarks(landmark));           */
 
- //     with urlimage  "---LogoDetection---"
- //     System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
+        //     with urlimage  "---LogoDetection---"
+        //     System.out.println(analyser.detectLogos("http://www.carlogos.org/logo/Audi-logo-1999-1920x1080.png"));
 
 
- //     with localimage  "---LogoDetection---"
+        //     with localimage  "---LogoDetection---"
  /*     BufferedImage logoimage = ImageIO.read(new File("/home/palm_tree/Pictures/m-bk7098white-adidas-originals-original-imaewgv6nwxkfek7.jpeg"));
         ByteArrayOutputStream logobaos = new ByteArrayOutputStream();
         ImageIO.write(logoimage,"jpg",logobaos);
@@ -85,19 +85,23 @@ public class ImageContentAnalyser {
         System.out.println(analyser.detectLogos(logo));   */
 
 
-
-   //--------------------------------111111----------------------------
-
-      //--------------- with localimage  "---OCR---"  -------------------------------------------------
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////--------------- with localimage  "---OCR---"  -----------------////////////////////////
 
 
         // Giving input hashmap for generating template
         HashMap<String,String> input_hashmap = new HashMap<String, String>();
-        input_hashmap.put("NAME","Sangeetha Bregit");
-        input_hashmap.put("GENDER","Female");
+   //     input_hashmap.put("Code","IND");
+     //  input_hashmap.put("Type","P");
+        input_hashmap.put("Nationality","INDIAN");
+       input_hashmap.put("Name","BRAHMACHARIMAYUM");
+       input_hashmap.put("Issue_Place","GUWAHATI");
+       input_hashmap.put("Issue_Date","16/12/2015");
+        input_hashmap.put("Expiry_Date","15/12/2025");
+       input_hashmap.put("Birth_Date","25/04/1994");
         String docType = null;
 
-        File file1 = new File("/home/palm_tree/Pictures/OCR/sangeetha.jpg");
+        File file1 = new File("/home/palm_tree/Pictures/OCR/passport/camanu7.jpg");
         FileInputStream imageInFile = new FileInputStream(file1);
         byte imageData[] = new byte[(int) file1.length()];
         imageInFile.read(imageData);
@@ -105,22 +109,24 @@ public class ImageContentAnalyser {
         String templateImage = com.sun.org.apache.xerces.internal.impl.dv.util.Base64.encode(imageData);
 
         // creating template image
-        analyser.generateTemplate(templateImage, input_hashmap, docType);
+     analyser.generateTemplate(templateImage, input_hashmap, docType);
 
-        File file2 = new File("/home/palm_tree/Pictures/OCR/hamsa.jpg");
+        File file2 = new File("/home/palm_tree/Pictures/OCR/passport/camlama7.jpg");
         FileInputStream imageInFile2 = new FileInputStream(file2);
         byte imageData2[] = new byte[(int) file2.length()];
         imageInFile2.read(imageData2);
         // Converting Image byte array into Base64 String
         String image = com.sun.org.apache.xerces.internal.impl.dv.util.Base64.encode(imageData2);
-        analyser.isCorrection(templateImage,image);
+
+        // Checking image and rotation
+        analyser.needRotation(image);
+
+      //    analyser.extractTextsAndLocation(image);
+     // analyser.needResize(templateImage, image , input_hashmap);
 
 
- //resizing image
-    /*    String old_img_path = "/home/palm_tree/Downloads/sharpeningcommon/v1.jpg";
-        String new_img_path = "/home/palm_tree/Downloads/sharpeningcommon/v1_new.jpg";
-        analyser.resizeImage(old_img_path, "90%","100x100", new_img_path);   */
-}
+     //  analyser.Resize(templateImage, image , input_hashmap);
+    }
 
 
 
@@ -128,6 +134,105 @@ public class ImageContentAnalyser {
 
 //---------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
+
+
+    public boolean needResize(String templateimage, String inputimage , HashMap<String,String> input_hashmap)
+    {
+        HashMap<String,TextFieldArea> templateImageHM = new HashMap<String, TextFieldArea>();
+        HashMap<String,TextFieldArea> inputImageHM = new HashMap<String, TextFieldArea>();
+        Set<String> label = input_hashmap.keySet();
+        TextFieldArea tx1 = null;
+        TextFieldArea tx2 = null;
+        for (String label_value : label)
+        {
+            String valueForLabel = input_hashmap.get(label_value);
+            templateImageHM = extractTextsAndLocation(templateimage);
+            tx1 = getPostionOfValueForLabel(valueForLabel, templateImageHM);
+        }
+        for (String label_value : label)
+        {
+            String valueForLabel = input_hashmap.get(label_value);
+            inputImageHM = extractTextsAndLocation(inputimage);
+            tx2 = getPostionOfValueForLabel(valueForLabel, inputImageHM);
+        }
+
+        System.out.println(tx1.left_Top_Y_Pos + "\n" + tx2.left_Top_Y_Pos);
+        float xtopdiff = tx1.left_Top_X_Pos - tx2.left_Top_X_Pos;
+        float ytopdiff = tx1.left_Top_Y_Pos - tx2.left_Top_Y_Pos;
+        float xbottomdiff = tx1.right_Bottom_X_Pos - tx2.right_Bottom_X_Pos;
+        float ybottomdiff = tx1.right_Bottom_Y_Pos - tx2.right_Bottom_Y_Pos;
+        System.out.println(xtopdiff+ "\n" + ytopdiff+ "\n" + xbottomdiff + "\n" + ybottomdiff);
+        return  true;
+    }
+
+     /*
+
+    public void Resize(String template_image, String image, HashMap<String, String> inputHashMap)  throws IOException {
+        //To change body of created methods use File | Settings | File Templates.
+        float x1=0;             float x2=0;
+        float y1=0;             float y2=0;
+        float X;                float Y;
+
+        String image_path = "/home/palm_tree/Downloads/OCR/Passport/sir1.jpg"; //we gaved manuall path
+        String convert_path = "/usr/bin/convert-im6";
+        String textcleaner_path = "/usr/local/bin/textcleaner";
+        HashMap<String,TextFieldArea> TemplateHM = extractTextsAndLocation(template_image);
+        HashMap<String, TextFieldArea> inputImageHM = extractTextsAndLocation(image);
+        TextFieldArea template_textfieldArea= null;
+        TextFieldArea inputimage_textfieldArea = null;
+        Set<String> key_template = inputHashMap.keySet();
+        Set<String> Key_Resize = inputImageHM.keySet();
+        Set<String> template_key_from_image = TemplateHM.keySet();
+        String label = "  " ;
+        Iterator it = inputHashMap.entrySet().iterator();
+        float template_x1 = 0;
+        float template_y1 =0;
+        float input_image_x1 =0;
+        float input_image_y1 =0;
+        float Difference_X = 0;
+        float Difference_Y =0;
+        while ((it.hasNext()))   // iterating the inputhashmap
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+            String key = (String) entry.getKey();
+
+            for(String template_lable:template_key_from_image)    // getting template image label and points
+            {
+
+                if(key.equals(template_lable))
+                {
+                    template_textfieldArea = (TextFieldArea) TemplateHM.get(template_lable);
+
+                    template_x1 = template_textfieldArea.left_Top_X_Pos;
+                    template_y1 = template_textfieldArea.left_Top_Y_Pos;
+                    //System.out.println(key);
+                    System.out.println(template_lable );
+                    //+ "------" + template_x1+ "------------" + template_y1);
+
+                }
+            }
+            for(String input_image_label :Key_Resize)
+            {
+                if(key.equals(input_image_label))
+                {
+                    inputimage_textfieldArea =  inputImageHM.get(input_image_label);
+
+                    input_image_x1 = inputimage_textfieldArea.left_Top_X_Pos;
+                    input_image_y1 = inputimage_textfieldArea.left_Top_Y_Pos;
+                    //System.out.println(input_image_label + "--------------" + input_image_x1 + "------------" + input_image_y1);
+
+
+                }
+            }
+            Difference_X = input_image_x1-template_x1;
+            Difference_Y = input_image_y1 - template_y1;
+            //  System.out.println(Difference_X + "\n" + Difference_Y);
+
+        }
+    }
+               */
+
+
 
 
 
@@ -153,110 +258,90 @@ public class ImageContentAnalyser {
     }
 
 
-
-    public boolean isCorrection( String templateImage, String inputImage) throws IOException {
-
-        HashMap<String,TextFieldArea> templateImageHM = new HashMap<String, TextFieldArea>();
+    public boolean needRotation( String inputImage) throws IOException
+    {
         HashMap<String,TextFieldArea> inputImageHM = new HashMap<String, TextFieldArea>();
-        templateImageHM = extractTextsAndLocation(templateImage);
-        inputImageHM =extractTextsAndLocation(inputImage);
-        Set<String> label = templateImageHM.keySet();
-        TextFieldArea tx1 = null;
+        inputImageHM = extractTextsAndLocation(inputImage);
         TextFieldArea tx2 = null;
-        Set<String> label1 = inputImageHM.keySet();
+        Set<String> label = inputImageHM.keySet();
+
         for (String label_value : label)
         {
-            tx1 = templateImageHM.get(label_value);
-            System.out.println(tx1.left_Top_X_Pos+"tx1");
+            tx2 = inputImageHM.get(label_value);
+            break;
         }
-        for (String labelValue2 : label1)
+
+        double    x1 = tx2.left_Bottom_X_Pos;
+        double    y1 = tx2.left_Bottom_Y_Pos;
+        double    x2 = tx2.right_Bottom_X_Pos;
+        double    y2 = tx2.right_Bottom_Y_Pos;
+        double     X = x2-x1;
+        double     Y = y2-y1;
+        double angle = (Math.atan2(Y, X) * 180) / 3.14;
+
+        if (angle == 0)
         {
-            tx2 = inputImageHM.get(labelValue2);
-            System.out.println(tx2.right_Top_X_Pos+"tx2");
-        }
-        if(tx1.right_Top_X_Pos == tx2.right_Top_X_Pos)
-        {  System.out.println("same");
-            System.out.println(extractFieldValueUsingTemplate(inputImage,"ajd"));
+            System.out.println("same");
+            System.out.println(extractFieldValueUsingTemplate(inputImage,"fb_id"));
         }
         else
-        {
-            ImageRotation(inputImage);
+        {   double angleNeedToRotate = 360 - angle;
+            System.out.println("Angle Tilted : " + angle + "\n" + angleNeedToRotate + "Angle Need to Rotate");
+            String image_path = "/home/palm_tree/Pictures/OCR/passport/commonsir8.jpg"; //we gaved manuall path
+            String convert_path = "/usr/bin/convert-im6";
+            String textcleaner_path = "/usr/local/bin/textcleaner";
+
+            ProcessBuilder pb = new ProcessBuilder(convert_path, "-rotate" , String.valueOf(angleNeedToRotate), image_path , image_path);
+            ProcessBuilder pb1 = new ProcessBuilder(textcleaner_path, "-T" , image_path , image_path);
+            ProcessBuilder pb2 = new ProcessBuilder(convert_path, "-quality" , "100" , image_path , image_path);
+            pb.redirectErrorStream(true);
+            pb1.redirectErrorStream(true);
+            pb2.redirectErrorStream(true);
+            // for image rotation
+            try {
+                Process p = pb.start();
+                BufferedReader br = new BufferedReader( new InputStreamReader(p.getInputStream() ));
+                String line = null;
+                while((line=br.readLine())!=null){
+                    System.out.println(line);
+                }
+            }catch(Exception e) {
+                return false;
+            }
+            // to trim image after rotation
+            try {
+                Process p1 = pb1.start();
+                BufferedReader br1 = new BufferedReader( new InputStreamReader(p1.getInputStream() ));
+                String line1 = null;
+                while((line1=br1.readLine())!=null){
+                    System.out.println(line1);
+                }
+            }catch(Exception e) {
+                return false;
+            }
+            // for enhancing image
+            try {
+                Process p2 = pb2.start();
+                BufferedReader br2 = new BufferedReader( new InputStreamReader(p2.getInputStream() ));
+                String line2 = null;
+                while((line2=br2.readLine())!=null){
+                    System.out.println(line2);
+                }
+            }catch(Exception e) {
+                return false;
+            }
+
+            File file5 = new File("/home/palm_tree/Pictures/OCR/passport/commonsir8.jpg");
+            FileInputStream imageInFile5 = new FileInputStream(file5);
+            byte imageData5[] = new byte[(int) file5.length()];
+            imageInFile5.read(imageData5);
+            // Converting Image byte array into Base64 String
+            String image = com.sun.org.apache.xerces.internal.impl.dv.util.Base64.encode(imageData5);
+
+            System.out.println(extractFieldValueUsingTemplate(image,"doctype"));
         }
         return true;
     }
-
-
-
-
-
-
-
-    public  boolean ImageRotation(String img) throws IOException
-    {   float x1=0;             float x2=0;
-        float y1=0;             float y2=0;
-        float X;                float Y;
-
-        String image_path = "/home/palm_tree/Pictures/OCR/hamsa.jpg"; //we gaved manuall path
-        String convert_path = "/usr/bin/convert-im6";
-        String textcleaner_path = "/usr/local/bin/textcleaner";
-        HashMap characterAndLocationHM = extractCharacterAndLocation(img);
-
-        Iterator it = characterAndLocationHM.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry entry = (Map.Entry) it.next();
-            String key = (String) entry.getKey();
-            TextFieldArea value = (TextFieldArea) entry.getValue();
-            x1 = value.left_Top_X_Pos;
-            y1 = value.left_Top_Y_Pos;
-            x2 = value.right_Top_X_Pos;
-            y2 = value.right_Top_Y_Pos;
-        }
-        //calculating distance  of two points
-        X = x2-x1;
-        Y = y2-y1;
-        double characterAngle = (Math.atan2(Y, X) * 180) / 3.14;
-        double angleNeedToRotate = 360 - characterAngle;
-
-        System.out.println(characterAngle + "character angle"); //for your reference
-
-        ProcessBuilder pb = new ProcessBuilder(convert_path, "-rotate" , String.valueOf(angleNeedToRotate), image_path , image_path);
-        ProcessBuilder pb1 = new ProcessBuilder(textcleaner_path, "-T" , image_path , image_path);
-        pb.redirectErrorStream(true);
-        try {
-            Process p = pb.start();
-            BufferedReader br = new BufferedReader( new InputStreamReader(p.getInputStream() ));
-            String line = null;
-            while((line=br.readLine())!=null){
-                System.out.println(line);
-            }
-        }catch(Exception e) {
-            return false;
-        }
-
-        try {
-            Process p1 = pb1.start();
-            BufferedReader br1 = new BufferedReader( new InputStreamReader(p1.getInputStream() ));
-            String line1 = null;
-            while((line1=br1.readLine())!=null){
-                System.out.println(line1);
-            }
-        }catch(Exception e) {
-            return false;
-        }
-
-        File file5 = new File("/home/palm_tree/Pictures/OCR/hamsa.jpg");
-        FileInputStream imageInFile5 = new FileInputStream(file5);
-        byte imageData5[] = new byte[(int) file5.length()];
-        imageInFile5.read(imageData5);
-        // Converting Image byte array into Base64 String
-        String image = com.sun.org.apache.xerces.internal.impl.dv.util.Base64.encode(imageData5);
-
-        System.out.println(extractFieldValueUsingTemplate(image,"doctype"));
-
-        return true;   }
-
-
 
 
     public HashMap extractFieldValueUsingTemplate(String image, String docType)
@@ -295,21 +380,17 @@ public class ImageContentAnalyser {
         for (String labels:label)
         {
             if (labels.contains(first))
-            {   left_Top_X_Pos = TextAndPosition.get(first).left_Top_X_Pos -8;
-                left_Top_Y_Pos = TextAndPosition.get(first).left_Top_Y_Pos -4;}
+            {   left_Top_X_Pos = TextAndPosition.get(first).left_Top_X_Pos -25;
+                left_Top_Y_Pos = TextAndPosition.get(first).left_Top_Y_Pos -15;}
             if (labels.contains(last))
-            {   right_Bottom_X_Pos = TextAndPosition.get(last).right_Bottom_X_Pos +8;
-                right_Bottom_Y_Pos = TextAndPosition.get(last).right_Bottom_Y_Pos +4;}
+            {   right_Bottom_X_Pos = TextAndPosition.get(last).right_Bottom_X_Pos +35;
+                right_Bottom_Y_Pos = TextAndPosition.get(last).right_Bottom_Y_Pos +15;}
         }
         right_Top_X_Pos = right_Bottom_X_Pos;
         right_Top_Y_Pos = left_Top_Y_Pos;
         left_Bottom_X_Pos = left_Top_X_Pos;
         left_Bottom_Y_Pos = right_Bottom_Y_Pos;
 
-        //     System.out.println("\n left_Top_X_Pos:" +left_Top_X_Pos + "\n left_Top_Y_Pos: " +left_Top_Y_Pos +
-        //           "\n right_Top_X_Pos " + right_Top_X_Pos + "\n right_Top_Y_Pos " + right_Top_Y_Pos +
-        //         "\n right_Bottom_X_Pos " + right_Bottom_X_Pos + "\n right_Bottom_Y_Pos " + right_Bottom_Y_Pos +
-        //       "\n left_Bottom_X_Pos" + left_Bottom_X_Pos + "\n left_Bottom_Y_Pos " + left_Bottom_Y_Pos);
         TextFieldArea textFieldArea_bigRect = new TextFieldArea(left_Top_X_Pos,left_Top_Y_Pos,right_Top_X_Pos,
                 right_Top_Y_Pos,right_Bottom_X_Pos,right_Bottom_Y_Pos,
                 left_Bottom_X_Pos,left_Bottom_Y_Pos);
@@ -349,8 +430,19 @@ public class ImageContentAnalyser {
 
             for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
                 for (EntityAnnotation poly : annotateImageResponse.getTextAnnotationsList()) {
-                    Description.add(poly.getDescription());
-                    vertex.add(poly.getBoundingPoly().getVerticesList());   }  }
+
+                 Description.add(poly.getDescription());
+                    vertex.add(poly.getBoundingPoly().getVerticesList());
+                }
+
+
+       }
+
+
+
+
+
+
 
             for (int i = 1; i < vertex.size(); i++) {
                 text = Description.get(i);
@@ -373,6 +465,11 @@ public class ImageContentAnalyser {
                         right_Top_X_Pos, right_Top_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos,
                         left_Bottom_X_Pos, left_Bottom_Y_Pos);
 
+    /*           System.out.println(text  + "\n left_Top_X_Pos:" +left_Top_X_Pos + "\n left_Top_Y_Pos: " +left_Top_Y_Pos +
+                        "\n right_Top_X_Pos " + right_Top_X_Pos + "\n right_Top_Y_Pos " + right_Top_Y_Pos +
+                        "\n right_Bottom_X_Pos " + right_Bottom_X_Pos + "\n right_Bottom_Y_Pos " + right_Bottom_Y_Pos +
+                        "\n left_Bottom_X_Pos" + left_Bottom_X_Pos + "\n left_Bottom_Y_Pos " + left_Bottom_Y_Pos);
+                   */
                 textPositionHM.put(text,textFieldArea);
             }
         } catch (IOException exc) {
@@ -380,90 +477,6 @@ public class ImageContentAnalyser {
         }
         return textPositionHM;
     }
-
-
-
-
-    //character and location hashmap
-    private HashMap extractCharacterAndLocation(String image) {
-        HashMap<String,TextFieldArea> characterPositionHM = new HashMap<String, TextFieldArea>();
-        String  character = "";
-
-        try {
-            ImageAnnotatorClient visionClient = ImageAnnotatorClient.create();
-            ArrayList<AnnotateImageRequest> imageReqsList = new ArrayList<AnnotateImageRequest>();
-
-            BASE64Decoder decoder = new BASE64Decoder();
-            byte[] imgBytes = decoder.decodeBuffer(image);
-
-
-            Image img = Image.newBuilder().setContent(ByteString.copyFrom(imgBytes)).build();
-            //   Image img = Image.newBuilder().setSource(ImageSource.newBuilder().setImageUri(image)).build();
-            AnnotateImageRequest imageReq = AnnotateImageRequest.newBuilder().setImage(img)
-                    .addFeatures(Feature.newBuilder().setType(Type.LABEL_DETECTION).build())
-                    .addFeatures(Feature.newBuilder().setType(Type.TEXT_DETECTION).build())
-                    .build();
-            imageReqsList.add(imageReq);
-            BatchAnnotateImagesResponse response = visionClient.batchAnnotateImages(imageReqsList);
-            List<AnnotateImageResponse> annotateImageResponses = response.getResponsesList();
-            List<String> Description = new ArrayList<String>();
-            List<List<Vertex>> vertex = new ArrayList<List<Vertex>>();
-            List<Vertex> polygon = new ArrayList<Vertex>();
-            String text = "";
-            float left_Top_X_Pos = 0;                   float right_Top_X_Pos = 0;
-            float left_Bottom_X_Pos = 0;                float right_Bottom_X_Pos = 0;
-            float left_Top_Y_Pos = 0;                   float right_Top_Y_Pos = 0;
-            float left_Bottom_Y_Pos = 0;                float right_Bottom_Y_Pos = 0;
-
-
-            for (AnnotateImageResponse annotateImageResponse : annotateImageResponses) {
-                // for (EntityAnnotation poly : annotateImageResponse.getTextAnnotationsList()) {
-
-                TextAnnotation annotation = annotateImageResponse.getFullTextAnnotation();
-                Page page= annotation.getPages(0);
-                Block block = page.getBlocks(0);
-                Paragraph paraText = block.getParagraphs(0);
-                Word wordText = paraText.getWords(0);
-                Symbol symbol = wordText.getSymbols(0);
-                Description.add(character);
-                vertex.add(symbol.getBoundingBox().getVerticesList());
-            }
-
-            for (int i = 0; i < Description.size(); i++) {
-                text = Description.get(i);
-                polygon = vertex.get(i);
-
-                Vertex First_co_ordinate = polygon.get(0);
-                Vertex Second_co_ordinate = polygon.get(1);
-                Vertex Third_co_ordinate = polygon.get(2);
-                Vertex Forth_co_ordinate = polygon.get(3);
-
-                left_Top_X_Pos = First_co_ordinate.getX();
-                left_Top_Y_Pos = First_co_ordinate.getY();
-                right_Top_X_Pos = Second_co_ordinate.getX();
-                right_Top_Y_Pos = Second_co_ordinate.getY();
-                right_Bottom_X_Pos = Third_co_ordinate.getX();
-                right_Bottom_Y_Pos = Third_co_ordinate.getY();
-                left_Bottom_X_Pos = Forth_co_ordinate.getX();
-                left_Bottom_Y_Pos = Forth_co_ordinate.getY();
-                TextFieldArea textFieldArea = new TextFieldArea(left_Top_X_Pos, left_Top_Y_Pos,
-                        right_Top_X_Pos, right_Top_Y_Pos, right_Bottom_X_Pos, right_Bottom_Y_Pos,
-                        left_Bottom_X_Pos, left_Bottom_Y_Pos);
-
-                characterPositionHM.put(text,textFieldArea);
-
-            }  } catch (IOException exc) {
-            logger.error("Exception while reading image from the url" + exc.getMessage());
-        }
-        return characterPositionHM;
-    }
-
-
-
-
-
-
-
 
 
     // Method For Comparing Rectangle
@@ -610,7 +623,7 @@ public class ImageContentAnalyser {
 class TextFieldArea
 {
     float left_Top_X_Pos,right_Top_X_Pos,left_Bottom_X_Pos, right_Bottom_X_Pos,
-          left_Top_Y_Pos,right_Top_Y_Pos,left_Bottom_Y_Pos, right_Bottom_Y_Pos;
+            left_Top_Y_Pos,right_Top_Y_Pos,left_Bottom_Y_Pos, right_Bottom_Y_Pos;
     public TextFieldArea(float left_Top_X_Pos, float left_Top_Y_Pos, float right_Top_X_Pos,
                          float right_Top_Y_Pos, float right_Bottom_X_Pos, float right_Bottom_Y_Pos,
                          float left_Bottom_X_Pos, float left_Bottom_Y_Pos)
