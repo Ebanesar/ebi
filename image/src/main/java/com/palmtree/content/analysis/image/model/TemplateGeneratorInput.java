@@ -1,5 +1,6 @@
 package com.palmtree.content.analysis.image.model;
 
+import com.google.api.client.json.Json;
 import com.google.gson.Gson;
 
 import com.google.gson.GsonBuilder;
@@ -20,29 +21,27 @@ import java.util.HashMap;
 public class TemplateGeneratorInput {
 
      String image;
-     HashMap outputHashmap;
+     HashMap labelVal;
      String docType;
-    String  json_String;
-    // HashMap<String,String> json_String;
 
-    public String getHashmap()
-    {
-
-        return json_String;
+    public void setImage(String image) {
+        this.image = image;
     }
-    public void setHashmap(HashMap<String,String> incomingHashmap)
-    {     Gson gson = new Gson();
-        json_String = gson.toJson(incomingHashmap);
-      //    outputHashmap = json_String;
-   }
-    public String getImage()
-    {
+
+    public HashMap getLabelVal() {
+        return labelVal;
+    }
+
+    public void setLabelVal(HashMap labelVal) {
+        this.labelVal = labelVal;
+    }
+
+    public String getImage() {
         return image;
     }
-    public void SetImage(String image_value)
-    {
-        image = image_value;
-    }
+    // HashMap<String,String> json_String;
+
+
     public String getDocType()
     {
         return docType;
@@ -50,6 +49,21 @@ public class TemplateGeneratorInput {
     public void setDocType(String doctype_Value)
     {
         docType = doctype_Value;
+    }
+
+    public static void main(String args[]){
+        TemplateGeneratorInput input = new TemplateGeneratorInput() ;
+        input.setDocType("USPassport");
+        HashMap<String ,String> inputCoordinates = new HashMap<>();
+        inputCoordinates.put("testlabel1","testval1");
+        inputCoordinates.put("testlabel12","testval2");
+
+
+        input.setLabelVal(inputCoordinates);
+        input.setImage("Image");
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(input));
+
     }
 }
 

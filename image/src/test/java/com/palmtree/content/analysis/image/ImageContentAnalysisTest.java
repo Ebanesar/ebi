@@ -24,7 +24,7 @@ public class ImageContentAnalysisTest {
 
     //TestCase for Validating the image
 
-    @Test
+  //  @Test
   /*  public void testImageValidityWithCoolingGlass(){
         boolean valid = imageContentAnalyser.isValidImage("http://images.huffingtonpost.com/\n" +
                 "2014-05-03-bwbw3.jpg");
@@ -191,12 +191,12 @@ public class ImageContentAnalysisTest {
 
 
 
-
+/*
         public void testImageWithAdidasLogo()
     {
         List<String> logo = imageContentAnalyser.detectLogosDuplicate("https://n1.sdlcdn.com/imgs/a/8/u/Adidas-White-Running-Sports-Shoes-SDL070564296-3-053d6.jpg");
         List<String> logo_detect = Arrays.asList("Adidas");
         Assert.assertEquals(logo_detect,logo);
     }
-
+*/
 }

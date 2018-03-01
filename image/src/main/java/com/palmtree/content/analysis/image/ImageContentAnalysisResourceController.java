@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.palmtree.content.analysis.image.model.*;
 import com.palmtree.content.analysis.image.model.ImageDetectLandmarkResponse;
 import org.json.JSONObject;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -134,22 +135,25 @@ ImageValidityResponse response = new ImageValidityResponse();
     }
        */
 
-   /*
+
    @CrossOrigin
     @RequestMapping(value = "/generateTemplate", method = RequestMethod.POST)
     public @ResponseBody
-    ResponseEntity<GenerateTemplateResponse> generateTemplateResponseResponseEntity(@RequestParam("file") MultipartFile imageContent, HashMap<String, String> stringMap, String docType) {
+    ResponseEntity<String> generateTemplateResponseResponseEntity( RequestEntity<TemplateGeneratorInput> imageContent) {
         System.out.println("The request is received");
      GenerateTemplateResponse response = new GenerateTemplateResponse();
+   TemplateGeneratorInput request =  imageContent.getBody();
+       String resp = "";
         try {
-            boolean ww=contentAnalyser.generateTemplate(imageContent.getBytes(),stringMap,docType);
-            response.setSample(ww);
-      } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok(response);
+            boolean ww=contentAnalyser.generateTemplate(request.getImage(),request.getLabelVal(),request.getDocType());
+            resp = "Template Generation status for template named "+request.getDocType() + " is"+ww;
+              }
+      catch(Exception exc){
+
+      }
+        return ResponseEntity.ok(resp);
     }
-    */
+
 
 
   /*  @CrossOrigin
