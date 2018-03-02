@@ -139,10 +139,10 @@ ImageValidityResponse response = new ImageValidityResponse();
    @CrossOrigin
     @RequestMapping(value = "/generateTemplate", method = RequestMethod.POST)
     public @ResponseBody
-    ResponseEntity<String> generateTemplateResponseResponseEntity( RequestEntity<TemplateGeneratorInput> imageContent) {
+    ResponseEntity<String> generateTemplateResponseResponseEntity( @RequestBody TemplateGeneratorInput imageContent) {
         System.out.println("The request is received");
-     GenerateTemplateResponse response = new GenerateTemplateResponse();
-   TemplateGeneratorInput request =  imageContent.getBody();
+     //GenerateTemplateResponse response = new GenerateTemplateResponse();
+   TemplateGeneratorInput request =  imageContent;
        String resp = "";
         try {
             boolean ww=contentAnalyser.generateTemplate(request.getImage(),request.getLabelVal(),request.getDocType());
